@@ -1,1172 +1,482 @@
 <!DOCTYPE html>
-<!-- OM NAMO NARAYANA -->
-<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 8)|!(IE)]><!-->
-<html class="no-js" lang="en">
-<!--<![endif]-->
-
+<html lang="en">
 <head>
-   <!-- Global site tag (gtag.js) - Google Analytics -->
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8D8XYVSXG"></script>
-   <script>
-   window.dataLayer = window.dataLayer || [];
-   function gtag(){dataLayer.push(arguments);}
-   gtag('js', new Date());
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Praveen Kumar Sridhar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f7f4ee;
+    --bg-2:#f1ece2;
+    --text:#1b1814;
+    --ink-soft:#574f44;
+    --muted:#938a79;
+    --line:#e4ddd0;
+    --line-2:#ece6db;
+    --accent:#b24a2c;
+    --serif:"Newsreader",Georgia,serif;
+    --sans:"Hanken Grotesk",system-ui,sans-serif;
+    --mono:"JetBrains Mono",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  ::selection{background:var(--accent);color:#fff;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 32px;}
+  .eyebrow{
+    font-size:12px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--accent);}
 
-   gtag('config', 'G-R8D8XYVSXG');
-   </script>
-   <!--- Basic Page Needs
-   ================================================== -->
-   <meta charset="utf-8">
-   <title>Praveen Kumar Sridhar - Portfolio, Praveen's Portfolio, Praveen Kumar Sridhar website, Praveen personal website, about Praveen kumar Sridhar</title>
-   <meta name="description" content="Praveen Kumar's Portfolio page, Praveen Kumar Sridhar website, Praveen personal website, about Praveen kumar Sridhar ">
-   <meta name="author" content="Praveen Kumar Sridhar">
-   <!---META KEYWORDS-->
-   <meta name="keywords" content="Praveen Kumar, Praveen Kumar Sridhar,Praveen Kumar S,Praveen Kumar's Protfolio, Data scientist, Praveenkumarsridhar website, Praveen Kumar Sridhar personal website"
+  /* ---------- header ---------- */
+  header.bar{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;transition:border-color .3s;
+  }
+  header.bar.scrolled{border-color:var(--line);}
+  header.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .name-mark{font-weight:600;font-size:15px;letter-spacing:-0.01em;}
+  .name-mark i{color:var(--accent);font-style:normal;}
+  nav.top{display:flex;gap:28px;}
+  nav.top a{font-size:14px;color:var(--ink-soft);transition:color .2s;}
+  nav.top a:hover{color:var(--accent);}
+  @media(max-width:680px){nav.top{display:none;}}
 
-   <!-- Mobile Specific Metas
-   ================================================== -->
-   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  /* ---------- hero ---------- */
+  .hero{padding:96px 0 72px;}
+  .hero .role{margin-bottom:30px;}
+  h1{
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(46px,8vw,88px);line-height:1.02;letter-spacing:-0.02em;
+    margin-bottom:30px;
+  }
+  .hero .intro{
+    font-size:clamp(18px,2.2vw,21px);line-height:1.62;color:var(--ink-soft);
+    max-width:62ch;font-weight:400;
+  }
+  .hero .intro b{color:var(--text);font-weight:600;}
+  .stack-strip{
+    margin-top:26px;font-family:var(--mono);font-size:12.5px;letter-spacing:0.01em;
+    color:var(--muted);display:flex;flex-wrap:wrap;gap:7px 14px;
+  }
+  .stack-strip span{position:relative;}
+  .stack-strip span:not(:last-child)::after{content:"/";margin-left:14px;color:var(--line);}
+  .hero .actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:36px;}
+  .btn{
+    font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px;
+    background:var(--text);color:var(--bg);transition:transform .2s,background .2s;
+    display:inline-flex;align-items:center;gap:9px;
+  }
+  .btn:hover{transform:translateY(-2px);background:var(--accent);}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);background:transparent;}
+  .meta-line{
+    display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:34px;
+    font-size:14px;color:var(--muted);
+  }
+  .meta-line span{display:inline-flex;align-items:center;gap:8px;}
+  .meta-line .d{width:5px;height:5px;border-radius:50%;background:var(--accent);}
+  .meta-line .ico{width:16px;height:16px;color:var(--accent);flex:none;}
+  .intro-2{margin-top:18px;}
 
-   <!-- CSS
-    ================================================== -->
-   <link rel="stylesheet" href="css/default.css">
-   <link rel="stylesheet" href="css/layout.css">
-   <link rel="stylesheet" href="css/media-queries.css">
-   <link rel="stylesheet" href="css/magnific-popup.css">
-   <link rel='stylesheet' href="css/exp.css">
+  /* ---------- section scaffold ---------- */
+  section{padding:64px 0;border-top:1px solid var(--line);}
+  .sec-label{margin-bottom:44px;}
+  .sec-label h2{
+    font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,38px);
+    letter-spacing:-0.01em;margin-top:14px;line-height:1.1;
+  }
+  .sec-label .sub{font-size:15px;color:var(--ink-soft);margin-top:10px;max-width:54ch;}
 
-   <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous" type="text/css"> -->
+  /* ---------- capability strip ---------- */
+  .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;}
+  .cap{background:var(--bg);padding:24px;}
+  .cap .n{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;}
+  .cap h3{font-size:17px;font-weight:600;margin:12px 0 8px;letter-spacing:-0.01em;}
+  .cap p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+  @media(max-width:680px){.caps{grid-template-columns:1fr;}}
 
-   <!-- Script
-   ================================================== -->
-   <script src="js/modernizr.js"></script>
-   <script type="text/javascript" src="js/jquery.particleground.js"></script>
-   <script type="text/javascript" src="js/demo.js"></script>
-   <script type="js/experience.js"></script>
-   <!-- Favicons
-	================================================== -->
-   <link rel="shortcut icon" href="favicon.png">
-   <link rel="apple-touch-icon" href="favicon-120x120.png" sizes="120x120" />
-   <link rel="apple-touch-icon" href="favicon-152x152.png" sizes="152x152" />
+  /* ---------- metrics ---------- */
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:30px 28px;}
+  .metric .v{font-family:var(--serif);font-size:clamp(34px,4.4vw,48px);line-height:1;letter-spacing:-0.01em;}
+  .metric .v small{color:var(--accent);font-size:0.5em;}
+  .metric .l{font-size:13.5px;color:var(--ink-soft);margin-top:12px;line-height:1.45;}
+  .metric .src{font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-top:9px;}
+  @media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr);gap:32px 24px;}}
+  @media(max-width:420px){.metrics{grid-template-columns:1fr;}}
 
+  /* ---------- experience ---------- */
+  .job{
+    display:grid;grid-template-columns:170px 1fr;gap:28px;
+    padding:30px 0;border-top:1px solid var(--line-2);
+  }
+  .job:first-of-type{border-top:0;}
+  .job .when{font-size:13px;color:var(--muted);padding-top:4px;font-variant-numeric:tabular-nums;}
+  .job .when .now{color:var(--accent);font-weight:600;}
+  .job h3{font-size:19px;font-weight:600;letter-spacing:-0.01em;}
+  .job .r{font-size:14px;color:var(--ink-soft);margin:2px 0 16px;}
+  .job .r .loc{color:var(--muted);}
+  .job ul{list-style:none;display:grid;gap:9px;}
+  .job li{position:relative;padding-left:20px;font-size:15px;color:var(--ink-soft);max-width:64ch;}
+  .job li::before{content:"";position:absolute;left:2px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--line);}
+  .job:hover li::before{background:var(--accent);}
+  .job li b{color:var(--text);font-weight:600;}
+  @media(max-width:680px){.job{grid-template-columns:1fr;gap:12px;}}
+
+  /* ---------- projects ---------- */
+  .projects{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;}
+  .proj{background:var(--bg);padding:26px;display:flex;flex-direction:column;gap:10px;min-height:188px;transition:background .25s;}
+  .proj:hover{background:#fdfbf6;}
+  .proj-link .badge{color:var(--accent);}
+  .proj-link:hover h3{color:var(--accent);}
+  .proj-link h3{transition:color .2s;}
+  .proj .pt{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+  .proj h3{font-size:18px;font-weight:600;letter-spacing:-0.01em;}
+  .proj .badge{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;}
+  .proj p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .proj .stack{margin-top:auto;display:flex;flex-wrap:wrap;gap:7px;font-family:var(--mono);}
+  .proj .stack span{font-size:11.5px;color:var(--ink-soft);}
+  .proj .stack span::after{content:"·";margin-left:7px;color:var(--muted);}
+  .proj .stack span:last-child::after{content:"";}
+  @media(max-width:620px){.projects{grid-template-columns:1fr;}}
+
+  /* ---------- skills ---------- */
+  .skill-row{display:grid;grid-template-columns:170px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--line-2);}
+  .skill-row:first-child{border-top:0;}
+  .skill-row dt{font-size:13px;color:var(--accent);font-weight:600;letter-spacing:0.02em;}
+  .skill-row dd{font-size:15px;color:var(--ink-soft);line-height:1.7;}
+  @media(max-width:600px){.skill-row{grid-template-columns:1fr;gap:6px;}}
+
+  /* ---------- two-up ---------- */
+  .twoup{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  @media(max-width:680px){.twoup{grid-template-columns:1fr;gap:44px;}}
+  .mini h3{font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:20px;}
+  .edu-item{padding:14px 0;border-top:1px solid var(--line-2);}
+  .edu-item:first-of-type{border-top:0;padding-top:0;}
+  .edu-item h4{font-size:17px;font-weight:600;}
+  .edu-item p{font-size:14px;color:var(--ink-soft);}
+  .edu-item .y{font-size:13px;color:var(--muted);margin-top:2px;}
+  .awards{list-style:none;display:grid;gap:0;}
+  .awards li{padding:13px 0;border-top:1px solid var(--line-2);font-size:14.5px;color:var(--ink-soft);}
+  .awards li:first-child{border-top:0;padding-top:0;}
+  .awards li b{color:var(--text);font-weight:600;}
+
+  /* ---------- contact ---------- */
+  .contact{border-top:1px solid var(--line);padding:80px 0 90px;}
+  .contact h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,52px);letter-spacing:-0.02em;line-height:1.05;}
+  .contact h2 em{font-style:italic;color:var(--accent);}
+  .contact .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px;}
+  .contact .links a{font-size:14px;padding:11px 18px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);transition:all .2s;display:inline-flex;align-items:center;gap:10px;}
+  .contact .links a .lico{width:17px;height:17px;flex:none;color:var(--muted);transition:color .2s;}
+  .contact .links a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+  .contact .links a:hover .lico{color:var(--accent);}
+  .foot{margin-top:64px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--muted);}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+</style>
 </head>
-
 <body>
 
-   <!-- Header
-   ================================================== -->
-   <header id="particles">
-      <nav id="nav-wrap">
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="name-mark" href="#top">PK<i>.</i></a>
+    <nav class="top">
+      <a href="#build">What I build</a>
+      <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
 
-         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show navigation</a>
-         <a class="mobile-btn" href="#" title="Hide navigation">Hide navigation</a>
+<a id="top"></a>
+<section class="hero" style="border-top:0;">
+  <div class="wrap">
+    <div class="role eyebrow">Machine Learning Engineer &amp; Data Scientist</div>
+    <h1>Hi, I'm PK.</h1>
+    <p class="intro">I build AI agents for businesses at Meta, and the evaluation frameworks that prove they actually work. Data Scientist by training, ML Engineer by habit.</p>
+    <div class="stack-strip">
+      <span>Python</span><span>Go</span><span>React</span><span>PyTorch</span><span>GCP / Vertex AI</span><span>AWS</span><span>Kubernetes</span><span>LLMs</span>
+    </div>
+    <div class="actions">
+      <a class="btn" href="#contact">Get in touch <span aria-hidden="true">→</span></a>
+      <a class="btn ghost" href="#work">View experience</a>
+    </div>
+    <div class="meta-line">
+      <span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"></path><path d="M3 12.5h18"></path></svg>Data Scientist 4, Meta</span>
+      <span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Vancouver, Canada</span>
+      <span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 5 2 9l10 4 10-4Z"></path><path d="M6 11v4.2c0 1.4 2.7 2.8 6 2.8s6-1.4 6-2.8V11"></path></svg>M.S. Data Science, Northeastern</span>
+    </div>
+  </div>
+</section>
 
-         <ul id="nav" class="nav">
-            <li class="current"><a class="smoothscroll" href="#particles">Home</a></li>
-            <li><a class="smoothscroll" href="#about">About</a></li>
-            <li><a class="smoothscroll" href="#resume">Resume</a></li>
-            <li><a class="smoothscroll" href="#portfolio">Works</a></li>
-            <!-- <li><a class="smoothscroll" href="#testimonials">Testimonials</a></li> -->
-            <!-- <li><a class="smoothscroll" href="#contact">Contact</a></li> -->
-         </ul> <!-- end #nav -->
-
-      </nav> <!-- end #nav-wrap -->
-
-      <div class="banner">
-         <div class="banner-text">
-            <h1 class="responsive-headline"><span class="typing" style="color:#FFFFFF"></span></h1>
-            <h3><a class="smoothscroll" href="#about">Let's start scrolling and learn more about me</a>.</h3>
-            <hr />
-            <ul class="social">
-               <li><a href="https://github.com/PraveenKumarSridhar"><i class="fa fa-github"></i></a></li>
-               <li><a href="https://twitter.com/prav1411"><i class="fa fa-twitter"></i></a></li>
-               <li><a href="https://www.linkedin.com/in/praveenks23/"><i class="fa fa-linkedin"></i></a>
-               </li>
-            </ul>
-         </div>
+<!-- WHAT I BUILD -->
+<section id="build">
+  <div class="wrap">
+    <div class="sec-label reveal">
+      <div class="eyebrow">What I build</div>
+      <h2>Full-stack across the ML lifecycle.</h2>
+      <p class="sub">I am comfortable owning a system from the data layer to the deployed service, not just the model in the middle.</p>
+    </div>
+    <div class="caps reveal">
+      <div class="cap">
+        <div class="n">01 / Engineering</div>
+        <h3>Systems &amp; infra</h3>
+        <p>Backends in Python and Go, React frontends, distributed services, and ML pipelines on GCP and Vertex AI with Docker, Kubernetes, Airflow, and Terraform.</p>
       </div>
-
-      <!-- <p class="scrolldown">
-         <a class="smoothscroll" href="#about"><i class="icon-down-circle"></i></a>
-      </p> -->
-
-   </header> <!-- Header End -->
-
-
-   <!-- About Section
-   ================================================== -->
-   <section id="about">
-
-      <div class="row">
-
-         <div class="three columns">
-
-            <img class="profile-pic" src="images/selfie-cropped.png" alt="profile picture" />
-
-         </div>
-
-         <div class="nine columns main-col">
-
-            <h2>About Me</h2>
-
-            <p>
-               I'm currently interning at Meta (Facebook) as a data scientist. I'm a grad student at Northeastern University, where I’m majoring in Data Science. I used to work as a Data Scientist at Intellect Design Arena Ltd., where I used to work on building ML and deep learning models, and backend for the UI in python to capture user feedback. These models are actively being used by multiple insurance companies in real-time. My interests primarily lie in the field of NLP and computer vision.
-            </p>
-            <p> A few interesting things about me. I love to listen to audio books and podcasts. My favorite podcasts
-               right now are (NLP highlights,Making sense with Sam Harris, The data scientist show).
-               I'm also an avid gamer. I love to play competitive games like DotA, Overwatch. I push myself to learn
-               something about machine learning, software development or just random trivia everyday.
-            </p>
-
-            <div class="row">
-
-               <div class="columns contact-details">
-
-                  <h2>Contact Details</h2>
-                  <p class="address">
-                     <span>Praveen Kumar Sridhar</span><br>
-                     <span> Boston, Massachusetts,</span><br>
-                     <span>sridharpraveenkumar@gmail.com</span>
-                  </p>
-
-               </div>
-
-               <div class="columns download">
-                  <p>
-                     <a href="https://raw.githubusercontent.com/PraveenKumarSridhar/PraveenkumarS/main/assets/Praveen_Resume.pdf"
-                        class="button"><i class="fa fa-download"></i>Download Resume</a>
-                  </p>
-               </div>
-
-            </div> <!-- end row -->
-
-         </div> <!-- end .main-col -->
-
+      <div class="cap">
+        <div class="n">02 / Modeling</div>
+        <h3>ML &amp; GenAI</h3>
+        <p>Production deep learning, computer vision, and NLP, plus LLM systems built with LangChain: RAG and retrieval over FAISS and Pinecone, fine-tuning, LlamaGuard-style guardrails, and agent tooling on PyTorch, HuggingFace, LLaMA, and GPT.</p>
       </div>
-
-   </section> <!-- About Section End-->
-
-
-   <!-- Resume Section
-   ================================================== -->
-   <section id="resume">
-
-      <!-- Skills
-      ----------------------------------------------- -->
-      <div class="row skill">
-
-         <div class="three columns header-col">
-            <h1><span>Skills</span></h1>
-         </div>
-
-         <div class="nine columns main-col">
-
-            <div class="card">python</div>
-            <div class="card">R</div>
-            <div class="card">SQL</div>
-            <div class="card">Data Cleaning</div>
-            <div class="card">Data Interpretation</div>
-            <div class="card">Image Processing</div>
-            <div class="card">Deep Learning</div>
-            <div class="card">Machine Learning</div>
-            <div class="card">Causal Inference</div>
-            <div class="card">MongoDB</div>
-            <div class="card">Redis</div>
-            <div class="card">TensorFlow</div>
-            <div class="card">Keras</div>
-            <div class="card">Torch</div>
-            <div class="card">NLP</div>
-            <div class="card">OpenCV</div>
-            <div class="card">tesseract</div>
-            <div class="card">EasyOCR</div>
-            <div class="card">Random Forest </div>
-            <div class="card">SVM</div>
-            <div class="card">Linear Regression</div>
-            <div class="card">Logistic Regression</div>
-            <div class="card">Naive-Bayes</div>
-            <div class="card">FastAPI</div>
-            <div class="card">Scala</div>
-            <div class="card">C/C++</div>
-            <div class="card">Java</div>
-            <div class="card">Git</div>
-            <div class="card">RabbitMQ</div>
-            <div class="card">SQLAlchemy</div>
-            <div class="card">Tableau</div>
-            <div class="card">sklearn</div>
-            <div class="card">plotly</div>
-            <div class="card">NEAT</div>
-         </div> <!-- main-col end -->
-
-      </div> <!-- End skills -->
-      <!-- Education
-      ----------------------------------------------- -->
-      <div class="row education">
-
-         <div class="three columns header-col">
-            <h1><span>Education</span></h1>
-         </div>
-
-         <div class="nine columns main-col">
-            
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Northeastern University</h3>
-                  <p class="info">Master's in Data Science<span>&bull;</span> <em class="date">2021-Present</em></p>
-
-                  <p>
-                     <b>GPA: 4.0/4.0</b>
-                  </p>
-
-               </div>
-
-            </div>
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>VIT University</h3>
-                  <p class="info">B.Tech in Computer Science<span>&bull;</span> <em class="date">2014-2018</em></p>
-
-                  <p>
-                     <b>Cumulative GPA: 8.93/10</b>
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-         </div> <!-- main-col end -->
-
-      </div> <!-- End Education -->
-
-
-      <!-- Work
-      ----------------------------------------------- -->
-      <div class="row work">
-
-         <div class="three columns header-col">
-            <h1><span>Work</span></h1>
-         </div>
-
-         <div class="nine columns main-col">
-            
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Graduate Research Assistant</h3>
-                  <p class="info">Khoury College of Computer Science <span>&bull;</span>Northeastern University <span>&bull;</span> <em class="date"> Aug 2022 – Present</em></p>
-
-                  <p>
-                     <ul style="list-style-type:disc">
-                     <li>
-                     I am working with <b><a href = 'https://www.silvioamir.com/'>Prof. Silvio Amir</a></b>, on Characterizing the Impact of Influential Actors on the Dynamics of #MeToo Online Social Movement.
-                     </li>
-                     <li>
-                        I'm revamping the NLP pipeline, which does the following tasks: pre-processing, topic modeling, inferring author demographics, and post-processing.                   
-                     </li>
-                     </ul>
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Data Scientist Intern</h3>
-                  <p class="info"> Meta (Facebook) - <i>Ads & Business</i>, <span>&bull;</span> <em class="date"> May 2022 – Aug 2022</em></p>
-
-                  <p>
-                     <ul style="list-style-type:disc">
-                     <li>
-                        Redefined how the organization looks at advertiser churn. Created a strong framework to predict churn and identify levers that reduce churn.
-                     </li>
-                     <li>
-                        Designed an exhaustive advertising lifecycle model and utilized it to construct a churn taxonomy.
-                     </li> 
-                     <li>
-                        Developed numerous ML models to forecast churn (with an 85% ACC) and used calibration curves to demonstrate the models' dependability. The critical features that are likely to generate churn, were extracted using SHAP values.
-                     </li>
-                     <li>
-                        Built friction vectors to identify and isolate levers the organization can control to reduce friction(obstacles that lead to churn). Wrote highly optimized SQL queries to create these features.                     </li>
-                     <li>
-                        Implemented causal inference models like X learners, & causal trees to measure the impact of each friction to cause churn.                     </li>
-                     <li>
-                        Presented the findings to the organization and leadership. The churn model will be used in the future as a part of the broader lifetime model for advertisers.                     </li>
-                     </ul>
-                  </p>
-
-               </div>
-
-            </div>
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Graduate Teaching Assistant</h3>
-                  <p class="info">Khoury College of Computer Science <span>&bull;</span>Northeastern University <span>&bull;</span> <em class="date"> Jan 2022 – May2022</em></p>
-
-                  <p>
-                     <ul style="list-style-type:disc">
-                        <li>
-                     I was a Graduate Teaching assistant for CS5008 – Data Structures, Algorithms, and Their Applications within Computer Systems under <b>Prof. Sophine Clachar</b>. 
-                     </li>
-                     <li>
-                        Assisted students in <b>clarifying conceptual misunderstandings</b> during office hours. I also assisted the lecturer in<b> setting up auto graders</b> on gradescope.
-                     </li>
-                     <li>
-                        Graded student's assignments, midterms, and weekly reflections. In addition, assisted the lecturer in <b> the students' final topic presentations</b>.
-                     </li>
-                     </ul>
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Data Scientist</h3>
-                  <p class="info">Intellect Design Arena Ltd. - <i>R&D team</i><span>&bull;</span> <em class="date">Jul 2020 - Aug 2021</em>
-                  </p>
-
-                  <p>
-                  <ul style="list-style-type:disc">
-                     <li>
-                        Designed, built and shipped <b> Deep learning models like LSTMs</b>, <b>Bidirectional LSTMs</b> and
-                           <b>Bidirectional LSTMs with attention</b>. These
-                        models achieved <b>accuracies upward of 90% </b> in the production environment.
-                     </li>
-                     <li>
-                        Designed and built the back-end for the application with FastAPI which connects to multiple
-                        databases.
-                        Additionally, this <b>captures feedback for retaining</b> and further improve the models.
-                     </li>
-                     <li>
-                        Experimented with the best OCRs like <b>tesseract, easyOCR, paddleOCR </b>, etc.
-                     </li>
-                     <li>
-                        <b>Combined CRAFT with tesseract</b> to produce extremely accurate results.
-                     </li>
-                     <li>
-                        Used image processing and tesseract with CRAFT to <b>extract data from MRZ (Machine Readable Zone) in passport </b> images.
-                     </li>
-                     <li>
-                        Helped design, build and ship a <b>complex ensemble text classifier</b> that's built using <b>BERT & ROBERTA </b>.
-                     </li>
-                  </ul>
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-            
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Data Engineer</h3>
-                  <p class="info">Intellect Design Arena Ltd.- <i>R&D team</i><span>&bull;</span> <em class="date">Jun 2018 - Jul
-                        2020</em></p>
-
-                  <p>
-                     <ul style="list-style-type:disc">
-                     <li>
-                        Built an entire <b>NLP pipeline using RabbitMQ (from tokenization to spell-checking)</b> which runs on multiple servers which are completely customizable wrt the number of workers/consumers and the flow.
-                     </li>
-                     <li>
-                        Optimize t-SQL procedures by implementing them through spark modules written in scala, complete with auto spin EMR clusters, actively monitoring their status through custom spark listeners.
-                     </li>
-                     </ul>
-                  </p>
-
-               </div>
-
-            </div>
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <h3>Data Analyst Intern</h3>
-                  <p class="info">Allsec technologies Ltd. <span>&bull;</span> <em class="date">Feb 2018 - Mar
-                        2018</em></p>
-
-                  <p>
-                     <ul style="list-style-type:disc">
-                        <li>
-                     Worked on employee attrition rate in both R and Python. I initially
-                     used many prominent algorithms like <b>Classification Trees, SVM,
-                     Random Forest</b>. Finally, implemented a simple artificial neural network
-                     which yielded better results.
-                     </li>
-                     </ul>
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-         </div> <!-- main-col end -->
-
-      </div> <!-- End Work now known as education-->
-
-      <div class="row certification">
-
-         <div class="three columns header-col">
-            <h1><span>Certifications</span></h1>
-         </div>
-
-         <div class="nine columns main-col">
-
-            <div class="row item">
-
-               <div class="twelve columns">
-
-                  <p>
-                  <ul style="list-style-type:disc">
-                     <li>Natural Language Processing in TensorFlow</li>
-                     <li>Neural Networks and Deep Learning</li>
-                     <li>Structuring Machine Learning Projects</li>
-                     <li>Improving Deep Neural Networks: Hyperparameter tuning, Regularization and Optimization</li>
-                     <li>Convolutional Neural Networks</li>
-                     <li>Sequence Models</li>
-
-                  </ul>
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-         </div> <!-- main-col end -->
-
+      <div class="cap">
+        <div class="n">03 / Science</div>
+        <h3>Evaluation &amp; experiments</h3>
+        <p>Evaluation frameworks, A/B and A/A testing, causal inference, and the metrics that turn model quality into decisions leadership can act on.</p>
       </div>
+    </div>
+  </div>
+</section>
 
-      <div class="row awards">
+<!-- METRICS -->
+<section id="impact">
+  <div class="wrap">
+    <div class="sec-label reveal">
+      <div class="eyebrow">Selected impact</div>
+      <h2>Shipped work, measured.</h2>
+    </div>
+    <div class="metrics reveal">
+      <div class="metric"><div class="v"><small>+</small>15<small>%</small></div><div class="l">AI Deep Convos from one product-consolidation launch</div><div class="src">Meta</div></div>
+      <div class="metric"><div class="v"><small>+</small>12<small>%</small></div><div class="l">Data Coverage Rate, the agent org's north-star metric</div><div class="src">Meta</div></div>
+      <div class="metric"><div class="v">90<small>%+</small></div><div class="l">Production accuracy across deep-learning models, CNNs to attention BiLSTMs</div><div class="src">Intellect Design Arena</div></div>
+      <div class="metric"><div class="v"><small>$</small>90<small>M</small></div><div class="l">Inference capacity allocated via an ROI framework</div><div class="src">Meta</div></div>
+      <div class="metric"><div class="v"><small>&minus;</small>12<small>%</small></div><div class="l">Business price-correction volume cut by a pricing experiment</div><div class="src">Meta</div></div>
+      <div class="metric"><div class="v"><small>+</small>10<small>%</small></div><div class="l">Moderation lift from automated fake-account detection, A/B tested</div><div class="src">Nextdoor</div></div>
+      <div class="metric"><div class="v"><small>+</small>5<small>%</small></div><div class="l">MAU lift from the notification system I built and shipped</div><div class="src">Citizen</div></div>
+      <div class="metric"><div class="v"><small>+</small>3<small>%</small></div><div class="l">DAU lift from triggering and live-video ranking systems</div><div class="src">Citizen</div></div>
+    </div>
+  </div>
+</section>
 
-         <div class="three columns header-col">
-            <h1><span>Awards</span></h1>
-         </div>
+<!-- WORK -->
+<section id="work">
+  <div class="wrap">
+    <div class="sec-label reveal">
+      <div class="eyebrow">Experience</div>
+      <h2>Where I've worked.</h2>
+    </div>
 
-         <div class="nine columns main-col">
-
-            <div class="row item">
-
-               <div class="twelve columns">
-                  <h3> At Intellect Design Arena</h3>
-                  <p>
-                  <ul style="list-style-type:disc">
-                     <li>Was conferred with the GEM award for
-                        building the models and achieving the
-                        accuracy expected by the clients and my
-                        general contribution to the organization
-                        and team.</li>
-                     <li>My team won the Chairman’s Excellence
-                        Award for our contribution to the
-                        organization.
-                     </li>
-                  </ul>
-                  </p>
-
-               </div>
-
-            </div> <!-- item end -->
-
-         </div> <!-- main-col end -->
-
+    <div class="job reveal">
+      <div class="when"><span class="now">Now</span> · Nov 2024</div>
+      <div>
+        <h3>Meta</h3>
+        <div class="r">Data Scientist 4, Machine Learning <span class="loc">· Vancouver, CA</span></div>
+        <ul>
+          <li>Built the <b>evaluation framework</b> for the knowledge base behind Meta's business AI agents, defining metrics (DCR, biz-DCR, Data Conflict Rate) that isolate whether a failure is hallucination, model gaps, missing knowledge, or bad retrieval.</li>
+          <li>Proved DCR correlates with business retention and made it the <b>north-star metric</b> for the agent quality org, then led the RCA that recovered a 12% DCR regression to baseline.</li>
+          <li>Owned the agent experimentation stack end to end (A/B, A/A, offline eval, simulation, replay), landing a consolidation launch at <b>WAB +6%, DCR +12%, AIDC +15%</b>.</li>
+          <li>Engineered and <b>shipped Claude Code skills, plugins, and DS-agent swarms</b> adopted by 10+ teams, validated $293M in savings, and owned 2025 to 2030 capacity planning.</li>
+        </ul>
       </div>
-
-   </section> <!-- Resume Section End-->
-
-
-   <!-- Portfolio Section
-   ================================================== -->
-   <section id="portfolio">
-
-      <div class="row">
-
-         <div class="twelve columns collapsed">
-
-            <h1>Check Out Some of My Works.</h1>
-
-            <!-- portfolio-wrapper -->
-            <div id="portfolio-wrapper" class="bgrid-quarters s-bgrid-thirds cf">
-
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-01" title="">
-                        <img alt="poetry generator" src="assets/poetry-unsplash.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-                              <h5>Poetry-Generator</h5>
-                           </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-               </div> <!-- item end -->
-                              
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-08" title="">
-                        <img alt="Question Answering" src="assets/Question-Answering-model.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>Question Answering model</h5>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div>
-
-               
-                <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-09" title="">
-                        <img alt="TheSongSerach" src="assets/music.avif">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-                              <h5>The Song Search</h5>
-                           </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-               </div>
-
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-02" title="">
-                        <img alt="flappy bird" src="assets/flappy-2.PNG">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-                              <h5>AI powered Flappy Bird</h5>
-                           </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-               </div> <!-- item end -->
-
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-05" title="">
-                        <img alt="create art" src="assets/create-art.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>Create Art</h5>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div>
-                
-                <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-06" title="">
-                        <img alt="reddit" src="assets/reddit-alien-red-st.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>Detect Reddit Sarcasm</h5>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div>
-               
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-04" title="">
-                        <img alt="breast cancer" src="assets/breast-cancer.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>Breast cancer Detection</h5>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div> 
-
-                <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-03" title="">
-                        <img alt="robot" src="assets/robo.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-                              <h5>Google Events voice-assistant</h5>
-                           </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-               </div> <!-- item end -->
-
-                <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-07" title="">
-                        <img alt="chatbot" src="assets/friendly-chatbot.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>A Basic Chatbot</h5>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div>
-                <!-- item end 
-
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-06" title="">
-                        <img alt="" src="images/portfolio/girl.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>Girl</h5>
-                              <p>Photography</p>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div> <!-- item end
-
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-07" title="">
-                        <img alt="" src="images/portfolio/origami.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>Origami</h5>
-                              <p>Illustrration</p>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div> <!-- item end 
-
-               <div class="columns portfolio-item">
-                  <div class="item-wrap">
-
-                     <a href="#modal-08" title="">
-                        <img alt="" src="images/portfolio/retrocam.jpg">
-                        <div class="overlay">
-                           <div class="portfolio-item-meta">
-          					      <h5>Retrocam</h5>
-                              <p>Web Development</p>
-          					   </div>
-                        </div>
-                        <div class="link-icon"><i class="icon-plus"></i></div>
-                     </a>
-
-                  </div>
-          		</div>  <!-- item end -->
-
-            </div> <!-- portfolio-wrapper end -->
-
-         </div> <!-- twelve columns end -->
-
-
-         <!-- Modal Popup
-	      --------------------------------------------------------------- -->
-
-         <div id="modal-01" class="popup-modal mfp-hide">
-
-            <img class="scale-with-grid" src="assets/poetry-unsplash.jpg" alt="poetry generator" />
-
-            <div class="description-box">
-               <h4>Multi-lingual Poetry-Generator</h4>
-               <p>Train a model using TensorFlow to write short poems in English, Hindi, Tamil.</p>
-               <span class="categories"><i class="fa fa-tag"></i>Deep Learning, python</span>
-            </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/poetry-generator" target="_blank">Details</a>
-               <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-         </div><!-- modal-01 End -->
-
-         <div id="modal-02" class="popup-modal mfp-hide">
-
-            <img class="scale-with-grid" src="assets/flappy-2.PNG" alt="flappy bird" />
-
-            <div class="description-box">
-               <h4>AI powered Flappy Bird</h4>
-               <p>Build a Flappy bird game and teach AI to play it.</p>
-               <span class="categories"><i class="fa fa-tag"></i>NEAT, Genetic Algorithm, pygame, python</span>
-            </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/AI-flappy-bird" target="_blank">Details</a>
-               <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-         </div><!-- modal-02 End -->
-
-         <div id="modal-03" class="popup-modal mfp-hide">
-
-            <img class="scale-with-grid" src="assets/robo.jpg" alt="robot" />
-
-            <div class="description-box">
-               <h4>Google Events voice-assistant</h4>
-               <p>An assistant that will read out the scheduled events in your google calender at a specified time
-                  during the day.</p>
-               <span class="categories"><i class="fa fa-tag"></i>python, text-to-speech</span>
-            </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/Events-assistant" target="_blank">Details</a>
-               <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-         </div><!-- modal-03 End -->
-         
-         <div id="modal-04" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="assets/breast-cancer.jpg" alt="breast cancer" />
-
-		      <div class="description-box">
-			      <h4>Breast Cancer Detection</h4>
-			      <p>Trained a deep neural network model to classify if the image of the patch sample provided tests positive or not for IDC (Invasive Ductal Carcinoma), the most common type of breast cancer.  </p>
-               <span class="categories"><i class="fa fa-tag"></i>python,Image processing,Image Classification,Deep Neural Network</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/Breast-cancer-detection/" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div>
-         <div id="modal-05" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="assets/create-art.jpg" alt="create art" />
-
-		      <div class="description-box">
-			      <h4>Create Art</h4>
-			      <p>Create Art using Neural style tranfer, using the content form one image and style from the other.</p>
-               <span class="categories"><i class="fa fa-tag"></i>TensorFlow, Image processing, Deep Learning</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/create-art" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div>
-         <div id="modal-06" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="assets/reddit-alien-red-st.jpg" alt="reddit" />
-
-		      <div class="description-box">
-			      <h4>Detect Reddit Sarcasm</h4>
-			      <p>Using Reddit data to detect sarcasm in the comments.</p>
-               <span class="categories"><i class="fa fa-tag"></i>TENSORFLOW, NLP, DEEP LEARNING, PYTHON</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/reddit_sarcasm_detection" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div>
-
-         <div id="modal-07" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="assets/friendly-chatbot.jpg" alt="chatbot" />
-
-		      <div class="description-box">
-			      <h4>A basic Chatbot</h4>
-			      <p>A simple chatbot built using intent and response.</p>
-               <span class="categories"><i class="fa fa-tag"></i>PYTHON,TENSORFLOW, NLP</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/basic_chatbot/" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div>
-
-         <div id="modal-08" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="assets/Question-Answering-model.jpg" alt="Question Answering" />
-
-		      <div class="description-box">
-			      <h4>Question Answering model</h4>
-			      <p>A Question Answering system built using transformer based models.</p>
-               <span class="categories"><i class="fa fa-tag"></i>PYTHON, NLP, PYTORCH, BERT</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="https://github.com/PraveenKumarSridhar/Question-Answering-model" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div>
-
-         <div id="modal-09" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="assets/music.avif" alt="TheSongSearch" />
-
-		      <div class="description-box">
-			      <h4>The Song Search</h4>
-			      <p>An Information Retrieval System for songs like Shazam.</p>
-               <span class="categories"><i class="fa fa-tag"></i>PYTHON, Music, Tensorflow, MEGENTA</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="https://expo.baulab.info/2022-Fall/PraveenKumarSridhar/index.html" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div>
-         <!-- modal-05 End 
-
-         <div id="modal-06" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="images/portfolio/modals/m-girl.jpg" alt="" />
-
-		      <div class="description-box">
-			      <h4>Girl</h4>
-			      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-               <span class="categories"><i class="fa fa-tag"></i>Photography</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="http://www.behance.net" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div><!-- modal-06 End
-
-         <div id="modal-07" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="images/portfolio/modals/m-origami.jpg" alt="" />
-
-		      <div class="description-box">
-			      <h4>Origami</h4>
-			      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-               <span class="categories"><i class="fa fa-tag"></i>Branding, Illustration</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="http://www.behance.net" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div><!-- modal-07 End 
-
-         <div id="modal-08" class="popup-modal mfp-hide">
-
-		      <img class="scale-with-grid" src="images/portfolio/modals/m-retrocam.jpg" alt="" />
-
-		      <div class="description-box">
-			      <h4>Retrocam</h4>
-			      <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-               <span class="categories"><i class="fa fa-tag"></i>Webdesign, Photography</span>
-		      </div>
-
-            <div class="link-box">
-               <a href="http://www.behance.net" target="_blank">Details</a>
-		         <a class="popup-modal-dismiss">Close</a>
-            </div>
-
-	      </div><!-- modal-01 End -->
-
-
-      </div> <!-- row End -->
-
-   </section> <!-- Portfolio Section End-->
-
-
-   <!-- Call-To-Action Section
-   ================================================== 
-   <section id="call-to-action">
-
-      <div class="row">
-
-         <div class="two columns header-col">
-
-            <h1><span>Get Hosting.</span></h1>
-
-         </div>
-
-         <div class="seven columns">
-
-            <h2><span class="lead">Unde Omnis Iste</span></h2>
-            <p><span class="lead">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-            eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae. </span></p>
-
-         </div>
-
-         <div class="three columns action">
-
-
-
-         </div>
-
+    </div>
+
+    <div class="job reveal">
+      <div class="when">Feb to Nov 2024</div>
+      <div>
+        <h3>Citizen</h3>
+        <div class="r">Machine Learning Engineer 3 <span class="loc">· San Jose, CA</span></div>
+        <ul>
+          <li>Built and deployed a notification system using <b>GPT to rewrite titles</b> dynamically, lifting DAU 2 to 3% and MAU 5% with triggering and user-selection models.</li>
+          <li>Engineered a CLIP and INSTRUCTOR <b>video-distribution system on Vertex AI</b> to surface only high-engagement live video, raising CTR, DAU, and MAU.</li>
+          <li>Stood up a robust ML pipeline on GCP plus an offline-to-online review framework that improved model quality and deployment consistency.</li>
+        </ul>
       </div>
+    </div>
 
-   </section> <!-- Call-To-Action Section End-->
-
-
-   <!-- Testimonials Section
-   ================================================== 
-   <section id="testimonials">
-
-      <div class="text-container">
-
-         <div class="row">
-
-            <div class="two columns header-col">
-
-               <h1><span>Client Testimonials</span></h1>
-
-            </div>
-
-            <div class="ten columns flex-container">
-
-               <div class="flexslider">
-
-                  <ul class="slides">
-
-                     <li>
-                        <blockquote>
-                           <p>Your work is going to fill a large part of your life, and the only way to be truly satisfied is
-                           to do what you believe is great work. And the only way to do great work is to love what you do.
-                           If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it.
-                           </p>
-                           <cite>Steve Jobs</cite>
-                        </blockquote>
-                     </li> <!-- slide ends 
-
-                     <li>
-                        <blockquote>
-                           <p>This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
-                           Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem
-                           nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris.
-                           </p>
-                           <cite>Mr. Adobe</cite>
-                        </blockquote>
-                     </li> <!-- slide ends 
-
-                  </ul>
-
-               </div> <!-- div.flexslider ends 
-
-            </div> <!-- div.flex-container ends
-
-         </div> <!-- row ends 
-
-       </div>  <!-- text-container ends 
-
-   </section> <!-- Testimonials Section End-->
-
-
-   <!-- Contact Section
-   ================================================== 
-   <section id="contact">
-
-         <div class="row section-head">
-
-            <div class="two columns header-col">
-
-               <h1><span>Get In Touch.</span></h1>
-
-            </div>
-
-            <div class="ten columns">
-
-                  <p> abcd</p>
-
-            </div>
-
-         </div>
-
-         <div class="row">
-
-            <div class="eight columns">
-
-               <!-- form 
-               <form action="" method="post" id="contactForm" name="contactForm">
-					<fieldset>
-
-                  <div>
-						   <label for="contactName">Name <span class="required">*</span></label>
-						   <input type="text" value="" size="35" id="contactName" name="contactName">
-                  </div>
-
-                  <div>
-						   <label for="contactEmail">Email <span class="required">*</span></label>
-						   <input type="text" value="" size="35" id="contactEmail" name="contactEmail">
-                  </div>
-
-                  <div>
-						   <label for="contactSubject">Subject</label>
-						   <input type="text" value="" size="35" id="contactSubject" name="contactSubject">
-                  </div>
-
-                  <div>
-                     <label for="contactMessage">Message <span class="required">*</span></label>
-                     <textarea cols="50" rows="15" id="contactMessage" name="contactMessage"></textarea>
-                  </div>
-
-                  <div>
-                     <button class="submit">Submit</button>
-                     <span id="image-loader">
-                        <img alt="" src="images/loader.gif">
-                     </span>
-                  </div>
-
-					</fieldset>
-				   </form> <!-- Form End 
-
-               <!-- contact-warning 
-               <div id="message-warning"> Error boy</div>
-               <!-- contact-success 
-				   <div id="message-success">
-                  <i class="fa fa-check"></i>Your message was sent, thank you!<br>
-				   </div>
-
-            </div>
-
-
-            <aside class="four columns footer-widgets">
-
-               <div class="widget widget_contact">
-
-					   <h4>Address and Phone</h4>
-					   <p class="address">
-						   Jonathan Doe<br>
-						   1600 Amphitheatre Parkway <br>
-						   Mountain View, CA 94043 US<br>
-						   <span>(123) 456-7890</span>
-					   </p>
-
-				   </div>
-
-               <div class="widget widget_tweets">
-
-                  <h4 class="widget-title">Latest Tweets</h4>
-
-                  <ul id="twitter">
-                     <li>
-                        <span>
-                        This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
-                        Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum
-                        <a href="#">http://t.co/CGIrdxIlI3</a>
-                        </span>
-                        <b><a href="#">2 Days Ago</a></b>
-                     </li>
-                     <li>
-                        <span>
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                        eaque ipsa quae ab illo inventore veritatis et quasi
-                        <a href="#">http://t.co/CGIrdxIlI3</a>
-                        </span>
-                        <b><a href="#">3 Days Ago</a></b>
-                     </li>
-                  </ul>
-
-		         </div>
-
-            </aside>
-
+    <div class="job reveal">
+      <div class="when">May to Dec 2023</div>
+      <div>
+        <h3>Nextdoor</h3>
+        <div class="r">Software Engineer 2, ML &middot; Moderation <span class="loc">· San Jose, CA</span></div>
+        <ul>
+          <li>Engineered an automated <b>fake account detection</b> system and ran a winning A/B test for a 5 to 10% moderation improvement.</li>
+          <li>Augmented data-scarce regions with GPT-generated examples and built a GPT-based Probability-of-Infractions model deployed alongside classical ML and BERT.</li>
+        </ul>
       </div>
+    </div>
 
-   </section> <!-- Contact Section End-->
-
-
-   <!-- footer
-   ================================================== -->
-   <footer>
-
-      <div class="row">
-
-         <div class="twelve columns">
-
-            <ul class="social-links">
-               <li><a href="https://twitter.com/prav1411"><i class="fa fa-twitter"></i></a></li>
-               <li><a href="https://www.linkedin.com/in/praveenks23/"><i class="fa fa-linkedin"></i></a>
-               </li>
-               <li><a href="https://github.com/PraveenKumarSridhar"><i class="fa fa-github"></i></a></li>
-            </ul>
-
-            <ul class="copyright">
-               <li>&copy; Copyright 2014 CeeVee</li>
-               <li>Design by <a href="http://www.styleshout.com/" title="Styleshout" target="_blank">Styleshout</a></li>
-            </ul>
-
-         </div>
-
-         <div id="go-top"><a class="smoothscroll" title="Back to Top" href="#particles"><i class="icon-up-open"></i></a>
-         </div>
-
+    <div class="job reveal">
+      <div class="when">Aug 2022 to May 2024</div>
+      <div>
+        <h3>Khoury College, NULab</h3>
+        <div class="r">Research Assistant <span class="loc">· Boston, MA</span></div>
+        <ul>
+          <li>Built an NLP pipeline for topic modeling and demographics with a DistilBERT emotion module that cut inference time <b>45%</b>.</li>
+          <li>Built a semantic retrieval system (Instructor, GTE, RoBERTa with FAISS) and generated synthetic instruction-tuning data with Llama-3.</li>
+        </ul>
       </div>
+    </div>
 
-   </footer>
+    <div class="job reveal">
+      <div class="when">May to Aug 2022</div>
+      <div>
+        <h3>Meta</h3>
+        <div class="r">Data Scientist Intern <span class="loc">· Seattle, WA</span></div>
+        <ul>
+          <li>Built a churn framework with causal inference (X-learners, causal trees) and SHAP, forecasting advertiser churn at <b>92% accuracy</b>.</li>
+        </ul>
+      </div>
+    </div>
 
+    <div class="job reveal">
+      <div class="when">Jun 2018 to Aug 2021</div>
+      <div>
+        <h3>Intellect Design Arena</h3>
+        <div class="r">Data Scientist <span class="loc">· Chennai, India</span></div>
+        <ul>
+          <li>Designed and shipped CNNs, LSTMs, and attention BiLSTMs to production at <b>90%+ accuracy</b>, plus a BERT and RoBERTa ensemble classifier.</li>
+          <li>Combined CRAFT with Tesseract for a 5% OCR accuracy gain and extracted MRZ data from passports via image processing.</li>
+        </ul>
+      </div>
+    </div>
 
-   <!-- Java Script
-   ================================================== -->
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-   <script>window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')</script>
-   <script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+  </div>
+</section>
 
-   <script src="js/jquery.flexslider.js"></script>
-   <script src="js/waypoints.js"></script>
-   <script src="js/jquery.fittext.js"></script>
-   <script src="js/magnific-popup.js"></script>
-   <script src="js/init.js"></script>
-   <script src="js/vendor/typed.js/typed.min.js"></script>
-   <script type="text/javascript">
-      var typed = new Typed('.typing',{
-         strings: ["Hello!!!", "I'm Praveen Kumar Sridhar"],
-         loop: true,
-         typeSpeed: 80,
-         backSpeed: 40
-      });
-   </script>
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-label reveal">
+      <div class="eyebrow">Selected projects</div>
+      <h2>Things I built end to end.</h2>
+    </div>
+    <div class="projects reveal">
+      <article class="proj">
+        <div class="pt"><h3>Answer Engine Optimization</h3><span class="badge">Full-stack SaaS</span></div>
+        <p>A distributed B2B platform that tracks and optimizes visibility across LLM answer engines, with real-time prompt ranking, competitive intel dashboards, and AI content recommendations.</p>
+        <div class="stack"><span>Python</span><span>Go</span><span>React</span></div>
+      </article>
+      <article class="proj">
+        <div class="pt"><h3>PromptJesus</h3><span class="badge">Open source</span></div>
+        <p>An LLM-powered prompt-optimization platform on Llama with LlamaGuard guardrails, auto-enhancing free-form input through git-style, version-controlled iterative refinement.</p>
+        <div class="stack"><span>Llama</span><span>LlamaGuard</span><span>Prompt eng.</span></div>
+      </article>
+      <article class="proj">
+        <div class="pt"><h3>Vision Transformer</h3><span class="badge">Computer vision</span></div>
+        <p>Fine-tuned Vision Transformers for image classification, reaching 95% accuracy on the CIFAR-10 dataset.</p>
+        <div class="stack"><span>ViT</span><span>PyTorch</span><span>CIFAR-10</span></div>
+      </article>
+      <article class="proj">
+        <div class="pt"><h3>FaceCheck</h3><span class="badge">Deployed model</span></div>
+        <p>A face-authentication system that flags counterfeits from StyleGAN, DCGAN, and PGGAN using a DenseNet classifier, deployed on GCP.</p>
+        <div class="stack"><span>DenseNet</span><span>GANs</span><span>GCP</span></div>
+      </article>
+      <article class="proj">
+        <div class="pt"><h3>The Song Search</h3><span class="badge">Information retrieval</span></div>
+        <p>A music IR system reaching 80% MAP, using MAGENTA's MT3 (a T5 architecture) for transcription over a custom dataset built on GTZAN.</p>
+        <div class="stack"><span>MT3 / T5</span><span>MAGENTA</span><span>GTZAN</span></div>
+      </article>
+      <a class="proj proj-link" href="https://github.com/PraveenKumarSridhar" target="_blank" rel="noopener">
+        <div class="pt"><h3>More on GitHub</h3><span class="badge">Open source &#8599;</span></div>
+        <p>Models, notebooks, and experiments across NLP, computer vision, and LLM tooling, plus everything that did not fit above.</p>
+        <div class="stack"><span>github.com/PraveenKumarSridhar</span></div>
+      </a>
+    </div>
+  </div>
+</section>
 
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-label reveal">
+      <div class="eyebrow">Toolkit</div>
+      <h2>What I work with?</h2>
+      <p class="sub">The full stack I reach for, from raw modeling to the infra that ships and monitors it.</p>
+    </div>
+    <dl class="reveal">
+      <div class="skill-row"><dt>Languages</dt><dd>Python · Go · Scala · R · C++ · Java · SQL</dd></div>
+      <div class="skill-row"><dt>Backend &amp; Web</dt><dd>Go · Python · React · REST APIs · distributed systems · microservices</dd></div>
+      <div class="skill-row"><dt>ML &amp; Deep Learning</dt><dd>PyTorch · TensorFlow · Keras · HuggingFace · scikit-learn · XGBoost · ONNX · OpenCV</dd></div>
+      <div class="skill-row"><dt>GenAI &amp; LLMs</dt><dd>LLaMA · GPT · Claude · Gemini · Mistral · HuggingFace Transformers · Ollama · vLLM</dd></div>
+      <div class="skill-row"><dt>LLM Engineering</dt><dd>LangChain · LlamaIndex · RAG &amp; retrieval · FAISS · Pinecone · embeddings (Instructor, GTE) · fine-tuning &amp; PEFT/LoRA · LlamaGuard · prompt engineering · agents &amp; eval · MCP</dd></div>
+      <div class="skill-row"><dt>MLOps &amp; Orchestration</dt><dd>Docker · Kubernetes · Kubeflow · Airflow · Dagster · MLflow · TFX · Terraform · GitHub Actions</dd></div>
+      <div class="skill-row"><dt>Cloud &amp; Data</dt><dd>GCP / Vertex AI · AWS · Spark · Hadoop · PostgreSQL · MongoDB · Redis · SQL Server</dd></div>
+      <div class="skill-row"><dt>Methods</dt><dd>A/B testing · Causal inference · Statistics · NLP · Computer vision · Information retrieval · Recommender systems</dd></div>
+      <div class="skill-row"><dt>Observability &amp; Tools</dt><dd>Datadog · Grafana · wandb · Tableau · Git · Linux · vim</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- AWARDS + EDU -->
+<section>
+  <div class="wrap">
+    <div class="twoup">
+      <div class="mini reveal">
+        <h3>Education</h3>
+        <div class="edu-item">
+          <h4>Northeastern University</h4>
+          <p>M.S., Data Science, Khoury College</p>
+          <div class="y">GPA 4.0 / 4.0 · Boston, MA · 2021 to 2023</div>
+        </div>
+        <div class="edu-item">
+          <h4>VIT University</h4>
+          <p>B.Tech, Computer Science</p>
+          <div class="y">Chennai, India · 2014 to 2018</div>
+        </div>
+      </div>
+      <div class="mini reveal">
+        <h3>Recognition</h3>
+        <ul class="awards">
+          <li>On the <b>Technical Program Committee</b> for 5+ IEEE conferences</li>
+          <li>Reviewer of academic papers for multiple IEEE conferences</li>
+          <li>Judge for 3+ <b>Globee International Awards</b></li>
+          <li>Winner, <b>SPOT Award</b>, Nextdoor</li>
+          <li>Winner, <b>Going the Extra Mile Award</b>, Intellect Design Arena</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="eyebrow reveal" style="margin-bottom:22px;">Get in touch</div>
+    <h2 class="reveal">Let's build something<br /><em>measurably</em> good.</h2>
+    <div class="links reveal">
+      <a href="mailto:sridharpraveenkumar@gmail.com"><svg class="lico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3.5 7 8.5 6 8.5-6"></path></svg><span>sridharpraveenkumar@gmail.com</span></a>
+      <a href="https://linkedin.com/in/praveenks23/" target="_blank" rel="noopener"><svg class="lico" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21H9z"></path></svg>LinkedIn</a>
+      <a href="https://github.com/PraveenKumarSridhar" target="_blank" rel="noopener"><svg class="lico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 8.84 21.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"></path></svg>GitHub</a>
+    </div>
+    <div class="foot">
+      <span>© 2026 Praveen Kumar Sridhar</span>
+      <span>Vancouver, Canada</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const bar = document.getElementById('bar');
+  addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 12), {passive:true});
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 </body>
-
 </html>
