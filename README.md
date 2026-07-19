@@ -1,11 +1,11 @@
 # PraveenkumarS
 
 
-This repository contains the code for my portfolio website, [https://praveenkumarsridhar.github.io/PraveenKumarS/](https://praveenkumarsridhar.github.io/PraveenKumarS/) The original html, css, and php were acquired from a free themezy theme found [here](https://www.themezy.com/demos/151-ceevee-free-responsive-website-template). It was a lot of fun tweaking the HTML to make the template my own. I learned a lot about HTML and CSS in the process of making this site.
+This repository contains the code for my portfolio website, [https://praveenks.com](https://praveenks.com) The original html, css, and php were acquired from a free themezy theme found [here](https://www.themezy.com/demos/151-ceevee-free-responsive-website-template). It was a lot of fun tweaking the HTML to make the template my own. I learned a lot about HTML and CSS in the process of making this site.
 
 ## Lab Notes
 
-The blog lives at [/notes/](https://praveenkumarsridhar.github.io/PraveenKumarS/notes/) and is rendered by GitHub Pages' built-in Jekyll. To publish a note:
+The blog lives at [/notes/](https://praveenks.com/notes/) and is rendered by GitHub Pages' built-in Jekyll. To publish a note:
 
 1. Add a markdown file to `_notes/`, e.g. `_notes/my-note-title.md` (the filename becomes the URL slug):
 
