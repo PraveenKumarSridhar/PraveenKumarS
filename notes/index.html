@@ -1,0 +1,160 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lab Notes · Praveen Kumar Sridhar</title>
+<meta name="description" content="Lab notes on agents, evals, and machine learning by Praveen Kumar Sridhar." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f7f4ee;
+    --bg-2:#f1ece2;
+    --text:#1b1814;
+    --ink-soft:#574f44;
+    --muted:#938a79;
+    --line:#e4ddd0;
+    --line-2:#ece6db;
+    --accent:#b24a2c;
+    --serif:"Newsreader",Georgia,serif;
+    --sans:"Hanken Grotesk",system-ui,sans-serif;
+    --mono:"JetBrains Mono",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;overflow-x:hidden;
+  }
+  ::selection{background:var(--accent);color:#fff;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 32px;}
+  .eyebrow{
+    font-size:12px;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--accent);}
+
+  header.bar{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;transition:border-color .3s;
+  }
+  header.bar.scrolled{border-color:var(--line);}
+  header.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .name-mark{font-weight:600;font-size:15px;letter-spacing:-0.01em;}
+  .name-mark i{color:var(--accent);font-style:normal;}
+  nav.top{display:flex;gap:28px;}
+  nav.top a{font-size:14px;color:var(--ink-soft);transition:color .2s;}
+  nav.top a:hover{color:var(--accent);}
+  nav.top a.here{color:var(--accent);font-weight:500;}
+  @media(max-width:680px){nav.top{display:none;}}
+
+  .notes-page{padding:96px 0 80px;}
+  .sec-label{margin-bottom:44px;}
+  .sec-label h1{
+    font-family:var(--serif);font-weight:400;font-size:clamp(38px,5.4vw,56px);
+    letter-spacing:-0.02em;margin-top:14px;line-height:1.05;
+  }
+  .sec-label .sub{font-size:15.5px;color:var(--ink-soft);margin-top:12px;max-width:54ch;}
+
+  .featured{display:block;color:var(--text);}
+  .featured .kicker{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);}
+  .featured h2{
+    font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.15;
+    letter-spacing:-0.01em;margin-top:12px;transition:color .2s;
+  }
+  .featured:hover h2{color:var(--accent);}
+  .featured p{font-size:15.5px;color:var(--ink-soft);line-height:1.6;margin-top:12px;max-width:60ch;}
+  .featured .meta{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px;}
+
+  .note-list{margin-top:32px;border-top:1px solid var(--line);}
+  .note-row{
+    display:grid;grid-template-columns:1fr auto;gap:24px;align-items:baseline;
+    padding:17px 0;border-top:1px solid var(--line-2);color:var(--text);
+  }
+  .note-row:first-child{border-top:0;}
+  .note-row .t{display:block;font-size:16px;font-weight:600;letter-spacing:-0.01em;transition:color .2s;}
+  .note-row:hover .t{color:var(--accent);}
+  .note-row .d{display:block;font-size:13.5px;color:var(--muted);margin-top:3px;}
+  .note-row .when{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;}
+  @media(max-width:560px){.note-row{grid-template-columns:1fr;gap:6px;}.note-row .when{order:-1;}}
+
+  .foot{
+    margin-top:80px;padding-top:24px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-size:13px;color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="name-mark" href="{{ site.baseurl }}/">PK<i>.</i></a>
+    <nav class="top">
+      <a href="{{ site.baseurl }}/#build">What I build</a>
+      <a href="{{ site.baseurl }}/#work">Work</a>
+      <a href="{{ site.baseurl }}/#projects">Projects</a>
+      <a href="{{ site.baseurl }}/#skills">Skills</a>
+      <a class="here" href="{{ site.baseurl }}/notes/">Lab Notes</a>
+      <a href="{{ site.baseurl }}/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="notes-page">
+  <div class="wrap">
+    <div class="sec-label">
+      <div class="eyebrow">Lab Notes</div>
+      <h1>Recent notes from the lab.</h1>
+      <p class="sub">Writing that would otherwise live on Medium. It lives here now, for free.</p>
+    </div>
+
+    {% assign notes = site.notes | sort: "date" | reverse %}
+    {% assign current_year = site.time | date: "%Y" %}
+    {% for note in notes limit: 1 %}
+      {% assign words = note.content | strip_html | number_of_words %}
+      {% assign mins = words | divided_by: 200 | at_least: 1 %}
+    <a class="featured" href="{{ note.url | relative_url }}">
+      <div class="kicker">Latest{% if note.tags and note.tags != empty %} · {{ note.tags | first }}{% endif %}</div>
+      <h2>{{ note.title }}</h2>
+      {% if note.description %}<p>{{ note.description }}</p>{% endif %}
+      <div class="meta">{{ note.date | date: "%b %-d, %Y" }} · {{ mins }} min read</div>
+    </a>
+    {% endfor %}
+
+    {% if notes.size > 1 %}
+    <div class="note-list">
+      {% for note in notes offset: 1 %}
+      {% assign words = note.content | strip_html | number_of_words %}
+      {% assign mins = words | divided_by: 200 | at_least: 1 %}
+      {% assign note_year = note.date | date: "%Y" %}
+      <a class="note-row" href="{{ note.url | relative_url }}">
+        <span><span class="t">{{ note.title }}</span>{% if note.description %}<span class="d">{{ note.description }}</span>{% endif %}</span>
+        <span class="when">{% if note_year == current_year %}{{ note.date | date: "%b %-d" }}{% else %}{{ note.date | date: "%b %-d, %Y" }}{% endif %} · {{ mins }} min</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="foot">
+      <span>© {{ site.time | date: "%Y" }} Praveen Kumar Sridhar</span>
+      <span>Vancouver, Canada</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const bar = document.getElementById('bar');
+  addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 12), {passive:true});
+</script>
+</body>
+</html>
