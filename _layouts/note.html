@@ -118,6 +118,27 @@
     background:var(--bg-2);border:1px solid var(--line);border-radius:10px;margin-bottom:24px;
   }
   .article-body pre code{background:none;border:0;padding:0;font-size:13px;color:inherit;}
+  .article-body .table-wrap{overflow-x:auto;margin-bottom:24px;}
+  .article-body table{
+    border-collapse:collapse;width:100%;font-family:var(--sans);
+    font-size:14px;line-height:1.5;
+  }
+  .article-body th{
+    text-align:left;font-weight:600;color:var(--text);font-size:12px;
+    letter-spacing:0.06em;text-transform:uppercase;
+    padding:10px 14px 10px 0;border-bottom:1px solid var(--line);
+  }
+  .article-body td{
+    padding:10px 14px 10px 0;border-bottom:1px solid var(--line-2);
+    color:var(--ink-soft);vertical-align:top;
+  }
+  .article-body .footnotes{
+    margin-top:44px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:14px;color:var(--ink-soft);
+  }
+  .article-body .footnotes ol{margin:0 0 0 18px;}
+  .article-body .footnotes p{margin-bottom:8px;}
+  sup[role="doc-noteref"],.article-body sup{font-size:0.65em;}
 
   .note-foot{
     margin-top:56px;padding-top:24px;border-top:1px solid var(--line);
@@ -174,6 +195,13 @@
 <script>
   const bar = document.getElementById('bar');
   addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 12), {passive:true});
+
+  document.querySelectorAll('#article-body > table').forEach(t => {
+    const w = document.createElement('div');
+    w.className = 'table-wrap';
+    t.before(w);
+    w.appendChild(t);
+  });
 
   const heads = document.querySelectorAll('#article-body h2[id]');
   if (heads.length) {
