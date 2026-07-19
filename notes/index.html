@@ -65,6 +65,13 @@ layout: null
     letter-spacing:-0.02em;margin-top:14px;line-height:1.05;
   }
   .sec-label .sub{font-size:15.5px;color:var(--ink-soft);margin-top:12px;max-width:54ch;}
+  .obsession{
+    margin-top:22px;display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;
+    font-family:var(--mono);font-size:12.5px;
+    border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+  }
+  .obsession .k{color:var(--accent);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;}
+  .obsession .v{color:var(--ink-soft);}
 
   .featured{display:block;color:var(--text);}
   .featured .kicker{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);}
@@ -115,8 +122,11 @@ layout: null
   <div class="wrap">
     <div class="sec-label">
       <div class="eyebrow">Lab Notes</div>
-      <h1>Recent notes from the lab.</h1>
-      <p class="sub">Writing that would otherwise live on Medium. It lives here now, for free.</p>
+      <h1>Ideas, evaluated.</h1>
+      <p class="sub">Notes on agents, memory, and evals. No paywall, no algorithm, no Medium.</p>
+      {% if site.obsession %}
+      <div class="obsession"><span class="k">Current obsession</span><span class="v">{{ site.obsession }}</span></div>
+      {% endif %}
     </div>
 
     {% assign notes = site.notes | sort: "date" | reverse %}
