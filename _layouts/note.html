@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#f7f4ee" />
 <title>{{ page.title }} · Lab Notes · Praveen Kumar Sridhar</title>
 {% if page.description %}<meta name="description" content="{{ page.description | strip_newlines | escape }}" />{% endif %}
 <link rel="canonical" href="{{ page.url | absolute_url }}" />
+<link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="16x16 32x32 48x48" />
+<link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}" sizes="180x180" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -29,7 +33,7 @@
   body{
     background:var(--bg);color:var(--text);font-family:var(--sans);
     font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;overflow-x:hidden;
+    text-rendering:optimizeLegibility;
   }
   ::selection{background:var(--accent);color:#fff;}
   a{color:inherit;text-decoration:none;}
@@ -55,6 +59,7 @@
     max-width:920px;margin:0 auto;padding:64px 32px 88px;
     display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;
   }
+  .note-grid>*{min-width:0;}
   .side{position:sticky;top:88px;display:grid;gap:22px;}
   .side .back{font-family:var(--mono);font-size:12.5px;color:var(--accent);}
   .side .meta{font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.9;}
@@ -62,10 +67,11 @@
   .side .tags span{
     font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);
     border:1px solid var(--line);border-radius:999px;padding:4px 10px;
+    max-width:100%;overflow-wrap:anywhere;
   }
   .side .toc-label{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px;}
   .side .toc{display:grid;gap:8px;font-size:13px;}
-  .side .toc a{color:var(--ink-soft);transition:color .2s;}
+  .side .toc a{color:var(--ink-soft);transition:color .2s;overflow-wrap:anywhere;}
   .side .toc a:hover{color:var(--accent);}
   @media(max-width:760px){
     .note-grid{grid-template-columns:1fr;gap:36px;padding-top:44px;}
@@ -78,7 +84,7 @@
   }
   .article-body{
     margin-top:30px;font-family:var(--serif);font-size:17.5px;
-    line-height:1.75;color:var(--ink-read);max-width:62ch;
+    line-height:1.75;color:var(--ink-read);max-width:62ch;min-width:0;
   }
   .article-body h2{
     font-family:var(--serif);font-weight:500;font-size:25px;line-height:1.2;
@@ -92,10 +98,13 @@
   .article-body p{margin-bottom:22px;}
   .article-body em{font-style:italic;}
   .article-body strong{color:var(--text);font-weight:600;}
-  .article-body a{color:var(--accent);border-bottom:1px solid rgba(178,74,44,0.35);}
+  .article-body a{
+    color:var(--accent);border-bottom:1px solid rgba(178,74,44,0.35);
+    overflow-wrap:anywhere;
+  }
   .article-body ul,.article-body ol{margin:0 0 22px 22px;}
   .article-body li{margin-bottom:8px;}
-  .article-body img{max-width:100%;border-radius:10px;margin-bottom:22px;}
+  .article-body img{max-width:100%;height:auto;border-radius:10px;margin-bottom:22px;}
   .article-body hr{border:0;border-top:1px solid var(--line);margin:34px 0;}
   .article-body blockquote{margin:34px 0;}
   .article-body blockquote::before{content:"";display:block;width:18px;height:1px;background:var(--accent);margin-bottom:14px;}
@@ -107,9 +116,10 @@
     font-family:var(--mono);font-size:0.82em;color:var(--ink-soft);
     background:var(--bg-2);border:1px solid var(--line);border-radius:5px;padding:1px 5px;
   }
+  .article-body :not(pre)>code{overflow-wrap:anywhere;}
   .article-body div.highlighter-rouge,.article-body figure.highlight{
     background:var(--bg-2);border:1px solid var(--line);border-radius:10px;
-    overflow:hidden;margin-bottom:24px;
+    overflow:hidden;margin-bottom:24px;max-width:100%;
   }
   .article-body div.highlighter-rouge pre,.article-body figure.highlight pre,.article-body>pre{
     font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--ink-soft);
@@ -119,7 +129,7 @@
     background:var(--bg-2);border:1px solid var(--line);border-radius:10px;margin-bottom:24px;
   }
   .article-body pre code{background:none;border:0;padding:0;font-size:13px;color:inherit;}
-  .article-body .table-wrap{overflow-x:auto;margin-bottom:24px;}
+  .article-body .table-wrap{max-width:100%;overflow-x:auto;margin-bottom:24px;}
   .article-body table{
     border-collapse:collapse;width:100%;font-family:var(--sans);
     font-size:14px;line-height:1.5;
