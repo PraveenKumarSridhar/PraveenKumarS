@@ -47,11 +47,9 @@ A production system rarely observes knowledge directly. It sees messages, acknow
 | Higher-order belief | Alice believes Bob knows the date | Reasoning about Alice's model of Bob |
 | Common knowledge | A qualifying group announcement established shared awareness | Reasoning that depends on everyone knowing, and knowing that everyone knows |
 
-Common knowledge is not a collection of independent private observations. It includes recursively shared awareness. That distinction matters when coordination depends on what every participant can assume about the others.
+Common knowledge is stronger than a collection of independent private observations. It requires recursively shared awareness, so a public channel alone does not establish it.
 
-A public channel alone does not establish it. The system still needs rules for which announcements qualify and which participants received them.
-
-All five records can land near each other in embedding space. They do not license the same answer or action.
+The system still needs rules for which announcements qualify and which participants received them. All five records can land near each other in embedding space, but they do not license the same answer or action.
 
 ## Follow the launch-date failure end to end
 
@@ -65,23 +63,13 @@ The unsafe ingestion path creates a record with no remaining point of view:
 
 When Bob asks, semantic retrieval correctly returns it. Generation then treats the retrieved sentence as usable context. The system has no field left that can reveal Alice as the speaker, distinguish belief from knowledge, trace the private source, or enforce its audience.
 
-A perspective-aware core preserves the modeling direction. This example and the fuller object below form a **proposed design contract**, not a claim about fields exposed by an existing product:
+A **proposed design contract** preserves the modeling direction and the policy inputs. This is a conceptual object, not a claim about fields exposed by an existing product:
 
 ```json
 {
   "content": "Alice believes Bob knows the launch is October 17",
   "observer_id": "alice",
-  "observed_id": "bob"
-}
-```
-
-That core is necessary, but it is not enough:
-
-```json
-{
-  "claim": "The launch is October 17",
-  "observer_id": "alice",
-  "subject_id": "bob",
+  "observed_id": "bob",
   "source_id": "private-session-42",
   "modality": "reported_belief",
   "confidence": 0.78,
@@ -92,29 +80,21 @@ That core is necessary, but it is not enough:
 }
 ```
 
-Now retrieval can return the record without pretending the query is settled. The response path can check whether Bob is an allowed audience and belongs to `launch-core`, seek an authoritative source, ask for verification, or abstain.
+The same semantically relevant record should produce different behavior under different response contexts:
 
 ```text
-Alice speaks in a private session
-                 |
-                 v
-store her belief, source, and scope
-                 |
-                 v
-Bob asks for the launch date
-                 |
-                 v
-retrieve the relevant record
-                 |
-                 v
-check evidence and disclosure policy
-                 |
-          +------+------+
-          |             |
-       answer         abstain
+SAME RETRIEVED RECORD
+"Alice believes Bob knows the launch date"
+source: private-session-42
+scope: launch-core
+
+ASKER: ALICE         | ASKER: BOB
+audience allowed     | audience not established
+return belief with   | relevance is not permission
+attribution + source | verify or abstain
 ```
 
-This separates two decisions that are often collapsed. Is the claim valid under the relevant participant's perspective? May the system disclose it to this audience? Evidence can support the first without granting the second. Knowing a secret and being authorized to receive it are different states.
+Retrieval can return the record in both cases without pretending the query is settled. The response policy then separates two decisions: is the claim valid under the relevant participant's perspective, and may the system disclose it to this audience? Evidence can support the first without granting the second. Knowing a secret and being authorized to receive it are different states.
 
 ## Disagreement can be the correct state
 
@@ -152,9 +132,9 @@ Each field changes a decision:
 
 > Semantic relevance answers "what sounds related?" It does not answer "whose claim is this, and may I use it here?"
 
-A recent preprint, *Governed Shared Memory for Multi-Agent LLM Systems*, describes and evaluates its authors' production service rather than establishing independent consensus. It names four production failure modes: unauthorized leakage, stale propagation, contradiction persistence, and provenance collapse. It proposes scoped retrieval, temporal supersession, provenance tracking, and policy-governed propagation as corresponding system primitives.[^3]
+A recent preprint, *Governed Shared Memory for Multi-Agent LLM Systems*, describes and evaluates its authors' production service rather than establishing independent consensus. It identifies unauthorized leakage, stale propagation, contradiction persistence, and provenance collapse, then proposes scoped retrieval, temporal supersession, provenance tracking, and policy-governed propagation as corresponding system primitives.
 
-Those primitives connect the fields to runtime behavior. Scope filters candidates before generation. Supersession prevents an old belief from propagating as current while keeping its history. Provenance preserves who wrote or derived a claim. Propagation policy determines which agents or groups may receive it. Perspective metadata supplies inputs to those controls, but does not replace them.
+The authors also report that tenant isolation held while a direct GET-by-ID path initially bypassed sub-tenant scope for agent-scoped credentials, a flaw they say they remediated during the study.[^3] The connection to runtime behavior is direct: scope filters candidates, supersession keeps stale beliefs historical, provenance preserves the writer and derivation, and propagation policy limits recipients. Perspective metadata supplies inputs to those controls; it does not replace them.
 
 ## The minimum design test
 
@@ -166,7 +146,18 @@ These are design tests, not a benchmark claim:
 4. **Higher-order belief:** Alice's belief about Bob is not rewritten as Bob's own belief or knowledge.
 5. **Common knowledge:** A qualifying group announcement is represented differently from independent private observations.
 
-Together, they test ingestion, storage, retrieval, update semantics, and disclosure. They can become an implementation fixture or evaluation artifact later. For now, their value is diagnostic: if a memory design cannot represent one of these cases without flattening it, adding more retrieval quality will not recover the lost distinction.
+The private-belief test can already be written as an acceptance fixture:
+
+```text
+GIVEN Alice states p in a private session
+AND   the stored modality is reported_belief
+WHEN  Bob asks whether p is true
+THEN  retrieval may find the record
+BUT   the response must not disclose p
+AND   Alice, source, scope, and history remain intact
+```
+
+This is the bridge to a later implementation or evaluation artifact, not evidence of benchmark performance. If a memory design cannot represent the five cases without flattening them, better retrieval will not recover the lost distinctions.
 
 > Storing an `observer_id` is the beginning, not the whole solution. If retrieval ignores observer, source, modality, audience, and access scope, the system preserves perspective at rest and erases it again at use time.
 
