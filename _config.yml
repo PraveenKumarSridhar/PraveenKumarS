@@ -1,8 +1,40 @@
 title: Praveen Kumar Sridhar
+tagline: Lab notes on agent memory, agents, and evals
+description: "Technical notes on agent memory, agents, evals, and applied machine learning by Praveen Kumar Sridhar."
 obsession: "agent memory layers: Honcho, Mem0, and building memoir"
 url: "https://praveenks.com"
 baseurl: ""
+lang: en-CA
+locale: en_CA
 markdown: kramdown
+
+author:
+  name: Praveen Kumar Sridhar
+  url: "https://praveenks.com"
+  twitter: prav1411
+
+twitter:
+  username: prav1411
+  card: summary_large_image
+
+social:
+  name: Praveen Kumar Sridhar
+  links:
+    - "https://x.com/prav1411"
+    - "https://linkedin.com/in/praveenks23/"
+    - "https://github.com/PraveenKumarSridhar"
+    - "https://medium.com/@hallucinatingkitten"
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+feed:
+  path: /feed/posts.xml
+  collections:
+    notes:
+      path: /feed.xml
 
 collections:
   notes:
@@ -15,6 +47,7 @@ defaults:
       type: notes
     values:
       layout: note
+      image: /assets/social-card.png
 
 exclude:
   - README.md
