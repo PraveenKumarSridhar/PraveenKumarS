@@ -15,6 +15,7 @@ The blog lives at [/notes/](https://praveenks.com/notes/) and is rendered by Git
    description: One-liner shown on the listing page.
    date: 2026-07-18
    tags: [agents, evals]
+   image: /assets/social-card.png # optional social-card override
    ---
 
    ## First section
@@ -25,3 +26,11 @@ The blog lives at [/notes/](https://praveenks.com/notes/) and is rendered by Git
 2. `git push`. GitHub Pages rebuilds in ~30 seconds.
 
 Read time is computed from word count, the newest note is featured on the listing page, and the note template is `_layouts/note.html`.
+
+GitHub Pages also generates:
+
+- `/sitemap.xml` for crawler discovery
+- `/feed.xml` as an Atom feed of Lab Notes
+- canonical, Open Graph, X card, and JSON-LD metadata for every note
+
+Every note should include a `title`, `description`, and `date`. The site-wide social card is used when `image` is omitted.
