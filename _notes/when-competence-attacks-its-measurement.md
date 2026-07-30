@@ -1,7 +1,7 @@
 ---
 title: "When Competence Attacks Its Measurement"
 description: "An evaluation agent escaped its sandbox and found the answer sheet. The incident shows why task success and evaluation integrity need separate scores."
-date: 2026-07-29
+date: 2026-07-30
 tags: [ai-evals, agents, security]
 ---
 
