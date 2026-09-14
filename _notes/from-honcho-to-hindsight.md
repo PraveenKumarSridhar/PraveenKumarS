@@ -1,117 +1,137 @@
 ---
-title: "I moved my AI's memory. Then I started deleting."
-description: "An experiment in getting two AI agents to share a memory, moving 8,455 old conclusions, and deciding which baggage to leave behind."
+title: "I added more memories. My AI answered less."
+description: "Moving 8,455 conclusions from Honcho to Hindsight led to a small experiment: could duplicate memories crowd the answer out of an assistant's context?"
 date: 2026-09-13
-tags: [agent-memory, experiments, reliability]
+tags: [memory, agents]
 ---
 
-I told Hermes a made-up project code. A fresh Codex session recalled it. But another saved fact failed to reach Codex even though it was sitting in the database.
+My local model could report three facts about a fictional software release. Then I added five copies of a fact it already had. It could answer only one.
 
-The code was a checksum for a fictional telescope project. Both assistants were connected to Hindsight, a memory system that saves information between conversations. Its automatic recall supplied context to Codex; Codex did not need to run a lookup tool or open a file. In a fresh CLI session, it returned the code Hermes had saved.
+I hadn't deleted the other facts. I hadn't changed the question or the model. I'd given the memory store more records.
 
-A nonsense string isn't much of a demo. But it was exactly what I wanted: tell one assistant something, switch to another, and stop explaining everything again.
+Asked for the deployment region, rollback code, and approval code, it returned:
 
-That small success was part of a larger experiment. I was moving my agent memory from Honcho to Hindsight, taking 8,455 stored conclusions along. The move worked. It also gave me an excuse to look inside the thing I'd been calling "memory."
-
-There were useful records, repeated conclusions, and leftover test records. Getting the data across was only the first decision. I still had to decide what the agents should use, what they should trust, and what I could safely remove.
-
-## Two assistants, less repeating myself
-
-I use Hermes and Codex as AI assistants. Honcho and Hindsight are separate memory systems: they keep information beyond a single conversation so an assistant can retrieve it later.
-
-My goal was ordinary. If I explain a project's conventions in one session, I'd like the next session to start somewhere other than zero. I'd also like a detail from one project to stay out of another. Shared memory shouldn't mean every conversation gets every fact.
-
-I'd previously [written about Honcho's architecture](https://praveenks.com/notes/honcho-vs-mem0-two-memory-layers-two-architectures/), particularly its ability to preserve whose perspective a conclusion came from. I still cared about that. For this experiment, though, I wanted to try Hindsight as the shared memory behind both assistants, with automatic capture during normal use.
-
-This wasn't a benchmark declaring a winning vendor. It was a test of whether I could change the memory system without starting over.
-
-## The database remembered. The assistant ran out of patience.
-
-I had connected selected archives of older memories alongside the new ones. In one actual test, Codex missed a saved project fact even though a direct query to the memory API found it.
-
-The client had a three-second request deadline. Historical searches were taking roughly nine to ten seconds. The fact wasn't missing. The caller had stopped waiting.
-
-I changed the deadlines and ran current and historical searches concurrently. Later fresh-session checks passed. But a separate synthetic test found another problem in my integration: a slow archive lookup could prevent already-finished current-memory results from reaching the assistant.
-
-The failure looked like this:
-
-```text
-Current memory: ready ----+
-                         +--> wait
-Old archive:   still busy+      |
-                            timeout
-                               |
-                         no context
+```json
+{
+  "region": "north-lab-7",
+  "rollback": "UNKNOWN",
+  "approval": "UNKNOWN"
+}
 ```
 
-That's an unpleasant trade: adding access to old history could hide useful context I already had. Optional archive results should be allowed to arrive late without taking current memory down with them.
+The rollback and approval codes were still there. The model never saw them.
 
-Another probe found a bookkeeping problem on the write side. The adapter marked a turn as handled when it queued the write, before delivery succeeded. When the test forced that write to fail, the next ordinary turn moved on without retrying it.
+This happened in a small, deliberately simple retrieval experiment, not my production memory system. But it put a concrete shape around a question I'd been struggling with while moving my agents from Honcho to Hindsight: **what does it mean for an assistant to have a memory if that memory never reaches its answer?**
 
-A later whole-session flush might resend the failed turn, so this wasn't proof of permanent data loss. It was proof that "queued" and "saved" needed different meanings.
+## I wanted less repeating myself
 
-These were findings in the integration I audited, including my own archive wrapper, not universal claims about Hindsight. They changed how I tested the experiment. Asking a fresh agent to recall a fact checked something that counting database rows couldn't.
+I use Hermes and Codex as assistants. What I wanted from shared memory was ordinary: explain a project decision once, then pick up the work in another session without explaining it again.
 
-## Keep the old conclusions identifiable
+Honcho was my existing memory backend. Hindsight was the destination I was trying for shared recall. Both sit outside the language model, storing information that can be supplied to it later. Moving between them meant carrying over old conclusions and making sure the assistants could actually use them.
 
-The old system held 8,455 conclusions. These weren't raw chat messages. They were records Honcho had already extracted or inferred from earlier conversations.
+One test worked exactly as I'd hoped. A made-up fact captured through Hermes was recalled in a fresh Codex CLI session, without Codex opening a file or running a lookup itself. Automatic recall supplied the context.[^operations]
 
-I wanted to preserve those records, not ask another model to take a fresh guess at what they meant. So I copied their exact text into 13 separate Hindsight archives (historical memory banks), along with where they came from, their dates, and whose perspective produced them. I labelled them historical inferences rather than new statements from me.
+Another check exposed the less satisfying version of that story. An archive search took about ten seconds, while the Codex startup recall path had a deadline of about three. The fact existed. The search could find it. The caller stopped waiting too early.
 
-That last part matters. Imagine an old record saying, "This project probably uses Redis." Moving it into a new database shouldn't quietly upgrade *probably* into a fact. The example is invented; the distinction is why I kept the original text and source information.
+That changed what I was checking. A database count could tell me whether a record survived the move. It couldn't tell me whether the assistant received it in time to help.
 
-Every conclusion survived verification against the export. I kept the original database and backups too.[^migration]
+Then there was the question of what I'd moved.
 
-Then I connected selected archives to automatic recall. Importing an archive and letting it influence the next answer were separate steps. History with an unclear project owner remained available for explicit search rather than being injected into whichever conversation happened next.
+## A successful move includes the clutter
 
-By the end of the capture-and-recall checks, a fresh Codex CLI session could return both its own saved test fact and the one Hermes had saved.[^audit] That was the appealing part of the experiment: the assistants could share context without sharing the same conversation window.
+The import preserved 8,455 Honcho conclusions across 13 historical memory banks. I kept their original wording and source information rather than asking another model to rewrite them. An old inference stayed labelled as an old inference. Importing it didn't make it newly confirmed.[^migration]
 
-## I had also moved the duplicates
+This was the right approach for preserving history. It also preserved the repetitions.
 
-Preserving everything had a predictable consequence: the repeated records came along too.
+Later, I removed 3,881 explicitly approved duplicate and test records. For duplicate conclusions, I kept a surviving copy and attached the removed copies' source information to it. The point was to reduce repeated text without losing the ability to trace where it came from.[^cleanup]
 
-I started with a deliberately narrow cleanup. Within an archive, I looked for approved groups of conclusions whose text was identical after normalization. I also identified records created only for tests. I did not ask a model to judge which memories were "low value" or merge sentences because they sounded similar.
+That distinction matters. Two copies of the same sentence may point to different sources. Two similar sentences may describe different projects. Neither is a good reason to let an LLM casually decide what to delete.
 
-Even an exact-text match needs care. Two projects can both say "use Redis" without referring to the same decision. I kept the cleanup inside the approved archive boundaries.
+The cleanup checks established that the approved records were gone and the intended survivors were intact. They didn't establish that the assistant gave better answers afterward.
 
-For each duplicate group, I retained one record and attached the removed copies' source information to it. The active list got shorter, but I could still trace where the copies had come from.
+So there was an obvious question left: **could duplicates actually make recall worse, or had I just tidied a database?**
+
+Rather than experiment on my real memories, I built a tiny fictional one.
+
+## Three facts, three slots
+
+For the release project, the required facts were:
 
 ```text
-Before                 After
-claim, source A --+
-claim, source B --+--> one claim
-claim, source C --+    sources A,B,C
+region:   north-lab-7
+rollback: amber-otter-462
+approval: violet-crane-815
 ```
 
-This is the part of "forgetting" I found useful. I didn't need three active copies to preserve the fact that three source records had existed. Nor did those copies automatically count as three independent pieces of evidence.
+I added five unrelated records, then used a local embedding model to rank records against a question asking for all three values. The retriever passed its top three records to a local Llama 3 model. The instruction was simple: answer from those records, and use `UNKNOWN` for anything missing.
 
-I approved a fixed list of record IDs before deleting anything. New memories were arriving during the cleanup, so a moving instruction like "delete all duplicates" would have given the operation a different scope from the one I'd reviewed.
+With distinct records, all three facts reached the model. It returned all three values correctly.
 
-After a backup and a rollback dry run, I removed 3,881 approved duplicate and test records. A separate check through the API confirmed that the targets were gone, the intended survivors remained with unchanged text, and the merged source information was intact.[^cleanup]
+Then I added five exact copies of the region fact and ran the same question through the same pipeline. The copies scored just as highly as the original. The three available slots became:
 
-Those removals covered the wider Hindsight installation, including test banks, not just the imported records. This was tidying a working system, not throwing away half the old history.
+```text
+Distinct records     With copies
 
-I can't claim the agents got smarter afterward. I didn't benchmark answer quality, and unchanged capture behavior could introduce duplicates again. What I could show was exactly what had been removed and what had survived.
+1. region            1. region
+2. rollback          2. region
+3. approval          3. region
+```
 
-## The experiment I'd repeat
+The store had more records. The prompt had less information.
 
-The shared-fact test worked. The failure probes showed what that success hadn't tested: whether a failed write would be retried, or a slow lookup would block useful context.
+The model's `UNKNOWN` answers were appropriate. It wasn't failing to understand the rollback code. The retrieval step had left that code out.
 
-If you're adding memory to an agent, you can try a small version of this without migrating thousands of records:
+After exact-text deduplication, the original three facts reached the model again, and the complete answer returned.
 
-1. Give it a made-up fact it couldn't infer from general knowledge.
-2. Open a fresh session and ask for the fact without allowing other lookup tools. If you use two clients, try the second one too.
-3. In a test setup, interrupt a write or slow a lookup. Check whether the fact gets retried and whether available context still reaches the agent.
-4. Remove the test fact using the system's supported controls, then check retrieval and a fresh session again. Ask what remains in source documents, caches, or backups.
+This is a small example of a familiar retrieval problem, not a discovery that duplicates exist. What made it useful to me was seeing the loss travel all the way into the answer: two fields that had worked became `UNKNOWN` without either fact being deleted.
 
-That last step deserves as much attention as the first. My cleanup removed active memory records; it did not erase the original conversations or the backups. A privacy deletion request would need a broader operation.
+## The case that didn't break
 
-I went into this wanting less repetition between assistants. I came out wanting a way to inspect a proposed cleanup before approving it: show me what you're keeping, what you're removing, and why. The one-off transaction did that job here; whether the cleanup improved answers is still an experiment to run.
+I fixed three fictional scenarios before running the test: a software release, an archive, and a sensor. Each question needed three facts. Each duplicate condition repeated the first fact, whether or not it turned out to rank highest. I didn't change the questions after seeing the results.
 
-For now, I have a better experiment than "does my AI remember me?" I can plant a fact, follow it into another session, interrupt its delivery, and check what remains after removal. And I can do it with a fictional telescope instead of trusting the system with something important first.
+Here is how many required facts reached the model:
+
+| Scenario | Distinct | With copies | Deduplicated |
+|---|---:|---:|---:|
+| Release | 3 of 3 | 1 of 3 | 3 of 3 |
+| Archive | 3 of 3 | 1 of 3 | 3 of 3 |
+| Sensor | 3 of 3 | 3 of 3 | 3 of 3 |
+
+The sensor case matters. Its repeated fact ranked below the other two required facts. Those two got their slots first, leaving room for one copy of the third. Nothing necessary was displaced.
+
+So the result wasn't “duplicates always break memory.” **Copies of a highly ranked fact can crowd other facts out of a limited retrieval window.** Their position matters, not just their existence.
+
+There was another useful check. Expanding retrieval from three records to eight recovered every required fact in all three duplicate cases. I inspected the retrieved context for that check; I didn't generate another set of answers. The information was present and searchable. The smaller selection had excluded it.
+
+Increasing the retrieval limit isn't automatically the right fix. Neither is deleting every repetition. This experiment used naive top-three selection, not a retriever that deliberately selects distinct information. It shows the failure that such a system needs to prevent.
+
+## What this does, and doesn't, say about forgetting
+
+The test makes a narrower case for deduplication than “less memory is better.” It helped here because repeated text was consuming slots that could carry different facts. The deduplicated context was identical to the original context, so the recovery was a restoration, not a mysterious improvement in reasoning.
+
+It also doesn't prove that deleting my real 3,881 records improved Hindsight's answers. This was a separate synthetic pipeline, with exact copies, one model pair, and one answer per condition. Hindsight's own retrieval and processing were not under test.[^experiment]
+
+In the real cleanup, preserving source information was part of the job. If separate observations independently support a claim, collapsing their wording shouldn't erase that support. And if two records disagree because a decision changed, deduplication is the wrong operation entirely.
+
+That is the useful distinction I took from the move: preserve the history you need, but inspect what you're actually putting in front of the assistant. A faithful archive and a useful prompt are different things.
+
+## Check the context before blaming the model
+
+When an assistant misses something it supposedly remembers, my first question now is: **was the needed fact in the context it received?**
+
+In the startup-recall check, a deadline stood between the saved fact and the assistant. In the duplicate experiment, a ranking filled the available slots with repetitions. Both can look like forgetting from the chat window. Neither is explained by counting stored records.
+
+A small test can make that distinction visible. Give the system a made-up fact it couldn't know otherwise. Ask for it in a fresh session. Save the retrieved context alongside the answer. If it fails, you have somewhere specific to look before changing the model or collecting more memories.
+
+For a duplicate test, ask a question that requires several facts. Add copies of one, keep the retrieval limit fixed, and watch which facts make it through. Keep the cases that don't break, too. They help explain the ones that do.
+
+I started this move wanting my assistants to remember more. Now I also want to see what gets left out.
+
+The rollback code wasn't forgotten. It lost its slot to another copy of the region.
 
 PK
 
-[^migration]: The September 11, 2026 migration report verified exact text and source information for all 8,455 conclusions in 13 archives. It preserved source references as metadata rather than rebuilding Honcho's reasoning graph. The private source corpus is not published here.
-[^audit]: The September 11-12 live audit records the cross-client recall tests and deadline failure. A separate source audit reproduced the archive timeout and failed-write behavior with synthetic probes. Passing fresh-session checks did not establish reliability under every interruption.
-[^cleanup]: The September 13, 2026 cleanup log and independent API verification record 3,827 duplicate archive removals, 48 test-bank record removals, and six test-marker removals, with source information merged onto 3,817 retained records. The cleanup used a schema-specific PostgreSQL transaction because the installed API did not support the required merge-and-delete operation. Its backup passed a full archive read but was not restore-tested; an earlier migration snapshot was. This is an account of the experiment, not a general deletion recipe.
+[^operations]: Private operator audit, September 11-12, 2026. Fresh-session checks demonstrated shared recall. A separate startup-path check found an approximately three-second deadline against an archive recall taking approximately ten seconds. These are observations about this installation, not general Honcho or Hindsight performance claims.
+[^migration]: Private migration receipt, September 11, 2026. Exact-text import verification covered 8,455 conclusions across 13 historical banks, with original provenance retained. Inclusion in automatic recall was configured separately from import.
+[^cleanup]: Private cleanup receipt and API verification, September 13, 2026 UTC. The approved removals comprised 3,827 duplicate archive records, 48 test-bank records, and six test markers. Verification checked target absence, retained text, and 3,817 merged provenance bundles. A backup and rollback dry run preceded deletion; restoring that cleanup backup into a database was not tested. This was not secure erasure of conversations or backups.
+[^experiment]: Synthetic local probe: Ollama `qwen3-embedding:0.6b` embeddings, cosine ranking with deterministic ID tie-breaking, and `llama3:latest` (8B) generation. Each baseline had three required records plus five distractors; the duplicate condition added five copies of the first required record. Generation used temperature zero, seed 1729, and a fixed prompt requiring JSON and `UNKNOWN` for missing facts. All nine runs completed. Exact field matches were 8 of 9 with distinct records, 4 of 9 with duplicates, and 8 of 9 after deduplication. The sensor answer consistently returned `23` instead of `23 seconds`, a missing-unit penalty in every condition, not a retrieval loss. The table reports retrieved fact coverage rather than conflating these measures. Prompts, rankings, vectors, model digests, and raw responses were saved; no latency improvement or production-quality gain was measured.
