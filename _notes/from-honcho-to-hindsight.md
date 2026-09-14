@@ -1,162 +1,117 @@
 ---
-title: "From Honcho to Hindsight: 8,455 Records Survived, but the Behavior Did Not Transfer"
-description: "I preserved 8,455 Honcho conclusions in Hindsight, then removed 3,881 approved duplicates and test records. The harder migration was the behavior around the data."
+title: "I moved my AI's memory. Then I started deleting."
+description: "An experiment in getting two AI agents to share a memory, moving 8,455 old conclusions, and deciding which baggage to leave behind."
 date: 2026-09-13
-tags: [agent-memory, migrations, reliability]
+tags: [agent-memory, experiments, reliability]
 ---
 
-In July, I [wrote about choosing Honcho's memory architecture](https://praveenks.com/notes/honcho-vs-mem0-two-memory-layers-two-architectures/). In September, I stopped its API container and moved all 8,455 of its conclusions into Hindsight. Every conclusion survived the import. Getting my agents to use that history correctly was a separate job.
+I told Hermes a made-up project code. A fresh Codex session recalled it. But another saved fact failed to reach Codex even though it was sitting in the database.
 
-Then I deleted 3,881 approved duplicate and test records from the destination system.
+The code was a checksum for a fictional telescope project. Both assistants were connected to Hindsight, a memory system that saves information between conversations. Its automatic recall supplied context to Codex; Codex did not need to run a lookup tool or open a file. In a fresh CLI session, it returned the code Hermes had saved.
 
-That sounds like an odd success story: preserve everything, then remove thousands of records. But the order mattered. I needed to know what I had carried over before deciding what should remain active. Neither a matching record count nor a smaller database could tell me whether the agent remembered correctly.
+A nonsense string isn't much of a demo. But it was exactly what I wanted: tell one assistant something, switch to another, and stop explaining everything again.
 
-**The migration moved stored conclusions. Capture, scope, retry, recalled context, correction, and forgetting still needed their own tests.**
+That small success was part of a larger experiment. I was moving my agent memory from Honcho to Hindsight, taking 8,455 stored conclusions along. The move worked. It also gave me an excuse to look inside the thing I'd been calling "memory."
 
-## I changed the requirement
+There were useful records, repeated conclusions, and leftover test records. Getting the data across was only the first decision. I still had to decide what the agents should use, what they should trust, and what I could safely remove.
 
-Honcho's observer-aware model was still useful. My earlier [point-of-view article](https://praveenks.com/notes/agent-memory-needs-a-point-of-view/) argued that a conclusion needs to retain whose perspective produced it. Switching systems did not make that distinction disappear.
+## Two assistants, less repeating myself
 
-What I wanted from daily use had changed. I wanted passive continuity between Hermes and Codex: save useful state through normal conversation, recover it in a fresh session, and keep project history from becoming global personal context. I also wanted to inspect and recover the system without turning memory maintenance into another project.
+I use Hermes and Codex as AI assistants. Honcho and Hindsight are separate memory systems: they keep information beyond a single conversation so an assistant can retrieve it later.
 
-Those priorities were in tension. My maintenance-first review initially favored a bounded trial of file-first memory. Hindsight became the conditional choice when automatic capture mattered enough to justify an extraction pipeline and PostgreSQL. It was not the winner on every axis.
+My goal was ordinary. If I explain a project's conventions in one session, I'd like the next session to start somewhere other than zero. I'd also like a detail from one project to stay out of another. Shared memory shouldn't mean every conversation gets every fact.
 
-In this installation, storage, embedding, and reranking ran locally; generation used Ollama Cloud. Calling it fully local would hide an inference dependency. Calling it maintenance-free would hide most of this article.
+I'd previously [written about Honcho's architecture](https://praveenks.com/notes/honcho-vs-mem0-two-memory-layers-two-architectures/), particularly its ability to preserve whose perspective a conclusion came from. I still cared about that. For this experiment, though, I wanted to try Hindsight as the shared memory behind both assistants, with automatic capture during normal use.
 
-The distinction from my previous posts is practical. The first was about architecture, the second about the meaning of a stored claim. This one is about which guarantees survive a change of systems.
+This wasn't a benchmark declaring a winning vendor. It was a test of whether I could change the memory system without starting over.
 
-## Preserve first, activate separately
+## The database remembered. The assistant ran out of patience.
 
-The migration deliberately avoided asking another model to reinterpret the old conclusions.[^migration]
+I had connected selected archives of older memories alongside the new ones. In one actual test, Codex missed a saved project fact even though a direct query to the memory API found it.
 
-```text
-Honcho PostgreSQL
-  | encrypted backup
-  | scratch restore verified
-  v
-8,455 conclusions + provenance
-  | exact text; no rewriting
-  v
-13 historical archive banks
-  | explicitly mapped scopes only
-  v
-5,755 in automatic recall
-2,700 in explicit search only
-```
+The client had a three-second request deadline. Historical searches were taking roughly nine to ten seconds. The fact wasn't missing. The caller had stopped waiting.
 
-*Import and activation counts, before the later cleanup.*
+I changed the deadlines and ran current and historical searches concurrently. Later fresh-session checks passed. But a separate synthetic test found another problem in my integration: a slow archive lookup could prevent already-finished current-memory results from reaching the assistant.
 
-I imported the conclusions in chunks mode, with archive consolidation disabled. Every record was labelled as a historical Honcho-derived inference, including records Honcho had classified as explicit. An old extractor's classification was worth preserving, but it was not permission to present the result as a fresh statement from me.
-
-The import kept exact conclusion text, source IDs, observer and observed peers, workspace, session, reasoning level, and derivation metadata. Recorded-at timestamps became Hindsight timestamps; original message timestamps remained in source metadata. Identical text with different source IDs stayed distinct. At this stage, preservation took priority over deduplication.
-
-Honcho's source references remained metadata. I did not reconstruct its reasoning graph in Hindsight. The archives' empty entity graphs were therefore expected, not evidence that the import had failed.
-
-Verification checked every imported document and stored fact against the encrypted export, including text, provenance, labels, timestamps, and a searchable embedding. Recall samples passed in all 13 banks. Raw messages and queued work stayed in the source backup; I did not replay them through an extractor as new conclusions.
-
-There was also an ordinary infrastructure failure. At record 6,953, a parallel PostgreSQL index build exceeded Docker's 64 MiB shared-memory mount. Disabling parallel maintenance workers fixed the failed operation on the database's one allocated CPU. The fix got the import moving again. It said nothing about whether Codex would receive the right context tomorrow.
-
-Initially, none of these archives participated in automatic recall. A later routing pass connected four explicitly mapped scopes containing 5,755 records. The remaining 2,700 stayed available through explicit search. An unrelated project received no unrelated project archive. I preferred incomplete automatic coverage to guessing which project owned ambiguous history.
-
-The original Honcho volume remained intact. Preservation gave me room to make these decisions without making the cutover irreversible.
-
-## Healthy storage, broken client paths
-
-After routing was connected, the backend audit reported zero pending and zero failed operations. Fresh-session canaries also passed. A separate source audit with synthetic probes still found defects in the installed client integration.[^audit]
-
-These findings describe the audited snapshot, including my local archive wrapper. They are not a claim that every Hindsight deployment has these behaviors, or that the probes measured their frequency in production.
-
-On the append-capable path, normal turn capture submitted a delta, but the session-switch flush submitted the whole buffered session. The probe reproduced resubmission of already queued turns. FIFO serialization kept writes in order; it did not make repeated payloads idempotent. This proved duplicate submission, not duplicate stored memories. I cannot attribute the later cleanup's duplicates to that mechanism.
-
-The write path also advanced its watermark after enqueueing, before successful delivery. When a synthetic append failed, the writer logged the error and removed the job from its queue. The next ordinary turn sent only its own delta. The failed turn was no longer eligible for that normal retry path. A later whole-session flush might resend it, so the test did not establish permanent production loss.
-
-Historical recall introduced another failure boundary. My composite provider held completed current-memory text while waiting for the archive branch. Under a synthetic outer timeout, the caller received neither. Increasing an inner request timeout does not help when an outer deadline stops waiting first. Optional history should degrade independently, without withholding current context that is already available.
-
-Finally, the prompt could change a record's apparent authority. Native packing reduced recalled records to text bullets and dropped supplied IDs and dates. The archive helper labelled old conclusions historical and unverified, while the outer memory wrapper called the combined context authoritative reference data. Both messages reached the same prompt.
-
-These failures lived in hooks, delivery bookkeeping, result assembly, and wording around retrieved text. A database export could not carry their intended guarantees. Backend health could not certify them either.
-
-## A faithful import also preserves redundancy
-
-The first destination inventory found 9,406 memory units across 33 banks. By execution, ongoing ingestion had raised that to 9,620. These totals covered the wider Hindsight installation, not just the imported Honcho archives.[^cleanup]
-
-That moving count ruled out approving a query such as "delete whatever looks duplicated when this runs." The cleanup used a fixed manifest of exact record IDs, with explicit survivors and preconditions. New records outside that manifest remained untouched.
-
-The approved changes were narrow:
-
-| Removed category | Records |
-|---|---:|
-| Excess within-bank copies of normalized identical archive conclusions | 3,827 |
-| Explicitly identified records in test-only banks | 48 |
-| Synthetic test markers in normal banks | 6 |
-| **Total removed** | **3,881** |
-
-I did not authorize new semantic-similarity groups, cross-bank merges, or age-based deletion. Identical wording across different perspectives can still carry different meaning. The decision was to merge the approved within-bank groups while preserving the source information, not to declare matching sentences interchangeable everywhere.
-
-Each group kept a deterministic canonical record. The removed copies' metadata, original wrapped text, dates, tags, and IDs were attached to 3,817 survivor provenance bundles. Repeated observers were not counted as independent evidence. This reduced active record duplication without pretending there had only ever been one source record.
-
-The installed public API did not expose the exact hard-delete plus provenance-merge operation this plan required. I used one bounded PostgreSQL transaction after a rollback dry run and a full database backup. That was a schema-specific operation, not a portable recipe for deleting memories through Hindsight.
-
-The transaction checked dependencies, remapped duplicate graph endpoints to survivors, and removed source documents only when they contained no retained or invalidated child memories. Two mixed source documents stayed because they also contained facts outside the approved deletion set.
-
-The result I cared about was more specific than "DELETE succeeded."
-
-| Independent post-commit check | Result |
-|---|---:|
-| Approved deleted IDs still present | 0 |
-| Previous survivors missing | 0 |
-| Previous survivor text changed | 0 |
-| Canonical provenance bundles verified | 3,817 |
-| Memory units remaining | 5,739 |
-
-All 33 bank containers remained. The readback enumerated the live API after commit rather than trusting the transaction's exit status.
-
-## What forgetting meant here
-
-This was controlled forgetting of active memory records. Original conversations were not erased, and the backup deliberately retained deleted content. It was neither secure erasure nor machine unlearning.
-
-Recovery evidence also had two different boundaries. The migration audit restored an encrypted Hindsight snapshot into a scratch database and matched all 8,455 archive documents by canonical-row hash. The later cleanup backup passed a full archive read, but I did not restore that backup into an isolated database. The earlier restore test does not certify the later artifact.
-
-I did not benchmark retrieval quality before and after deletion. Fewer records do not establish better answers, lower latency, or less storage use, especially when provenance is preserved on survivors. Capture behavior was unchanged, so duplicates could recur.
-
-The cleanup is evidence for a proposed tool, not a finished product: show an explained plan, identify what will survive, expose unsupported backend operations, and execute only the approved revision. Its useful output would be the verified result and a recovery path. An autonomous "delete low-value memories" loop would skip the decision I most wanted to inspect.
-
-## Test the behavior that crosses the boundary
-
-The lifecycle I now use to review a migration is simple enough to fit in one trace. The labels name obligations, not guarantees this installation has already satisfied:
+The failure looked like this:
 
 ```text
-capture    source event + scope
-   |
-persist    acknowledged delivery
-           safe retries
-   |
-process    preserve provenance
-   |
-retrieve   permitted scope
-           bounded waiting
-   |
-inject     traceable context
-           honest authority
-   |
-correct    supersede old evidence
-   |
-forget     approved targets
-           checked survivors
+Current memory: ready ----+
+                         +--> wait
+Old archive:   still busy+      |
+                            timeout
+                               |
+                         no context
 ```
 
-My acceptance checks exercised selected parts of that chain. Hermes captured a withheld synthetic fact through normal turn capture, and a separate session recalled it without tools or files. Codex captured a project fact through its native Stop path. A fresh Codex CLI session recalled both its project fact and the Hermes fact. Routing checks verified that unrelated project archives were not selected.
+That's an unpleasant trade: adding access to old history could hide useful context I already had. Optional archive results should be allowed to arrive late without taking current memory down with them.
 
-Those are stronger receipts than a healthy service or a successful subprocess exit. They remain happy-path checks. They do not prove retry safety, correction propagation, or behavior under every interruption. The later adapter probes demonstrated why both kinds of test belong in the same acceptance process.
+Another probe found a bookkeeping problem on the write side. The adapter marked a turn as handled when it queued the write, before delivery succeeded. When the test forced that write to fail, the next ordinary turn moved on without retrying it.
 
-For another migration, I would preserve source identity before changing meaning, approve archive routing separately from import, and test queued work independently from acknowledged delivery. I would require partial recall to remain useful when optional history stalls. Destructive approval would name exact targets and survivors, with verification on both sides.
+A later whole-session flush might resend the failed turn, so this wasn't proof of permanent data loss. It was proof that "queued" and "saved" needed different meanings.
 
-I would also ask how a correction reaches every place the old claim can still be injected. Keeping an accurate archive while an always-loaded preference contradicts it is another way to preserve data and lose the behavior.
+These were findings in the integration I audited, including my own archive wrapper, not universal claims about Hindsight. They changed how I tested the experiment. Asking a fresh agent to recall a fact checked something that counting database rows couldn't.
 
-The next memory system I choose will be judged by how cleanly I can leave it, and by whether it can prove what it forgot without losing what mattered.
+## Keep the old conclusions identifiable
+
+The old system held 8,455 conclusions. These weren't raw chat messages. They were records Honcho had already extracted or inferred from earlier conversations.
+
+I wanted to preserve those records, not ask another model to take a fresh guess at what they meant. So I copied their exact text into 13 separate Hindsight archives (historical memory banks), along with where they came from, their dates, and whose perspective produced them. I labelled them historical inferences rather than new statements from me.
+
+That last part matters. Imagine an old record saying, "This project probably uses Redis." Moving it into a new database shouldn't quietly upgrade *probably* into a fact. The example is invented; the distinction is why I kept the original text and source information.
+
+Every conclusion survived verification against the export. I kept the original database and backups too.[^migration]
+
+Then I connected selected archives to automatic recall. Importing an archive and letting it influence the next answer were separate steps. History with an unclear project owner remained available for explicit search rather than being injected into whichever conversation happened next.
+
+By the end of the capture-and-recall checks, a fresh Codex CLI session could return both its own saved test fact and the one Hermes had saved.[^audit] That was the appealing part of the experiment: the assistants could share context without sharing the same conversation window.
+
+## I had also moved the duplicates
+
+Preserving everything had a predictable consequence: the repeated records came along too.
+
+I started with a deliberately narrow cleanup. Within an archive, I looked for approved groups of conclusions whose text was identical after normalization. I also identified records created only for tests. I did not ask a model to judge which memories were "low value" or merge sentences because they sounded similar.
+
+Even an exact-text match needs care. Two projects can both say "use Redis" without referring to the same decision. I kept the cleanup inside the approved archive boundaries.
+
+For each duplicate group, I retained one record and attached the removed copies' source information to it. The active list got shorter, but I could still trace where the copies had come from.
+
+```text
+Before                 After
+claim, source A --+
+claim, source B --+--> one claim
+claim, source C --+    sources A,B,C
+```
+
+This is the part of "forgetting" I found useful. I didn't need three active copies to preserve the fact that three source records had existed. Nor did those copies automatically count as three independent pieces of evidence.
+
+I approved a fixed list of record IDs before deleting anything. New memories were arriving during the cleanup, so a moving instruction like "delete all duplicates" would have given the operation a different scope from the one I'd reviewed.
+
+After a backup and a rollback dry run, I removed 3,881 approved duplicate and test records. A separate check through the API confirmed that the targets were gone, the intended survivors remained with unchanged text, and the merged source information was intact.[^cleanup]
+
+Those removals covered the wider Hindsight installation, including test banks, not just the imported records. This was tidying a working system, not throwing away half the old history.
+
+I can't claim the agents got smarter afterward. I didn't benchmark answer quality, and unchanged capture behavior could introduce duplicates again. What I could show was exactly what had been removed and what had survived.
+
+## The experiment I'd repeat
+
+The shared-fact test worked. The failure probes showed what that success hadn't tested: whether a failed write would be retried, or a slow lookup would block useful context.
+
+If you're adding memory to an agent, you can try a small version of this without migrating thousands of records:
+
+1. Give it a made-up fact it couldn't infer from general knowledge.
+2. Open a fresh session and ask for the fact without allowing other lookup tools. If you use two clients, try the second one too.
+3. In a test setup, interrupt a write or slow a lookup. Check whether the fact gets retried and whether available context still reaches the agent.
+4. Remove the test fact using the system's supported controls, then check retrieval and a fresh session again. Ask what remains in source documents, caches, or backups.
+
+That last step deserves as much attention as the first. My cleanup removed active memory records; it did not erase the original conversations or the backups. A privacy deletion request would need a broader operation.
+
+I went into this wanting less repetition between assistants. I came out wanting a way to inspect a proposed cleanup before approving it: show me what you're keeping, what you're removing, and why. The one-off transaction did that job here; whether the cleanup improved answers is still an experiment to run.
+
+For now, I have a better experiment than "does my AI remember me?" I can plant a fact, follow it into another session, interrupt its delivery, and check what remains after removal. And I can do it with a fictional telescope instead of trusting the system with something important first.
 
 PK
 
-[^migration]: Operator receipt, "Honcho conclusion migration," September 11, 2026. Exact import verification covered 8,455 conclusions across 13 archives; four conversion tests and a live synthetic idempotency test passed. The source export and raw conclusions remain private. This article reproduces aggregate results, not the underlying personal corpus.
-[^audit]: Operator receipts, "Hindsight audit, September 11-12, 2026" and reviewer C's harness audit, September 12, 2026. The first records live capture, recall, routing, and restore checks, including 15 passing adapter/routing tests. The separate source audit ran seven offline synthetic probes. Neither is a comparative memory-quality benchmark.
-[^cleanup]: Operator receipts, "Approved Hindsight cleanup" and its independent verification record, completed September 13, 2026 UTC. The manifest authorized 3,881 removals; API verification found 5,739 remaining units, no missing or text-modified survivors, and all 3,817 expected provenance bundles. Private manifests and backups are not public demo fixtures.
+[^migration]: The September 11, 2026 migration report verified exact text and source information for all 8,455 conclusions in 13 archives. It preserved source references as metadata rather than rebuilding Honcho's reasoning graph. The private source corpus is not published here.
+[^audit]: The September 11-12 live audit records the cross-client recall tests and deadline failure. A separate source audit reproduced the archive timeout and failed-write behavior with synthetic probes. Passing fresh-session checks did not establish reliability under every interruption.
+[^cleanup]: The September 13, 2026 cleanup log and independent API verification record 3,827 duplicate archive removals, 48 test-bank record removals, and six test-marker removals, with source information merged onto 3,817 retained records. The cleanup used a schema-specific PostgreSQL transaction because the installed API did not support the required merge-and-delete operation. Its backup passed a full archive read but was not restore-tested; an earlier migration snapshot was. This is an account of the experiment, not a general deletion recipe.
