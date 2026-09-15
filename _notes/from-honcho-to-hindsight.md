@@ -43,33 +43,35 @@ Adjusting that path was part of making the new setup work. Later fresh-session c
 
 The timeout was a clear failure: a fact was found but arrived too late. The duplicates posed a less obvious question. Were they just untidy, or could repeated records prevent a useful fact from reaching the assistant at all?
 
-## A tiny experiment: three facts, three slots
+## The ablation: more records, no new information
 
-I'd already cleaned up the real records by the time I ran this test. To understand whether duplicates could affect answers, I built a separate local experiment. It used fictional memories, not my production data or Hindsight's retrieval pipeline.
+I'd already cleaned up the real records. The question left open was whether redundancy could change an answer even when the underlying information stayed fixed.
 
-The fictional release project had three facts:
+I tested that in a separate local retrieval pipeline. No production memories, no Honcho-versus-Hindsight comparison. The intervention was narrow: **add records without adding knowledge.**
+
+Before running it, I fixed three fictional scenarios, their questions, and their expected answers. Each corpus contained three facts needed for the answer and five irrelevant records. Each question requested all three facts.
+
+For every scenario, I ran three conditions:
+
+1. **Baseline:** eight distinct records.
+2. **Duplicate injection:** the same corpus plus five exact copies of the first required fact.
+3. **Reversal:** exact-text deduplication before retrieval, returning the corpus to baseline.
+
+The duplicate target was chosen before inspecting its similarity score. Query, embedding model, cosine ranking, three-record retrieval limit, answer prompt, and generation settings stayed fixed. Only record multiplicity changed. The reversal checked whether removing the injected copies restored the original context; it was not an independent replication.
+
+I measured two things separately: **evidence coverage**, the required facts present in the retrieved context, and **answer exact match**, the returned fields matching their expected values. That separates a retrieval failure from a generation or formatting error.[^experiment]
+
+Here is the release case. With distinct records, the model correctly returned the region, rollback code, and approval code. Adding copies changed the context:
 
 ```text
-region:   north-lab-7
-rollback: amber-otter-462
-approval: violet-crane-815
-```
-
-I added five unrelated records. A local embedding model ranked the records against a question asking for all three values. The retriever passed the top three records to a local Llama 3 model, with instructions to answer only from those records and use `UNKNOWN` for missing information.
-
-With distinct records, the model returned all three values correctly.
-
-Then I added five exact copies of the region fact. Same question, same models, same three retrieval slots. The copies ranked just as highly as the original, and the selected context became:
-
-```text
-Before               With copies
+Baseline             With copies
 
 1. region            1. region
 2. rollback          2. region
 3. approval          3. region
 ```
 
-The model answered:
+The answer became:
 
 ```json
 {
@@ -79,35 +81,35 @@ The model answered:
 }
 ```
 
-More records in the store. Less information in the answer.
+The missing codes were still stored. The generator never saw them. It correctly abstained rather than inventing values, so calling this a reasoning failure would diagnose the wrong stage.
 
-The model was behaving sensibly: the prompt contained nothing about rollback or approval. Those facts still existed, but repeated copies of the region had taken their slots.
+After deduplication, all three facts and the complete answer returned.
 
-After exact-text deduplication, all three facts reached the model again and the complete answer returned.
+## The result: lost evidence, not lost records
 
-## Why one case didn’t break
+Across the three fixed scenarios, duplicate injection reduced evidence coverage from **9 of 9 required facts to 5 of 9**. Removing the copies restored coverage to 9 of 9.
 
-I fixed three fictional scenarios before running the test. Each needed three facts, and each duplicate condition repeated the first fact rather than choosing one after seeing its ranking.
-
-The table shows how many required facts reached the model, not a general accuracy score:
-
-| Scenario | Distinct | With copies | Deduplicated |
+| Measure, across three scenarios | Baseline | With copies | Deduplicated |
 |---|---:|---:|---:|
-| Release | 3 of 3 | 1 of 3 | 3 of 3 |
-| Archive | 3 of 3 | 1 of 3 | 3 of 3 |
-| Sensor | 3 of 3 | 3 of 3 | 3 of 3 |
+| Required facts in context | 9/9 | 5/9 | 9/9 |
+| Exact answer-field matches | 8/9 | 4/9 | 8/9 |
+| Scenarios with complete evidence | 3/3 | 1/3 | 3/3 |
 
-The sensor case didn't break. Its repeated fact ranked below the other two required facts, so both got into the context before the copies could displace them.
+The gap between coverage and exact answers came from one consistent output: the sensor case returned `23` instead of `23 seconds`. The predeclared scorer penalized the missing unit in every condition. That error belongs to answer formatting, not retrieval, and should not be credited to or blamed on deduplication.
 
-That makes the conclusion specific: **copies of a highly ranked fact can crowd other facts out of a limited retrieval window.** Duplicate count alone doesn't tell you whether that will happen.
+The ranking traces explain the four displaced facts. In the release and archive cases, the injected fact ranked first. Its copies occupied all three slots, excluding two required facts per case. In the sensor case, the duplicated fact ranked third. The other two needed facts remained ahead of every copy, so coverage stayed intact.
 
-A retrieval-only check with eight slots recovered all the required facts in every duplicate case. The records weren't lost or unsearchable. The smaller selection had excluded them.
+**Redundancy was harmful when it occupied scarce retrieval slots, not simply because duplicates existed.** The unaffected case makes that distinction visible.
 
-This is a deliberately simple demonstration of a familiar retrieval problem. A retriever that selects for distinct information may avoid it. I didn't test Hindsight's retrieval, semantic near-duplicates, or whether my real cleanup improved answers. Deduplication here restored the original context; it didn't make the model smarter.[^experiment]
+A separate retrieval-only capacity check widened the selection from three records to eight. It recovered all required facts in every duplicate case, without deleting anything. No additional answers were generated for that check. Together with the reversal, it locates the failure at the selection boundary: the data existed, but the fixed-size context excluded it.
 
-That was enough to make the issue tangible. A repeated fact wasn't merely taking up disk space. In two cases, it took the place of information the answer needed.
+That suggests more than one possible intervention. Remove redundant records before retrieval, select for diversity during retrieval, or admit more candidates. This run demonstrated exact deduplication and inspected wider retrieval; it did not compare their production costs or test a diversity-aware retriever.
 
-Removing exact copies was easy in a fictional dataset. My real history required a more careful version of that operation.
+These are descriptive results from three constructed scenarios and nine generation calls, not nine independent trials. There is no significance claim or population-level failure-rate estimate. Exact copies and plain top-k retrieval deliberately isolate one mechanism. Hindsight's retrieval, semantic near-duplicates, and improvements from my real cleanup remain untested.
+
+The useful result is the trace: adding records left the underlying information unchanged while removing evidence from the prompt. For that failure, a larger model would still be answering without the missing facts.
+
+Removing exact copies was easy in this controlled setting. My real history required a more careful operation.
 
 ## Cleaning up without throwing away the evidence
 
