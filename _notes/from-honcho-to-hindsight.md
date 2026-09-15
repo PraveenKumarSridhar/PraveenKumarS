@@ -1,6 +1,6 @@
 ---
 title: "I got tired of babysitting my AI's memory"
-description: "I moved from Honcho to Hindsight, inspected what my agents had saved, and cleaned up the duplicates. Then a small experiment showed how more memory records could produce a worse answer."
+description: "A move from Honcho to Hindsight led me to inspect what my agents had saved. A small experiment showed how duplicates could crowd out answers, and why cleanup needs more care than deleting repeated text."
 date: 2026-09-13
 tags: [memory, agents]
 ---
@@ -13,7 +13,7 @@ The appeal of agent memory is that you explain something once and move on. When 
 
 I decided to try Hindsight. But the interesting part of the move wasn't getting a different service running. It was looking at what my agents had accumulated, separating what belonged where, and asking whether all those records were actually helping.
 
-A later experiment gave me an answer I could see: I added copies of a fact, and my local model stopped answering two fields it had answered correctly before. The facts were still stored. They just weren't making it into the prompt.
+The question wasn't just whether the new system could store my history. It was whether the history reaching my assistants was useful. A later experiment made the distinction hard to miss: adding more memory records made an answer less complete.
 
 ## First, move the history without rewriting it
 
@@ -41,25 +41,11 @@ From the chat window, that looks like an assistant forgetting. From the trace, i
 
 Adjusting that path was part of making the new setup work. Later fresh-session checks demonstrated the behavior I actually wanted: a made-up fact captured through Hermes was recalled by Codex without Codex opening a file or running its own lookup. Automatic recall supplied the context.
 
-So switching backends hadn't made maintenance disappear. It had given me a new setup whose behavior I still needed to inspect.
-
-## Cleaning up without throwing away the evidence
-
-The cleanup removed 3,881 explicitly approved duplicate and test records. It didn't ask an LLM to browse my history and decide what no longer mattered.[^cleanup]
-
-For duplicate conclusions, I kept a surviving copy and attached the removed copies' source information to it. That way, repeated wording didn't need to occupy repeated records, but I could still trace where it had come from.
-
-This distinction is easy to miss. Two copies of a sentence may have different sources. Similar sentences may describe different projects. An older decision and its replacement may look almost identical while meaning opposite things for what the assistant should do next.
-
-I backed up the database, rehearsed the deletion in a transaction that rolled back, applied the approved cleanup, and checked the result through the API. The intended targets were gone; the retained text and merged source information were intact.
-
-That established that I'd cleaned up the records as intended. It didn't establish that the assistant now gave better answers.
-
-Had I fixed a practical problem, or just made the database less untidy?
+The timeout was a clear failure: a fact was found but arrived too late. The duplicates posed a less obvious question. Were they just untidy, or could repeated records prevent a useful fact from reaching the assistant at all?
 
 ## A tiny experiment: three facts, three slots
 
-After the migration and cleanup, I tested one possible consequence of duplicates in a separate local pipeline. No real memories, no production writes, and no Honcho-versus-Hindsight comparison.
+I'd already cleaned up the real records by the time I ran this test. To understand whether duplicates could affect answers, I built a separate local experiment. It used fictional memories, not my production data or Hindsight's retrieval pipeline.
 
 The fictional release project had three facts:
 
@@ -99,7 +85,7 @@ The model was behaving sensibly: the prompt contained nothing about rollback or 
 
 After exact-text deduplication, all three facts reached the model again and the complete answer returned.
 
-## The result that kept the explanation honest
+## Why one case didn’t break
 
 I fixed three fictional scenarios before running the test. Each needed three facts, and each duplicate condition repeated the first fact rather than choosing one after seeing its ranking.
 
@@ -119,7 +105,23 @@ A retrieval-only check with eight slots recovered all the required facts in ever
 
 This is a deliberately simple demonstration of a familiar retrieval problem. A retriever that selects for distinct information may avoid it. I didn't test Hindsight's retrieval, semantic near-duplicates, or whether my real cleanup improved answers. Deduplication here restored the original context; it didn't make the model smarter.[^experiment]
 
-But it gave the cleanup question a concrete consequence. An assistant can receive less useful information even while its memory store grows.
+That was enough to make the issue tangible. A repeated fact wasn't merely taking up disk space. In two cases, it took the place of information the answer needed.
+
+Removing exact copies was easy in a fictional dataset. My real history required a more careful version of that operation.
+
+## Cleaning up without throwing away the evidence
+
+In the real store, removing repeated text also meant preserving where it came from. Two copies of a sentence can point to different sources. Similar sentences can describe different projects. An old decision and its replacement can look almost identical while giving the assistant opposite instructions.
+
+So the cleanup wasn't an invitation for an LLM to decide what I should forget. I used an explicit list of approved records. For duplicate conclusions, I kept a surviving copy and attached the removed copies' source information to it.
+
+The result was 3,881 approved duplicate and test records removed. Repeated wording no longer needed repeated records, but the surviving conclusions retained the sources I'd collected.[^cleanup]
+
+Before applying it, I backed up the database and rehearsed the deletion in a transaction that rolled back. Afterward, I checked through the API that the intended targets were gone and the retained text and merged source information were intact.
+
+Those checks answered whether the cleanup did what I intended. The later experiment answered a different, smaller question: could duplicates crowd useful facts out of a simple retriever? It didn't establish that my production answers improved.
+
+The distinction matters for the setup I kept. I want to preserve enough history to trace a conclusion without automatically putting all of that history in every conversation.
 
 ## The Hindsight setup I landed on
 
@@ -141,7 +143,7 @@ There is still glue to maintain: a Hermes provider extension and a local Codex b
 
 My check is small: save a made-up fact, ask for it in a fresh session, and inspect what context actually arrived. When it fails, that trace tells me whether to investigate capture, routing, a deadline, or retrieval before blaming the model.
 
-I moved because I was tired of babysitting memory. The useful outcome wasn't finding a backend that made those questions disappear. It was getting specific about what I needed to preserve, what each assistant should see, and how to check the difference.
+I moved because I was tired of babysitting memory. I still have a system to maintain, but I have better questions to ask of it: was the fact captured, did it reach the right session, and what else competed for its place in the context?
 
 The store can remember the rollback code perfectly and still send the assistant three copies of the region.
 
