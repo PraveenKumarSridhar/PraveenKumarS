@@ -1,6 +1,6 @@
 ---
 title: "I got tired of babysitting my AI's memory"
-description: "A move from Honcho to Hindsight led me to inspect what my agents had saved. A small experiment showed how duplicates could crowd out answers, and why cleanup needs more care than deleting repeated text."
+description: "A move from Honcho to Hindsight led me to inspect what my agents had saved. A GPT-OSS handoff study showed how repeated status notes can displace the decisions needed to continue a project."
 date: 2026-09-13
 tags: [memory, agents]
 ---
@@ -13,7 +13,7 @@ The appeal of agent memory is that you explain something once and move on. When 
 
 I decided to try Hindsight. But the interesting part of the move wasn't getting a different service running. It was looking at what my agents had accumulated, separating what belonged where, and asking whether all those records were actually helping.
 
-The question wasn't just whether the new system could store my history. It was whether the history reaching my assistants was useful. A later experiment made the distinction hard to miss: adding more memory records made an answer less complete.
+The question wasn't just whether the new system could store my history. It was whether the history reaching my assistants was useful. A later study made the distinction hard to miss: an assistant could receive six reminders to continue a project and none of the decisions needed to do it.
 
 ## First, move the history without rewriting it
 
@@ -31,9 +31,7 @@ The move preserved the history. It also preserved the clutter.
 
 Inspecting the memories was more useful than staring at the total count. I looked at the records by scope, examined repeated conclusions, and separated historical archives from new memories entering through the assistants.
 
-It was important not to treat every odd-looking statistic as a bug. The imported archives hadn't been sent through a fresh extraction pass. Their absent entity relationships were expected; I'd deliberately preserved the old conclusions without rebuilding them.
-
-Some findings were less benign. There were duplicate conclusions and leftover test records. There were also problems outside the database.
+I found duplicate conclusions and leftover test records. There were also problems outside the database.
 
 One fresh Codex session missed a saved project fact even though a direct recall request found it. The archive search took about ten seconds. The startup recall path had a deadline of about three.[^audit]
 
@@ -43,75 +41,107 @@ Adjusting that path was part of making the new setup work. Later fresh-session c
 
 The timeout was a clear failure: a fact was found but arrived too late. The duplicates posed a less obvious question. Were they just untidy, or could repeated records prevent a useful fact from reaching the assistant at all?
 
-## A tiny experiment: three facts, three slots
+## Could a fresh session actually pick up my work?
 
-I'd already cleaned up the real records by the time I ran this test. To understand whether duplicates could affect answers, I built a separate local experiment. It used fictional memories, not my production data or Hindsight's retrieval pipeline.
+I'd already cleaned up the real records. What I hadn't established was whether repetition could interfere with the reason I wanted memory in the first place: continuing a project without another briefing.
 
-The fictional release project had three facts:
+So I built 24 fictional coding histories from six templates and tested them with a separate, simple similarity retriever, not my Hindsight setup. A fresh GPT-OSS 120B session had to identify the next action, the constraint it must preserve, and what testing had actually completed.
 
-```text
-region:   north-lab-7
-rollback: amber-otter-462
-approval: violet-crane-815
-```
+The request was the kind I make when returning to a project: **what should I do next, and what must I avoid changing?** The test used structured choices and supporting memory IDs, not actual code edits.
 
-I added five unrelated records. A local embedding model ranked the records against a question asking for all three values. The retriever passed the top three records to a local Llama 3 model, with instructions to answer only from those records and use `UNKNOWN` for missing information.
+Each history contained the three governing facts, a routine status note, and other plausible project context. I compared three versions: the clean history, the same history with ten extra copies of one note, and an exact-deduplicated version. Half the tasks repeated status; half repeated a decision. The targets were fixed before inspecting retrieval scores, so repetition wasn't restricted to notes I already knew would cause trouble.
 
-With distinct records, the model returned all three values correctly.
+All three conditions had the same question, models, and 256-token allowance for recalled memory. That limit applied to the memory excerpt, not GPT-OSS's full context window. I ran two responses per task and condition: 144 completed answers, analyzed as paired tasks rather than 144 independent examples.[^experiment]
 
-Then I added five exact copies of the region fact. Same question, same models, same three retrieval slots. The copies ranked just as highly as the original, and the selected context became:
+The useful part was opening the retrieved context alongside the answer.
 
-```text
-Before               With copies
+In one configuration task, the clean history let GPT-OSS identify all three decisions:
 
-1. region            1. region
-2. rollback          2. region
-3. approval          3. region
-```
+- Repair configuration reload.
+- Preserve the default setting values.
+- Unit and integration tests had passed; the full suite hadn't run.
 
-The model answered:
+After repetition, the context contained six copies of a generic continue-the-project status note and one background note about a database. None of the governing facts made it through.
+
+GPT-OSS returned:
 
 ```json
 {
-  "region": "north-lab-7",
-  "rollback": "UNKNOWN",
-  "approval": "UNKNOWN"
+  "next_action": "UNKNOWN",
+  "preserve": "UNKNOWN",
+  "verification": "UNKNOWN"
 }
 ```
 
-More records in the store. Less information in the answer.
+It knew work was happening. It didn't have the information needed to continue it.
 
-The model was behaving sensibly: the prompt contained nothing about rollback or approval. Those facts still existed, but repeated copies of the region had taken their slots.
+That was a safe answer to a bad handoff. The model hadn't lost the decisions or invented replacements. The retriever had spent its allowance repeating that there was work to do.
 
-After exact-text deduplication, all three facts reached the model again and the complete answer returned.
+## More room helped. Cleanup wasn't a cure.
 
-## Why one case didn’t break
+The main comparison looked like this:
 
-I fixed three fictional scenarios before running the test. Each needed three facts, and each duplicate condition repeated the first fact rather than choosing one after seeing its ranking.
-
-The table shows how many required facts reached the model, not a general accuracy score:
-
-| Scenario | Distinct | With copies | Deduplicated |
+| At 256 memory tokens | Clean | Repeated | Exact dedup |
 |---|---:|---:|---:|
-| Release | 3 of 3 | 1 of 3 | 3 of 3 |
-| Archive | 3 of 3 | 1 of 3 | 3 of 3 |
-| Sensor | 3 of 3 | 3 of 3 | 3 of 3 |
+| Required facts reaching the prompt | 51/72 | 21/72 | 51/72 |
+| Tasks with complete, supported handoffs | 8/24 | 0/24 | 8/24 |
 
-The sensor case didn't break. Its repeated fact ranked below the other two required facts, so both got into the context before the copies could displace them.
+A complete handoff needed all three correct choices, supported by retrieved citations. Both response repetitions agreed on which tasks were complete. When a fact was absent, GPT-OSS returned `UNKNOWN` every time in this run. The loss was usable context, not evidence that the model had become worse at reasoning.
 
-That makes the conclusion specific: **copies of a highly ranked fact can crowd other facts out of a limited retrieval window.** Duplicate count alone doesn't tell you whether that will happen.
+**The clean baseline was already weak.** It supplied all the necessary evidence in only eight tasks. Removing exact duplicates restored that baseline; it did not fix the other ranking and selection failures. Clean and deduplicated prompts were identical, so the recovery wasn't a new model capability.
 
-A retrieval-only check with eight slots recovered all the required facts in every duplicate case. The records weren't lost or unsearchable. The smaller selection had excluded them.
+I also varied the amount of repetition and the room available for memory. This part checked retrieval only, without generating more answers.
 
-This is a deliberately simple demonstration of a familiar retrieval problem. A retriever that selects for distinct information may avoid it. I didn't test Hindsight's retrieval, semantic near-duplicates, or whether my real cleanup improved answers. Deduplication here restored the original context; it didn't make the model smarter.[^experiment]
+<figure style="margin:2rem 0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 360" role="img" aria-labelledby="handoff-plot-title handoff-plot-desc" style="display:block;width:100%;height:auto">
+<title id="handoff-plot-title">Repeated memories displaced project decisions</title>
+<desc id="handoff-plot-desc">Required-fact coverage falls as exact copies increase. At 512 memory tokens it falls from 100 percent to 54.2 percent. At 256 tokens it falls from 70.8 to 29.2 percent. At 128 tokens it falls from 40.3 to 22.2 percent. Retrieval-only results across 24 synthetic coding histories.</desc>
+<line x1="50" y1="20" x2="70" y2="20" stroke="#b24a2a" stroke-width="3"/><text x="76" y="25" font-size="15" fill="#1b1814">128 tokens</text>
+<line x1="182" y1="20" x2="202" y2="20" stroke="#305f91" stroke-width="3"/><text x="208" y="25" font-size="15" fill="#1b1814">256 tokens</text>
+<line x1="314" y1="20" x2="334" y2="20" stroke="#39856b" stroke-width="3"/><text x="340" y="25" font-size="15" fill="#1b1814">512 tokens</text>
+<line x1="55" y1="280.0" x2="438" y2="280.0" stroke="#d8d2c7"/><text x="46" y="285.0" text-anchor="end" font-size="15" fill="#1b1814">0</text>
+<line x1="55" y1="226.25" x2="438" y2="226.25" stroke="#d8d2c7"/><text x="46" y="231.25" text-anchor="end" font-size="15" fill="#1b1814">25</text>
+<line x1="55" y1="172.5" x2="438" y2="172.5" stroke="#d8d2c7"/><text x="46" y="177.5" text-anchor="end" font-size="15" fill="#1b1814">50</text>
+<line x1="55" y1="118.75" x2="438" y2="118.75" stroke="#d8d2c7"/><text x="46" y="123.75" text-anchor="end" font-size="15" fill="#1b1814">75</text>
+<line x1="55" y1="65.0" x2="438" y2="65.0" stroke="#d8d2c7"/><text x="46" y="70.0" text-anchor="end" font-size="15" fill="#1b1814">100</text>
+<text x="60" y="305" text-anchor="middle" font-size="15" fill="#1b1814">0</text>
+<text x="134" y="305" text-anchor="middle" font-size="15" fill="#1b1814">2</text>
+<text x="245" y="305" text-anchor="middle" font-size="15" fill="#1b1814">5</text>
+<text x="430" y="305" text-anchor="middle" font-size="15" fill="#1b1814">10</text>
+<polyline points="60.00,193.40 134.00,232.22 245.00,232.22 430.00,232.22" fill="none" stroke="#b24a2a" stroke-width="3"/>
+<circle cx="60.00" cy="193.40" r="4" fill="#b24a2a"/>
+<circle cx="134.00" cy="232.22" r="4" fill="#b24a2a"/>
+<circle cx="245.00" cy="232.22" r="4" fill="#b24a2a"/>
+<circle cx="430.00" cy="232.22" r="4" fill="#b24a2a"/>
+<polyline points="60.00,127.71 134.00,142.64 245.00,217.29 430.00,217.29" fill="none" stroke="#305f91" stroke-width="3"/>
+<circle cx="60.00" cy="127.71" r="4" fill="#305f91"/>
+<circle cx="134.00" cy="142.64" r="4" fill="#305f91"/>
+<circle cx="245.00" cy="217.29" r="4" fill="#305f91"/>
+<circle cx="430.00" cy="217.29" r="4" fill="#305f91"/>
+<polyline points="60.00,65.00 134.00,70.97 245.00,97.85 430.00,163.54" fill="none" stroke="#39856b" stroke-width="3"/>
+<circle cx="60.00" cy="65.00" r="4" fill="#39856b"/>
+<circle cx="134.00" cy="70.97" r="4" fill="#39856b"/>
+<circle cx="245.00" cy="97.85" r="4" fill="#39856b"/>
+<circle cx="430.00" cy="163.54" r="4" fill="#39856b"/>
+<text x="248" y="335" text-anchor="middle" font-size="16" fill="#1b1814">Extra copies of one memory</text>
+<text x="15" y="178" text-anchor="middle" transform="rotate(-90 15 178)" font-size="15" fill="#1b1814">Required facts in context (%)</text>
+</svg>
+<figcaption>Same information, more copies. Each line is a different allowance for recalled memory. These are retrieval results, not measured coding success.</figcaption>
+</figure>
 
-That was enough to make the issue tangible. A repeated fact wasn't merely taking up disk space. In two cases, it took the place of information the answer needed.
+With a 512-token allowance, the clean histories supplied every required fact. Ten extra copies reduced that to about 54%. More space delayed the crowding; it didn't make repeated text free.
 
-Removing exact copies was easy in a fictional dataset. My real history required a more careful version of that operation.
+The average also hides differences between tasks. At the primary allowance, three histories didn't pack any additional copies into context. Their duplication had no opportunity to displace evidence. Where copies did enter, their rank and length mattered. Counting duplicates alone wasn't enough to predict the outcome.
+
+This was a controlled stress test, not a measurement of my daily failure rate. The histories shared six templates, the status notes were worded to be relevant to a handoff, and the retriever used plain similarity ranking. The result doesn't establish how often natural repetition causes problems, or whether Hindsight's retriever behaves this way. The paired analysis and its sensitivity checks are described in the notes.[^analysis]
+
+But it gave me a concrete failure to look for: **a memory excerpt can be relevant to the project and still omit the decisions needed to work on it.**
+
+That explains why I care about repeated context. It doesn't make deleting real history as simple as undoing a synthetic experiment.
 
 ## Cleaning up without throwing away the evidence
 
-In the real store, removing repeated text also meant preserving where it came from. Two copies of a sentence can point to different sources. Similar sentences can describe different projects. An old decision and its replacement can look almost identical while giving the assistant opposite instructions.
+Back in the cleanup I'd done before this experiment, removing repeated text also meant preserving where it came from. Two copies of a sentence can point to different sources. Similar sentences can describe different projects. An old decision and its replacement can look almost identical while giving the assistant opposite instructions.
 
 So the cleanup wasn't an invitation for an LLM to decide what I should forget. I used an explicit list of approved records. For duplicate conclusions, I kept a surviving copy and attached the removed copies' source information to it.
 
@@ -119,7 +149,7 @@ The result was 3,881 approved duplicate and test records removed. Repeated wordi
 
 Before applying it, I backed up the database and rehearsed the deletion in a transaction that rolled back. Afterward, I checked through the API that the intended targets were gone and the retained text and merged source information were intact.
 
-Those checks answered whether the cleanup did what I intended. The later experiment answered a different, smaller question: could duplicates crowd useful facts out of a simple retriever? It didn't establish that my production answers improved.
+Those checks answered whether the cleanup did what I intended. The later study asked whether repetition could prevent a fresh session from receiving the evidence needed to continue a task. It didn't establish that my production answers improved.
 
 The distinction matters for the setup I kept. I want to preserve enough history to trace a conclusion without automatically putting all of that history in every conversation.
 
@@ -135,7 +165,7 @@ The arrangement I verified after the move separates current memory from historic
 | Hindsight storage | Keeps the data locally in PostgreSQL with pgvector. |
 | Model work | Uses Ollama Cloud `gpt-oss:120b` for generation, with local embedding and reranking models. |
 
-For the local retrieval models, that setup used `BAAI/bge-small-en-v1.5` and `cross-encoder/ms-marco-MiniLM-L-6-v2`. These are different from the models in the synthetic experiment. Local storage also doesn't mean all processing stays local: the generation path uses a cloud service.
+For the local retrieval models, that setup used `BAAI/bge-small-en-v1.5` and `cross-encoder/ms-marco-MiniLM-L-6-v2`. The handoff study used a different embedding model and a simpler retriever, not this production pipeline. Local storage also doesn't mean all processing stays local: the generation path uses a cloud service.
 
 The archive mappings matter more to me than the model list. Codex can receive the historical archive matched to its project, not every archive I happen to own. Hermes receives the historical personal archive. Archives without an unambiguous mapping remain available for explicit search rather than automatic inclusion.
 
@@ -145,11 +175,12 @@ My check is small: save a made-up fact, ask for it in a fresh session, and inspe
 
 I moved because I was tired of babysitting memory. I still have a system to maintain, but I have better questions to ask of it: was the fact captured, did it reach the right session, and what else competed for its place in the context?
 
-The store can remember the rollback code perfectly and still send the assistant three copies of the region.
+I don't need six reminders that we're working on a project. I need the next session to remember what we decided.
 
 PK
 
 [^migration]: Private migration receipt, September 11, 2026. Exact-text verification covered 8,455 conclusions in 13 historical banks. The source Honcho API container was stopped to end a failed restart loop; its original data volume and encrypted backup were preserved. This describes my installation, not a general reliability claim about Honcho.
 [^audit]: Private installation audit, September 11-12, 2026. Direct recall exposed a saved fact missed by a Codex session; the approximately three-second deadline was shorter than archive searches taking roughly ten seconds. Subsequent fresh CLI checks passed shared recall. The setup above describes the audited migration configuration. A final desktop check was user-confirmed rather than independently observed. Backups, routing and client behavior remain separate operational responsibilities.
 [^cleanup]: Private cleanup receipt and API verification, September 13, 2026 UTC. Approved removals: 3,827 duplicate archive records, 48 test-bank records, and six test markers. Verification checked target absence, retained text, and 3,817 merged provenance bundles. Restoring the cleanup backup into a database was not tested. This was not secure erasure of original conversations or backups.
-[^experiment]: Separate synthetic probe using Ollama `qwen3-embedding:0.6b`, cosine ranking with deterministic ID tie-breaking, and `llama3:latest` (8B). Three fixed scenarios, three conditions, nine completed answers; temperature zero, seed 1729, fixed JSON instructions. Baselines contained three required facts and five distractors; duplicate conditions added five copies of the first fact. Exact field matches were 8 of 9, 4 of 9, and 8 of 9 respectively. Every sensor answer omitted the unit in `23 seconds`, a consistent exact-match penalty unrelated to retrieval. The table reports context coverage. Prompts, vectors, rankings, model digests, and raw responses were saved. The eight-slot control inspected retrieval only. No production improvement, general benchmark result, or latency benefit was measured.
+[^experiment]: Controlled synthetic coding-handoff study: 24 main tasks, four variants in each of six shared templates; three memory conditions; two responses per task and condition. All 144 main calls completed on the reported model `gpt-oss:120b` through Ollama Cloud. An excluded six-task development run produced 18 responses. Local `qwen3-embedding:0.6b` supplied vectors for flat cosine ranking. Whole records were packed greedily into a 256-token memory allowance counted with `o200k_base`; query, prompt, options and budget were held fixed within each task. Temperature 0.2, low thinking effort and two fixed requested seeds. Tasks, targets, scoring and schedule were frozen before main generation. Each history contained three required facts, a routine status note and 17 distractors. The retrieval-only grid varied 0/2/5/10 copies and 128/256/512-token allowances across raw and deduplicated histories. It produced 576 selection evaluations, not additional model answers. Structured handoff decisions and citations were scored, not code execution. Protocol, source fingerprints, vectors, requests, responses and independent rescoring were retained.
+[^analysis]: Responses were averaged within tasks before comparison. Deduplication recovered complete handoffs in eight tasks, worsened none and left 16 unchanged: a 33.3-percentage-point paired recovery. A 10,000-resample bootstrap within template-by-repetition-role cells gave a 25.0 to 41.7-point sensitivity interval; leaving one template out gave effects from 20 to 40 points. These describe sensitivity within a small constructed task set, not population efficacy or statistical significance. Clean and deduplicated prompts were byte-identical. Across both responses per task, correct option-label selections for available facts were 100/102 clean, 41/42 repeated and 102/102 deduplicated; one repeated-condition answer gave the right wording instead of its required label. All absent fields received UNKNOWN. The configuration example was chosen after analysis to illustrate a completeness loss, not as another independent result.
