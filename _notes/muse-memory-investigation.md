@@ -55,34 +55,15 @@ The files have different jobs, but they share evidence. Muse describes daily evi
 There are then two routes into an answer: standing context at conversation start, and detail read when needed.
 
 <style>
-.muse-diagram{margin:1.5rem 0;padding:16px 8px;border:1px solid #d8d2c7;border-radius:8px;background:#f7f4ee;display:flex;justify-content:center}
-.muse-diagram svg{display:block;width:100%;max-width:280px;height:auto;overflow:visible}
-.muse-diagram text{font-family:Arial,sans-serif;font-size:18px;fill:#173f30}
-.muse-diagram .box{fill:#edf3ee;stroke:#a1b9aa;stroke-width:1.5}
-.muse-diagram .path{fill:none;stroke:#496657;stroke-width:2;stroke-dasharray:4 5}
+.article-body .muse-diagram{margin:1.5rem auto;max-width:344px;}
+.article-body .muse-diagram img{display:block;width:100%;height:auto;margin:0;border-radius:0;}
 </style>
 
-<div class="muse-diagram" role="group" aria-label="Reported memory organization and two context routes">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 660" role="img" aria-labelledby="muse-memory-title muse-memory-desc">
-<title id="muse-memory-title">Memory organization and context paths</title>
-<desc id="muse-memory-desc">Reported relationships: conversations and profile review feed daily evidence and the profile. Daily evidence feeds the current memory; the profile feeds specialized profiles. Bank input lineage is unresolved. Standing files enter context at session start. Indexed search and general file reading provide detail on demand.</desc>
-<defs><marker id="muse-memory-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#496657"/></marker></defs>
-<rect class="box" x="5" y="5" width="270" height="62" rx="8"/><text x="140" y="30" text-anchor="middle">Conversation +</text><text x="140" y="53" text-anchor="middle">profile review</text>
-<path class="path" d="M140 67V94" marker-end="url(#muse-memory-arrow)"/>
-<rect class="box" x="5" y="96" width="270" height="62" rx="8"/><text x="140" y="122" text-anchor="middle">Daily evidence +</text><text x="140" y="145" text-anchor="middle">reviewed profile</text>
-<path class="path" d="M140 158V185" marker-end="url(#muse-memory-arrow)"/>
-<rect class="box" x="5" y="187" width="270" height="111" rx="8"/><text x="140" y="213" text-anchor="middle">Evidence → current view</text><text x="140" y="238" text-anchor="middle">Profile → specialist views</text><text x="140" y="263" text-anchor="middle">Bank views: input</text><text x="140" y="286" text-anchor="middle">lineage unresolved</text>
-<path class="path" d="M5 270H1V515H5" marker-end="url(#muse-memory-arrow)"/>
-<path class="path" d="M140 298V330" marker-end="url(#muse-memory-arrow)"/>
-<rect class="box" x="5" y="332" width="270" height="108" rx="8"/><text x="140" y="358" text-anchor="middle">1. Standing context</text><text x="140" y="383" text-anchor="middle">Current memory, profiles,</text><text x="140" y="406" text-anchor="middle">indexes + synthesis</text><text x="140" y="429" text-anchor="middle">Subject to size budgets</text>
-<path class="path" d="M275 385H279V622H271" marker-end="url(#muse-memory-arrow)"/>
-<rect class="box" x="5" y="467" width="270" height="108" rx="8"/><text x="140" y="493" text-anchor="middle">2. Detail on demand</text><text x="140" y="518" text-anchor="middle">Search indexed records;</text><text x="140" y="541" text-anchor="middle">read stored files</text><text x="140" y="564" text-anchor="middle">Coverage differs</text>
-<path class="path" d="M140 575V603" marker-end="url(#muse-memory-arrow)"/>
-<rect class="box" x="10" y="605" width="260" height="49" rx="8"/><text x="140" y="636" text-anchor="middle">Answer context</text>
-</svg>
-</div>
+<figure class="muse-diagram">
+<img src="{{ '/assets/muse-context-excalidraw.png' | relative_url }}" width="1032" height="2742" alt="Reported memory organization, followed by two parallel routes into answer context: standing files at conversation start and search or file reads on demand. Bank input lineage remains unresolved." />
+</figure>
 
-*Memory organization and context paths described in Muse's exports. Dotted arrows are reported relationships, not a verified execution sequence. The two access routes can consult overlapping files; storage does not establish search coverage.*
+*Memory organization and context paths described in Muse's exports. The panels separate organization from context access. Dashed arrows show reported relationships, not a verified execution sequence. The two access routes can consult overlapping files; storage does not establish search coverage.*
 
 The first route supplies compact orientation: current memory, profile and relationship indexes, and the current behavioral synthesis. The report says standing files can be omitted under context-budget pressure. Being on disk doesn't guarantee being in the prompt. [[R]](#sources-and-scope)
 
@@ -104,26 +85,11 @@ Three similarly named artifacts are easy to confuse:
 
 The claim index organizes evidence. The dream and synthesis interpret interactions. In this vocabulary, “alignment” means deriving prompt guidance about tone, restraint, uncertainty, and future conduct. These sources do not demonstrate model-weight updates.
 
-<div class="muse-diagram" role="group" aria-label="Reported dreaming and separate runtime approval">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 633" role="img" aria-labelledby="muse-dream-title muse-dream-desc">
-<title id="muse-dream-title">From remembered evidence to standing guidance</title>
-<desc id="muse-dream-desc">Muse reports observation and reflection over evidence and prior guidance, followed by grounding, consistency, and preservation review. A dated dream records the review, while current synthesis enters standing context. Runtime approval for external actions is a separate gate.</desc>
-<defs><marker id="muse-dream-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#496657"/></marker></defs>
-<rect class="box" x="5" y="5" width="270" height="62" rx="8"/><text x="140" y="31" text-anchor="middle">Conversation, evidence</text><text x="140" y="54" text-anchor="middle">+ prior guidance</text>
-<path class="path" d="M140 67V93" marker-end="url(#muse-dream-arrow)"/>
-<rect class="box" x="5" y="95" width="270" height="48" rx="8"/><text x="140" y="126" text-anchor="middle">Observe + reflect</text>
-<path class="path" d="M140 143V169" marker-end="url(#muse-dream-arrow)"/>
-<rect class="box" x="5" y="171" width="270" height="84" rx="8"/><text x="140" y="197" text-anchor="middle">Grounding, consistency</text><text x="140" y="220" text-anchor="middle">+ preservation review</text><text x="140" y="243" text-anchor="middle">Repair if friction detected</text>
-<path class="path" d="M140 255V281" marker-end="url(#muse-dream-arrow)"/>
-<rect class="box" x="5" y="283" width="270" height="62" rx="8"/><text x="140" y="309" text-anchor="middle">Dated dream: history</text><text x="140" y="332" text-anchor="middle">Current synthesis: guidance</text>
-<path class="path" d="M140 345V371" marker-end="url(#muse-dream-arrow)"/>
-<rect class="box" x="5" y="373" width="270" height="62" rx="8"/><text x="140" y="399" text-anchor="middle">Synthesis → context</text><text x="140" y="422" text-anchor="middle">→ recommendation</text>
-<text x="140" y="482" text-anchor="middle">Separate execution gate</text>
-<rect class="box" x="5" y="499" width="270" height="127" rx="8"/><text x="140" y="525" text-anchor="middle">Action needing approval</text><text x="140" y="554" text-anchor="middle">↓</text><text x="140" y="580" text-anchor="middle">Runtime permission</text><text x="140" y="607" text-anchor="middle">→ approved execution</text>
-</svg>
-</div>
+<figure class="muse-diagram">
+<img src="{{ '/assets/muse-dreaming-excalidraw.png' | relative_url }}" width="1032" height="3144" alt="Reported review produces a historical dated dream and current behavioral synthesis. Current synthesis enters answer context. A separate runtime permission gate governs actions requiring approval." />
+</figure>
 
-*From remembered evidence to standing guidance, as described in the Investigation Report. This is a functional map. The dated dream is historical; current synthesis has a separate injection path. Runtime permission is separate from memory review.*
+*From remembered evidence to standing guidance, as described in the Investigation Report. This is a functional map of reported relationships. The dated dream is historical; current synthesis has a separate injection path. Runtime permission is separate from memory review.*
 
 Muse describes four review functions. **Grounding** asks whether evidence supports a claim. **Consistency** checks contradictions with prior guidance. **Preservation** guards against silently dropping established content. **Repair** organizes detected friction and a proposed resolution. These are reported checks, not stages I independently watched execute. They also serve different purposes from user approval. [R]
 
