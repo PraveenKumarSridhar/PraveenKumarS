@@ -1,6 +1,6 @@
 ---
-title: "I asked Muse for its memories. It showed me instructions."
-description: "Inside Muse’s memory exports: how corrections become standing guidance, why one follow-up probe produced opposite answers, and three changes I want in Hermes + Hindsight."
+title: "My AI assistant turned my silence into a rule"
+description: "An unanswered message became standing guidance in Muse’s memory. I traced how that happens, examined a follow-up probe, and found three changes I want in my own assistant."
 date: 2026-09-21
 tags: [memory, agents]
 ---
