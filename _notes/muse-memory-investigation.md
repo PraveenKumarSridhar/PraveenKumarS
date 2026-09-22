@@ -115,13 +115,17 @@ The YAML artifacts describe another way of organizing this work. `REPAIR_THREADS
 
 The distinction between history and current guidance also appears in Muse's forgetting account: historical dreams remain, while current synthesis is re-derived later. That explains the different maintenance jobs, although the exact trigger and practical propagation behavior remain unresolved.
 
-## What I took from opening the files
+## What I want to bring back to Hermes + Hindsight
 
-The useful map came from following the files' jobs: basic orientation, a current summary, chronological evidence, profiles, source-linked views and guidance for future conversations. Each answered a different question about the material it carried.
+Much of this already maps onto [my Hermes + Hindsight setup](https://praveenks.com/notes/from-honcho-to-hindsight/). The [Hermes integration](https://github.com/NousResearch/hermes-agent/blob/de5ece994415276d215976836161f871f1d6d8f5/plugins/memory/hindsight/__init__.py) supports conversation retention and recall. Hindsight provides [source-backed observations](https://hindsight.vectorize.io/developer/observations) and [curated mental models](https://hindsight.vectorize.io/developer/api/mental-models). The building blocks for storing evidence, consolidating it and retrieving a current understanding are there. Opening Muse's files made me more interested in how I use those pieces together.
 
-I asked what Muse remembers and found several ways of representing the same evidence. The names were only a starting point. A daily note and a current summary handle time differently. A profile and a claim index give different routes into information. A historical review and a synthesis have different responsibilities in the next conversation.
+**First, a small, reviewable guide to how the assistant should work with me.** The separation between a historical dream and current synthesis was the part I most wanted to borrow. I'd use a dedicated mental model to draft guidance from relevant interactions, review what belongs in it, and give the approved guidance an explicit route into Hermes's context. Each rule should say where it came from, when it applies and what would retire it. A temporary frustration shouldn't quietly become a permanent instruction.
 
-Those connections are what made the files worth opening. They let me ask where an understanding came from, which representation carries it forward, and what remains uncertain about the path between them.
+**Second, check that a correction reaches the next answer.** The correction trail through Muse's files made this a concrete thing to test. I'd correct a stored assumption, then check the source record, derived observations, any relevant mental model and the answer Hermes produces. Hindsight already has consolidation and model-refresh mechanisms; the work here is verifying the full path in my setup. Keeping the historical record is useful, provided its superseded conclusion stops steering the assistant.
+
+**Third, keep the source attached when a memory comes back.** The bank views showed why different representations of a claim needn't be different evidence. I'd make the retrieved context distinguish something I said, outside evidence and an assistant's inference, while preserving a route back to the source. If the assistant repeats its own earlier interpretation, that repetition shouldn't count as another reason to believe it. Hindsight's source-backed observations give me a foundation; I want that distinction to survive the handoff into the conversation too.
+
+I'd start with the reviewed behavioral guide, then use the correction and provenance checks to decide whether it deserves a place in everyday use. That's what I want to take from this investigation: a clearer path from remembered evidence to guidance I can inspect, correct and retire.
 
 PK
 
