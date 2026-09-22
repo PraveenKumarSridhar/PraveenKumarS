@@ -2,6 +2,9 @@
 title: "Inside Meta Muse's memory: how records become guidance"
 description: Muse's memory export included guidance for future behavior. I traced its reported path from records to standing context, then compared it with Hermes and Hindsight.
 date: 2026-09-21
+image:
+  path: /assets/muse-memory-social-v1.png
+  alt: "Inside Meta Muse’s memory: records become guidance. Source records, current understanding, and behavioral guidance."
 tags:
 - memory
 - agents
@@ -21,9 +24,9 @@ I examined its exported files and asked it to trace their use. This is a reconst
 
 Three jobs helped me make sense of the files. **Evidence records** preserve what happened. **Profiles and indexes** organize what is currently known. **Behavioral synthesis** expresses what the assistant should do with it.
 
-The daily records, `memory/<date>.md`, were the evidence layer: quotes, extracted claims, source-message references, and corrections naming the inference they replaced. The compact `MEMORY.md` was the current view. Muse describes both conversational writes and background reconciliation that maintains that view. Those paths can coexist; the export doesn't settle which kinds of saving require review first. [M, R]
+The daily records, `memory/<date>.md`, were the evidence layer: quotes, extracted claims, source-message references, and corrections naming the inference they replaced. The compact `MEMORY.md` was the current view. Muse describes both conversational writes and background reconciliation that maintains that view. Those paths can coexist; the export doesn't settle which kinds of saving require review first. [[M, R]](#sources-and-scope)
 
-The reviewed profile, `memory/personalization.md`, supplied preferences for recommendations. The `memory/bank/` files reorganized claims into episodes, opinions, circumstances, and a cross-cutting claim index. Their contents overlap. An interest appearing in both a profile and a fact-oriented index doesn't become two independent observations. [M]
+The reviewed profile, `memory/personalization.md`, supplied preferences for recommendations. The `memory/bank/` files reorganized claims into episodes, opinions, circumstances, and a cross-cutting claim index. Their contents overlap. An interest appearing in both a profile and a fact-oriented index doesn't become two independent observations. [[M]](#sources-and-scope)
 
 That distinction matters when something is wrong. I want to inspect the source of a belief, not just find the same sentence in several places.
 
@@ -81,9 +84,9 @@ There are then two routes into an answer: standing context at conversation start
 
 *Memory organization and context paths described in Muse's exports. Dotted arrows are reported relationships, not a verified execution sequence. The two access routes can consult overlapping files; storage does not establish search coverage.*
 
-The first route supplies compact orientation: current memory, profile and relationship indexes, and the current behavioral synthesis. The report says standing files can be omitted under context-budget pressure. Being on disk doesn't guarantee being in the prompt. [R]
+The first route supplies compact orientation: current memory, profile and relationship indexes, and the current behavioral synthesis. The report says standing files can be omitted under context-budget pressure. Being on disk doesn't guarantee being in the prompt. [[R]](#sources-and-scope)
 
-The second route retrieves evidence selectively. Muse reports `memory_search` returning indexed snippets with memory URIs and file-and-line references, `memory_get` reading further detail, and `memory_explain` exposing a claim's quote, source, status, and replacement relationship. Its general reader, `muse.read`, can inspect files too. The report demonstrates indexed claim retrieval in its account; it doesn't establish semantic-search coverage for every bank file or historical dream. [H, R]
+The second route retrieves evidence selectively. Muse reports `memory_search` returning indexed snippets with memory URIs and file-and-line references, `memory_get` reading further detail, and `memory_explain` exposing a claim's quote, source, status, and replacement relationship. Its general reader, `muse.read`, can inspect files too. The report includes an account of indexed claim retrieval; it doesn't establish semantic-search coverage for every bank file or historical dream. [[H, R]](#sources-and-scope)
 
 I like the separation: enough context to start, with a route back to the evidence when I question a memory. The source links make that design inspectable even where the maintenance order remains unclear.
 
@@ -128,7 +131,7 @@ The two derivations in the export make that last distinction concrete. Correctio
 
 Muse described structured state for boundaries, confidence, adaptation lifecycles, and repair threads, but reported that state as **unconfigured in this instance**. The operative guidance was in Markdown. Markdown can preserve source, authority, scope, and correction status perfectly well. Structured fields can help preserve them too. What matters is whether those distinctions reach the answering context and remain meaningful there. [R]
 
-The report says the synthesis on disk matched its injected-context copy. A dated dream's `prompt_hoisted: false` describes that historical artifact, not the current synthesis. Its evidence window and `user_turns` describe the review period and volume; `correction_free_rate` is reported run metadata, not a validated accuracy measure. [M, R]
+The report says the synthesis on disk matched its injected-context copy. A dated dream's `prompt_hoisted: false` describes that historical artifact, not the current synthesis. [M, R]
 
 Muse calls dreaming nightly and reports successful maintenance runs, but the visible cron inventory didn't explain the exact trigger. What interests me is the second pass: revisiting an interaction and deriving guidance, beyond merely storing it. Guidance can shape a recommendation; the harness describes separate runtime approvals for actions such as sending a message. Recommending, drafting, and sending remain separate operations. [H, R]
 
@@ -151,7 +154,7 @@ The two rationales still express the distinction that prompted the investigation
 
 [My setup](https://praveenks.com/notes/from-honcho-to-hindsight/) uses Hermes as the assistant and Hindsight as its memory backend. Hermes provides automatic retention and recall alongside standing memory and user-profile files. Hindsight [consolidates observations from supporting memories](https://hindsight.vectorize.io/developer/observations) and supports [derived mental models](https://hindsight.vectorize.io/developer/api/mental-models).
 
-The baseline inspected on September 21 was Hindsight 0.9.2 plus my Hermes archive integration. I rechecked the relevant local integration code and the pinned engine source for this article. The engine handles explicit edits and deletions by invalidating dependent observations and scheduling eligible mental-model refreshes. That refresh is configured, asynchronous, and best effort. A conversational correction still has to be understood and connected to the older claim; it isn't automatically the same operation as an explicit backend edit. I haven't tested that full path in my setup. [S]
+The baseline inspected on September 21 was Hindsight plus my Hermes archive integration. I rechecked the relevant local integration code and the pinned engine source for this article. The engine handles explicit edits and deletions by invalidating dependent observations and scheduling eligible mental-model refreshes. That refresh is configured, asynchronous, and best effort. A conversational correction still has to be understood and connected to the older claim; it isn't automatically the same operation as an explicit backend edit. I haven't tested that full path in my setup. [[S]](#sources-and-scope)
 
 | Job | Muse evidence | Hermes + Hindsight baseline |
 |---|---|---|
@@ -173,7 +176,7 @@ Muse leaves a related question open. According to the forgetting specification s
 
 ### 1. Make corrections reach every place memory can influence an answer
 
-Muse's source-linked views made the revision problem visible: a record, its current interpretation, and behavioral guidance are separate things. Its forgetting account also distinguishes removing evidence from refreshing guidance. Hindsight already provides backend invalidation and eligible refresh; Hermes adds standing files, recalled context carried forward in a conversation, and historical archives. [R, S]
+Muse's source-linked views made the revision problem visible: a record, its current interpretation, and behavioral guidance are separate things. Its forgetting account also distinguishes removing evidence from refreshing guidance. Hindsight already provides backend invalidation and eligible refresh; Hermes adds standing files, recalled context carried forward in a conversation, and historical archives. [[R, S]](#sources-and-scope)
 
 I'd extend revision across those surfaces: a corrected or withdrawn claim loses current authority everywhere it can affect an answer, and affected derivatives remain invalid until rebuilt. An old archive result shouldn't silently restore the superseded belief.
 
@@ -181,7 +184,7 @@ This comes first because a correct database entry is insufficient if an older co
 
 ### 2. Keep inferred adaptations distinct from user instructions
 
-Muse's unanswered-nudge rule shows how an interpretation can become standing guidance. Hindsight's sourced observations and derived-memory facilities give me a foundation; my integration must carry the authority distinction into answering context. I want an adaptation to retain its origin, scope, and status: inferred or explicitly requested; provisional, confirmed, rejected, or superseded. [M, R, S]
+Muse's unanswered-nudge rule shows how an interpretation can become standing guidance. Hindsight's sourced observations and derived-memory facilities give me a foundation; my integration must carry the authority distinction into answering context. I want an adaptation to retain its origin, scope, and status: inferred or explicitly requested; provisional, confirmed, rejected, or superseded. [[M, R, S]](#sources-and-scope)
 
 Scope, expiry, and reversal belong here. Does silence justify restraint for this topic, for a limited time, or across all suggestions? Does an explicit request immediately override the inference? Excessive caution might also suppress the future interaction that would correct it. That's a feedback-loop hypothesis to test, not an observed Muse failure.
 
@@ -189,7 +192,7 @@ The observable outcome: a narrow preference stays narrow, as in the constructed 
 
 ### 3. Preserve evidence independence through the memory loop
 
-The private correction was represented in a daily record, bank views, a dream, and broader synthesis. Those representations shared ancestry; they weren't independent confirmations. Hindsight retains supporting sources, and Hermes preserves roles and session lineage. I want those foundations to survive recall, assistant restatement, and subsequent retention. [M, S]
+The private correction was represented in a daily record, bank views, a dream, and broader synthesis. Those representations shared ancestry; they weren't independent confirmations. Hindsight retains supporting sources, and Hermes preserves roles and session lineage. I want those foundations to survive recall, assistant restatement, and subsequent retention. [[M, S]](#sources-and-scope)
 
 Suppose an assistant infers that a project favors small patches, recalls that next week, and repeats it. Saving its answer shouldn't create a second user confirmation. The observable outcome is that one source repeated across sessions remains one source, while new user evidence counts separately. This is a property to establish, not a double-counting failure I've demonstrated in Hindsight.
 
@@ -198,6 +201,8 @@ I went looking for stored memories and found an inspectable path toward future b
 PK
 
 ## File reference
+
+A dated dream's evidence window and `user_turns` describe the review period and volume; `correction_free_rate` is reported run metadata, not a validated accuracy measure. [M, R]
 
 | Purpose | Exported file or directory |
 |---|---|
