@@ -2,6 +2,8 @@
 """Prove the validator rejects realistic corruptions of a real generated site."""
 from pathlib import Path
 import shutil
+import json
+import re
 import sys
 import tempfile
 import unittest
@@ -31,6 +33,33 @@ class RegressionGateTests(unittest.TestCase):
 
     def test_valid_site_passes_including_image_object_override(self):
         self.assertEqual(check_site(self.root)[0], [])
+
+    def mutate_schema(self, route, kind, change):
+        file = self.root / route / "index.html"
+        def edit(match):
+            obj = json.loads(match.group(1))
+            return '<script type="application/ld+json">' + json.dumps(change(obj) if obj.get("@type") == kind else obj) + '</script>'
+        file.write_text(re.sub(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', edit, file.read_text(), flags=re.S))
+
+    def test_conflicting_person_identity_is_rejected(self):
+        self.mutate_schema("", "Person", lambda x: dict(x, **{"@id": "https://example.com/person"}))
+        self.fails_with("conflicting Person identity")
+
+    def test_wrong_article_author_is_rejected(self):
+        self.mutate_schema("notes/agent-memory-needs-a-point-of-view", "BlogPosting", lambda x: dict(x, author={"url": "https://example.com/person"}))
+        self.fails_with("author identity mismatch")
+
+    def test_breadcrumb_mismatch_is_rejected(self):
+        self.mutate_schema("notes/agent-memory-needs-a-point-of-view", "BreadcrumbList", lambda x: dict(x, itemListElement=[]))
+        self.fails_with("breadcrumb schema mismatch")
+
+    def test_modification_before_publication_is_rejected(self):
+        self.mutate_schema("notes/agent-memory-needs-a-point-of-view", "BlogPosting", lambda x: dict(x, dateModified="2020-01-01T00:00:00+00:00"))
+        self.fails_with("modification predates publication")
+
+    def test_duplicate_identity_is_rejected(self):
+        self.corrupt_home('</head>', '<script type="application/ld+json">{"@type":"Person"}</script></head>')
+        self.fails_with("expected one Person identity")
 
     def test_missing_old_note_is_rejected(self):
         (self.root / "notes/agent-memory-needs-a-point-of-view/index.html").unlink()

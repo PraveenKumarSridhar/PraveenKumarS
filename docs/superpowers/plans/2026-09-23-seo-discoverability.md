@@ -127,9 +127,9 @@ Expected: each note has a clear topic and useful onward reading; all historical 
 
 **Interfaces:** retain `{% seo %}` as the owner of WebSite/BlogPosting metadata. Supplemental Person uses a stable `https://praveenks.com/#person` identifier; breadcrumbs must match visible links.
 
-- [ ] Inspect actual emitted graph before extending it. Add Person using verified full name, homepage, visible professional role, Northeastern University, existing sameAs profiles, and supported knowsAbout topics. Do not use the generic social card as a portrait.
-- [ ] Ensure note author resolves to the same identity; validate publication/modification dates, image override, mainEntityOfPage, and headline against visible content. Do not reset dates at every build.
-- [ ] Add BreadcrumbList via `jsonify`-escaped values, matching the visible breadcrumb. Avoid duplicate Article or contradictory Person records.
+- [x] Inspect actual emitted graph before extending it. Add Person using verified full name, homepage, visible professional role, Northeastern University, existing sameAs profiles, and supported knowsAbout topics. Do not use the generic social card as a portrait.
+- [x] Ensure note author resolves to the same identity; validate publication/modification dates, image override, mainEntityOfPage, and headline against visible content. Do not reset dates at every build.
+- [x] Add BreadcrumbList via `jsonify`-escaped values, matching the visible breadcrumb. Avoid duplicate Article or contradictory Person records.
 - [ ] Extend validator with malformed/duplicate/conflicting-identity and date fixtures; check all notes. Use Google's Rich Results Test on deployable/public output after merge when available; local JSON parsing alone does not prove eligibility.
 - [ ] Run full gates, commit the schema milestone, and continue Task 6; verify live after the SEO PR merges.
 

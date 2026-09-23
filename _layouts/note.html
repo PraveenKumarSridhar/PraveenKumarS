@@ -199,7 +199,7 @@
 <div class="note-grid">
   <div class="side">
     <a class="back" href="{{ site.baseurl }}/notes/">&larr; All notes</a>
-    <div class="meta"><span>{{ page.date | date: "%b %-d, %Y" }}</span><span>{{ mins }} min read</span></div>
+    <div class="meta"><span>Published <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time></span>{% if page.last_modified_at %}<span>Updated <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">{{ page.last_modified_at | date: "%b %-d, %Y" }}</time></span>{% endif %}<span>{{ mins }} min read</span></div>
     {% if page.tags and page.tags != empty %}
     <div class="tags">
       {% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}
@@ -211,7 +211,7 @@
     </details>
   </div>
   <article>
-    <h1 class="note-title">{{ page.title | escape }}</h1>
+    <h1 class="note-title">{{ page.title | smartify | strip_html | escape }}</h1>
     <div class="article-body" id="article-body">
 {{ content }}
     </div>

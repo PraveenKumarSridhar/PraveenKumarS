@@ -24,6 +24,8 @@ class Page(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.in_head = self.in_title = self.in_json = False
         self.title = ""
+        self.h1 = ""
+        self.in_h1 = False
         self.title_count = self.h1_count = 0
         self.meta = {}
         self.canonicals, self.refs, self.ids, self.schemas = [], [], [], []
@@ -44,6 +46,7 @@ class Page(HTMLParser):
             self.title_count += 1
         if tag == "h1":
             self.h1_count += 1
+            self.in_h1 = True
         if tag == "meta" and self.in_head:
             key = a.get("name", a.get("property", "")).lower()
             self.meta.setdefault(key, []).append(a.get("content", ""))
@@ -60,6 +63,8 @@ class Page(HTMLParser):
             self.json_text = ""
 
     def handle_endtag(self, tag):
+        if tag == "h1":
+            self.in_h1 = False
         if tag == "title":
             self.in_title = False
         if tag == "head":
@@ -69,6 +74,8 @@ class Page(HTMLParser):
             self.in_json = False
 
     def handle_data(self, data):
+        if self.in_h1:
+            self.h1 += data
         if self.in_title:
             self.title += data
         if self.in_json:
@@ -126,10 +133,26 @@ def check_site(root):
         check(len(page.ids) == len(set(page.ids)), f"{route}: duplicate HTML IDs")
         check(bool(page.schemas), f"{route}: missing JSON-LD")
         schemas = [node for item in page.schemas for node in (item.get("@graph", [item]) if isinstance(item, dict) else item)]
+        check(all(isinstance(s, dict) for s in schemas), f"{route}: schema nodes must be objects")
+        schemas = [s for s in schemas if isinstance(s, dict)]
+        if route == "/":
+            people = [s for s in schemas if s.get("@type") == "Person"]
+            check(len(people) == 1, "homepage: expected one Person identity")
+            for person in people:
+                check(person.get("@id") == ORIGIN + "/#person" and person.get("url") == ORIGIN + "/", "homepage: conflicting Person identity")
+                check(person.get("name") == "Praveen Kumar Sridhar", "homepage: Person name mismatch")
         if route.startswith("/notes/") and route != "/notes/":
             articles = [s for s in schemas if s.get("@type") in ("BlogPosting", "Article")]
             check(len(articles) == 1, f"{route}: expected exactly one article schema")
+            crumbs = [s for s in schemas if s.get("@type") == "BreadcrumbList"]
+            check(len(crumbs) == 1, f"{route}: expected one breadcrumb schema")
+            for crumb in crumbs:
+                expected = [(1, "Home", ORIGIN + "/"), (2, "Lab Notes", ORIGIN + "/notes/"), (3, page.h1, canonical)]
+                actual = [(x.get("position"), x.get("name"), x.get("item")) for x in crumb.get("itemListElement", []) if isinstance(x, dict)]
+                check(actual == expected, f"{route}: breadcrumb schema mismatch")
             for article in articles:
+                check(article.get("headline") == page.h1, f"{route}: headline differs from H1")
+                check(article.get("author", {}).get("url") == ORIGIN + "/#person", f"{route}: author identity mismatch")
                 for field in ("headline", "description", "author", "datePublished", "dateModified", "image", "mainEntityOfPage"):
                     check(bool(article.get(field)), f"{route}: article missing {field}")
                 check(article.get("mainEntityOfPage", {}).get("@id") == canonical, f"{route}: article mainEntityOfPage mismatch")

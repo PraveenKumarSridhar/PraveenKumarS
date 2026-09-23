@@ -1,0 +1,13 @@
+<script id="person" type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": {{ '/#person' | absolute_url | jsonify }},
+  "name": {{ site.author.name | jsonify }},
+  "url": {{ '/' | absolute_url | jsonify }},
+  "jobTitle": "Machine Learning Engineer and Data Scientist",
+  "alumniOf": {"@type": "CollegeOrUniversity", "name": "Northeastern University"},
+  "knowsAbout": ["AI agents", "Agent memory", "AI evaluation", "Applied machine learning"],
+  "sameAs": {{ site.social.links | jsonify }}
+}
+</script>
