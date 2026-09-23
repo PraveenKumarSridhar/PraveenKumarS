@@ -141,11 +141,11 @@ Expected: valid, consistent graph with evidence-backed fields; unchanged layout 
 
 **Interfaces:** `/agent-memory/` is a stable evergreen page, not a fake dated note. Reuse site styles and SEO machinery; add route to output/browser checks.
 
-- [ ] Organize around the lifecycle: capture -> store -> retrieve -> inject -> influence behavior. Cover memory types, admission/writes, consolidation, forgetting, provenance/perspective, retrieval, failure modes, evaluation, frameworks, and experiments.
-- [ ] Source framework statements from current primary documentation. Use dated existing notes as firsthand cases, keeping reported observations distinct from unverified runtime claims.
-- [ ] Include one original worked example following a corrected user preference through write, supersession, retrieval, and answer use; a lifecycle diagram; an architecture decision table; explicit limitations and further reading.
-- [ ] Link to relevant existing notes; update those notes and homepage to link back where useful. No links to the flagship until it is built.
-- [ ] Score the editorial rubric, run all engineering gates, and commit the guide milestone. A list of definitions or links alone fails the substantial-guide gate.
+- [x] Organize around the lifecycle: capture -> store -> retrieve -> inject -> influence behavior. Cover memory types, admission/writes, consolidation, forgetting, provenance/perspective, retrieval, failure modes, evaluation, frameworks, and experiments.
+- [x] Source framework statements from current primary documentation. Use dated existing notes as firsthand cases, keeping reported observations distinct from unverified runtime claims.
+- [x] Include one original worked example following a corrected user preference through write, supersession, retrieval, and answer use; a lifecycle diagram; an architecture decision table; explicit limitations and further reading.
+- [x] Link to relevant existing notes; update those notes and homepage to link back where useful. No links to the flagship until it is built.
+- [x] Score the editorial rubric, run all engineering gates, and commit the guide milestone. A list of definitions or links alone fails the substantial-guide gate.
 
 Expected: a reader can design a memory lifecycle and identify where it can fail; examples and citations support each recommendation.
 

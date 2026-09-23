@@ -172,6 +172,7 @@ My earlier [Honcho versus Mem0 article](/notes/honcho-vs-mem0-two-memory-layers-
 
 ## Related reading
 
+- [Agent memory: a practical guide](/agent-memory/): Follow the lifecycle from capture and corrections to retrieval and answer use.
 - [From Honcho to Hindsight](/notes/from-honcho-to-hindsight/): An operational case where stored history, retrieval and delivered context needed separate checks.
 - [Inside Muse’s memory](/notes/muse-memory-investigation/): A source-bounded investigation of how evidence becomes standing guidance.
 

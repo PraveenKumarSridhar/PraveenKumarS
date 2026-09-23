@@ -269,6 +269,7 @@ image: /assets/social-card.png
       <h2 id="writing-heading">Notes on memory, agents, and evals.</h2>
       <p class="sub">Experiments, architecture comparisons, and things I learned by inspecting how agents actually work.</p>
       {% if site.obsession %}<p class="writing-focus">Current focus: {{ site.obsession | escape }}</p>{% endif %}
+      <p class="sub"><a href="{{ '/agent-memory/' | relative_url }}" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Agent memory: the practical guide &rarr;</a></p>
     </div>
     <div class="writing-grid">
       {% for note in recent_notes limit: 3 %}

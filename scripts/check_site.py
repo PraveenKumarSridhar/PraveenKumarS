@@ -111,7 +111,7 @@ def check_site(root):
             pages[route] = Page(source)
         except (ValueError, UnicodeError) as error:
             errors.append(f"{route}: invalid HTML/JSON-LD: {error}")
-    for route in sorted(BASELINE_ROUTES - pages.keys()):
+    for route in sorted((BASELINE_ROUTES | {"/agent-memory/"}) - pages.keys()):
         errors.append(f"missing baseline route: {route}")
 
     for route, page in pages.items():
@@ -141,6 +141,14 @@ def check_site(root):
             for person in people:
                 check(person.get("@id") == ORIGIN + "/#person" and person.get("url") == ORIGIN + "/", "homepage: conflicting Person identity")
                 check(person.get("name") == "Praveen Kumar Sridhar", "homepage: Person name mismatch")
+        if route == "/agent-memory/":
+            check(not any(s.get("@type") in ("BlogPosting", "Article") for s in schemas), "guide: must not masquerade as a dated article")
+            crumbs = [s for s in schemas if s.get("@type") == "BreadcrumbList"]
+            check(len(crumbs) == 1, "guide: expected one breadcrumb schema")
+            for crumb in crumbs:
+                expected = [(1, "Home", ORIGIN + "/"), (2, page.h1, canonical)]
+                actual = [(x.get("position"), x.get("name"), x.get("item")) for x in crumb.get("itemListElement", []) if isinstance(x, dict)]
+                check(actual == expected, "guide: breadcrumb schema mismatch")
         if route.startswith("/notes/") and route != "/notes/":
             articles = [s for s in schemas if s.get("@type") in ("BlogPosting", "Article")]
             check(len(articles) == 1, f"{route}: expected exactly one article schema")

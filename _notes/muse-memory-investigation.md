@@ -132,6 +132,7 @@ If I correct the assistant today, I want tomorrow's answer to reflect it. And wh
 
 ## Related reading
 
+- [Agent memory: a practical guide](/agent-memory/): Follow the lifecycle from capture and corrections to retrieval and answer use.
 - [Provenance and perspective in agent memory](/notes/agent-memory-needs-a-point-of-view/): A worked example of why an assistant’s inference must remain distinguishable from what someone actually said.
 
 PK
