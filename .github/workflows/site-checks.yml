@@ -33,5 +33,9 @@ jobs:
         if: always()
         with:
           name: browser-checks
-          path: .artifacts
+          path: |
+            .artifacts/browser
+            .artifacts/writing-fixtures
+          include-hidden-files: true
+          if-no-files-found: error
           retention-days: 14
