@@ -37,8 +37,22 @@ def validate_note(path)
   data
 end
 
+def note_paths(root)
+  paths = Dir[root.join('**/*').to_s].select { |name| File.file?(name) }
+  paths.each do |name|
+    path = Pathname.new(name)
+    raise "#{name}: keep articles directly in _notes as .md or .markdown files" unless path.dirname == root && %w[.md .markdown].include?(path.extname)
+  end
+  paths
+end
+
 if $PROGRAM_NAME == __FILE__
-  paths = ARGV.empty? ? Dir[File.expand_path('../_notes/*.{md,markdown}', __dir__)] : ARGV
+  begin
+    paths = ARGV.empty? ? note_paths(Pathname.new(File.expand_path('../_notes', __dir__))) : ARGV
+  rescue StandardError => e
+    warn e.message
+    exit 1
+  end
   errors = []
   slugs = {}
   paths.each do |name|

@@ -226,6 +226,16 @@
   const bar = document.getElementById('bar');
   addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 12), {passive:true});
 
+  // WebKit does not consistently scroll focused overflow regions with arrow keys.
+  document.querySelectorAll('.table-wrap').forEach(table => {
+    table.addEventListener('keydown', event => {
+      if (event.target !== table || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (!['ArrowLeft', 'ArrowRight'].includes(event.key) || table.scrollWidth <= table.clientWidth) return;
+      event.preventDefault();
+      table.scrollLeft += event.key === 'ArrowRight' ? 40 : -40;
+    });
+  });
+
   const heads = document.querySelectorAll('#article-body h2[id]');
   if (heads.length) {
     const toc = document.getElementById('toc');

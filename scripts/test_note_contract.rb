@@ -11,6 +11,20 @@ class NoteContractTest < Minitest::Test
       validate_note(path)
     end
   end
+  def test_inventory_rejects_unchecked_nested_or_other_format_articles
+    Dir.mktmpdir do |dir|
+      root = Pathname.new(dir)
+      root.join('valid.md').write(VALID)
+      assert_equal [root.join('valid.md').to_s], note_paths(root)
+      root.join('nested').mkdir
+      nested = root.join('nested/bypass.md')
+      nested.write(VALID.sub('tags: [memory]', 'draft: true'))
+      assert_raises(RuntimeError) { note_paths(root) }
+      nested.delete
+      root.join('bypass.html').write("---\nlayout: null\n---\nunchecked")
+      assert_raises(RuntimeError) { note_paths(root) }
+    end
+  end
   def test_valid_minimal_article
     assert_equal 'A title', check(VALID)['title']
   end

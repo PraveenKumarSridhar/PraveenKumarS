@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 // Render the built site in a real browser. No deployed-site mutations or analytics requests.
-const { chromium } = require('playwright');
+const playwright = require('playwright');
+const browserName = process.env.SITE_BROWSER || 'chromium';
+assertBrowserName(browserName);
+function assertBrowserName(name) {
+  if (!['chromium', 'webkit'].includes(name)) throw new Error('Unsupported SITE_BROWSER: ' + name);
+}
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
@@ -34,7 +39,7 @@ const server = http.createServer((req, res) => {
 (async () => {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch();
+  const browser = await playwright[browserName].launch();
   try {
     for (const width of [320, 390, 768, 1440]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
@@ -51,7 +56,7 @@ const server = http.createServer((req, res) => {
         }
         for (const img of await page.locator('img[loading="lazy"]').all()) {
           await img.scrollIntoViewIfNeeded();
-          await img.evaluate(el => el.decode());
+          await page.waitForFunction(el => el.complete && el.naturalWidth > 0, await img.elementHandle());
         }
         await page.evaluate(() => scrollTo(0, 0));
         const layout = await page.evaluate(() => ({
@@ -85,6 +90,33 @@ const server = http.createServer((req, res) => {
           check(new URL(page.url()).pathname === '/notes/', `${width}px: writing button destination`);
           await page.goto(origin + route);
         }
+        if (route.startsWith('/notes/') && route !== '/notes/' && !baseline) {
+          const toc = page.locator('#toc-block');
+          if (await toc.isVisible()) {
+            if (!await toc.evaluate(el => el.open)) await toc.locator('summary').click();
+            const link = toc.locator('a').last();
+            const target = await link.getAttribute('href');
+            await link.click();
+            check(new URL(page.url()).hash === target, `${width}px ${route}: TOC destination`);
+            const top = await page.locator(target).evaluate(el => el.getBoundingClientRect().top);
+            const headerBottom = await page.locator('header.bar').evaluate(el => el.getBoundingClientRect().bottom);
+            check(top >= Math.max(0, headerBottom) - 1 && top < 900, `${width}px ${route}: TOC target obscured`);
+          }
+          for (const table of await page.locator('.table-wrap').all()) {
+            const overflow = await table.evaluate(el => el.scrollWidth > el.clientWidth + 1);
+            if (overflow) {
+              await table.focus();
+              await page.keyboard.press('ArrowRight');
+              await page.waitForFunction(el => el.scrollLeft > 0, await table.elementHandle(), { timeout: 2000 }).catch(() => {});
+              check(await table.evaluate(el => el.scrollLeft > 0), `${width}px ${route}: table cannot scroll by keyboard`);
+            }
+          }
+          for (const img of await page.locator('img[loading="lazy"]').all()) {
+            await img.scrollIntoViewIfNeeded();
+            await page.waitForFunction(el => el.complete && el.naturalWidth > 0, await img.elementHandle());
+          }
+          await page.evaluate(() => scrollTo(0, 0));
+        }
         // Keep full-page evidence for every route, at both desktop and narrow mobile widths.
         if (width === 390 || width === 1440) {
           await page.screenshot({ path: path.join(artifacts, `${width}-${route.replace(/\//g, '_') || 'home'}.png`), fullPage: true });
@@ -92,7 +124,8 @@ const server = http.createServer((req, res) => {
       }
       // Exercise actual navigation when available, rather than merely checking hrefs.
       await page.goto(origin + '/');
-      await page.keyboard.press('Tab');
+      // On macOS WebKit, Option+Tab includes links in keyboard navigation.
+      await page.keyboard.press(browserName === 'webkit' && process.platform === 'darwin' ? 'Alt+Tab' : 'Tab');
       const focus = await page.evaluate(() => ({
         tag: document.activeElement.tagName,
         outline: getComputedStyle(document.activeElement).outlineStyle,
@@ -154,7 +187,7 @@ const server = http.createServer((req, res) => {
       check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${width}px: loaded-font homepage overflow`);
       await context.close();
     }
-    fs.writeFileSync(path.join(artifacts, 'results.json'), JSON.stringify({ checks, routes, failures }, null, 2) + '\n');
+    fs.writeFileSync(path.join(artifacts, 'results.json'), JSON.stringify({ browser: browserName, checks, routes, failures }, null, 2) + '\n');
     for (const failure of failures) console.error('FAIL: ' + failure);
     console.log(`${checks} browser checks over ${routes.length} pages: ${failures.length} failure(s). Screenshots: ${artifacts}`);
     process.exitCode = failures.length ? 1 : 0;

@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium webkit
       - name: Article contract, image preflight and production build
         run: bash scripts/build_site.sh "$RUNNER_TEMP/site"
       - name: Rendered metadata, article discovery and links
@@ -31,6 +31,8 @@ jobs:
       - name: Verify a new article through the complete publishing pipeline
         run: python3 scripts/test_new_article.py
       - run: node scripts/check_browser.cjs "$RUNNER_TEMP/site" .artifacts/browser
+      - name: WebKit reading and layout checks
+        run: SITE_BROWSER=webkit node scripts/check_browser.cjs "$RUNNER_TEMP/site" .artifacts/browser/webkit
       - uses: actions/upload-artifact@v4
         if: always()
         with:
