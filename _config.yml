@@ -51,3 +51,4 @@ defaults:
 
 exclude:
   - README.md
+  - scripts
