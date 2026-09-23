@@ -1,0 +1,36 @@
+name: Site checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - run: bash scripts/build_site.sh "$RUNNER_TEMP/site"
+      - run: python3 scripts/check_site.py "$RUNNER_TEMP/site"
+      - run: python3 scripts/test_site_checks.py "$RUNNER_TEMP/site"
+      - run: python3 scripts/test_writing.py
+      - run: node scripts/check_browser.cjs "$RUNNER_TEMP/site" .artifacts/browser
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-checks
+          path: .artifacts
+          retention-days: 14

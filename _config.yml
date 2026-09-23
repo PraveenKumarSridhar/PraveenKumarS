@@ -1,5 +1,5 @@
 title: Praveen Kumar Sridhar
-tagline: Lab notes on agent memory, agents, and evals
+tagline: AI Agents, Agent Memory & Evaluation
 description: "Technical notes on agent memory, agents, evals, and applied machine learning by Praveen Kumar Sridhar."
 obsession: "Agent memory, memory evals, retrieval quality"
 url: "https://praveenks.com"
@@ -52,3 +52,9 @@ defaults:
 exclude:
   - README.md
   - scripts
+  - docs
+  - tests
+  - examples
+  - node_modules
+  - package.json
+  - package-lock.json

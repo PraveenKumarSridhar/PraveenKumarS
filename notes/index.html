@@ -62,7 +62,14 @@ image: /assets/social-card.png
   nav.top a{font-size:14px;color:var(--ink-soft);transition:color .2s;}
   nav.top a:hover{color:var(--accent);}
   nav.top a.here{color:var(--accent);font-weight:500;}
-  @media(max-width:680px){nav.top{display:none;}}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:5px;}
+  @media(max-width:680px){
+    header.bar{position:relative;}
+    header.bar .wrap{height:auto;min-height:64px;flex-wrap:wrap;gap:8px;padding-top:14px;padding-bottom:14px;}
+    nav.top{width:100%;flex-wrap:wrap;gap:0 18px;}
+    nav.top a{padding:8px 0;}
+  }
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*,*::before,*::after{transition:none!important;}}
 
   .notes-page{padding:96px 0 80px;}
   .sec-label{margin-bottom:44px;}
@@ -114,7 +121,7 @@ image: /assets/social-card.png
 <header class="bar" id="bar">
   <div class="wrap">
     <a class="name-mark" href="{{ site.baseurl }}/">PK<i>.</i></a>
-    <nav class="top">
+    <nav class="top" aria-label="Main navigation">
       <a href="{{ site.baseurl }}/#build">What I build</a>
       <a href="{{ site.baseurl }}/#work">Work</a>
       <a href="{{ site.baseurl }}/#projects">Projects</a>

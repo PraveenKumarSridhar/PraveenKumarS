@@ -1,6 +1,6 @@
 ---
 layout: null
-description: Data scientist building agent memory, evaluation, and applied machine learning systems.
+description: Praveen Kumar Sridhar works on AI agents, agent memory, and evaluation. Technical notes and experiments on building reliable agent systems.
 image: /assets/social-card.png
 ---
 <!DOCTYPE html>
@@ -61,14 +61,22 @@ image: /assets/social-card.png
   nav.top{display:flex;gap:28px;}
   nav.top a{font-size:14px;color:var(--ink-soft);transition:color .2s;}
   nav.top a:hover{color:var(--accent);}
-  @media(max-width:680px){nav.top{display:none;}}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:5px;}
+  section[id]{scroll-margin-top:84px;}
+  @media(max-width:680px){
+    header.bar{position:relative;}
+    header.bar .wrap{height:auto;min-height:64px;flex-wrap:wrap;gap:8px;padding-top:14px;padding-bottom:14px;}
+    nav.top{width:100%;flex-wrap:wrap;gap:0 18px;}
+    nav.top a{padding:8px 0;}
+    section[id]{scroll-margin-top:20px;}
+  }
 
   /* ---------- hero ---------- */
   .hero{padding:96px 0 72px;}
   .hero .role{margin-bottom:30px;}
   h1{
     font-family:var(--serif);font-weight:400;
-    font-size:clamp(46px,8vw,88px);line-height:1.02;letter-spacing:-0.02em;
+    font-size:clamp(40px,6vw,72px);line-height:1.05;letter-spacing:-0.02em;
     margin-bottom:30px;
   }
   .hero .intro{
@@ -99,6 +107,7 @@ image: /assets/social-card.png
   .meta-line .d{width:5px;height:5px;border-radius:50%;background:var(--accent);}
   .meta-line .ico{width:16px;height:16px;color:var(--accent);flex:none;}
   .intro-2{margin-top:18px;}
+  @media(max-width:680px){.hero{padding:48px 0;}}
 
   /* ---------- section scaffold ---------- */
   section{padding:64px 0;border-top:1px solid var(--line);}
@@ -108,6 +117,17 @@ image: /assets/social-card.png
     letter-spacing:-0.01em;margin-top:14px;line-height:1.1;
   }
   .sec-label .sub{font-size:15px;color:var(--ink-soft);margin-top:10px;max-width:54ch;}
+
+  /* ---------- writing ---------- */
+  .writing-focus{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:18px;}
+  .writing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;}
+  .writing-card{display:flex;flex-direction:column;gap:14px;padding:22px 0;border-top:1px solid var(--line);overflow-wrap:anywhere;}
+  .writing-card h3{font-family:var(--serif);font-size:26px;font-weight:400;line-height:1.18;}
+  .writing-card p{font-size:14px;line-height:1.6;color:var(--ink-soft);}
+  .writing-card time{margin-top:auto;font-family:var(--mono);font-size:11px;color:var(--ink-soft);}
+  .writing-card:hover h3{color:var(--accent);}
+  .writing-all{display:inline-flex;margin-top:24px;font-size:14px;color:var(--accent);border-bottom:1px solid var(--accent);}
+  @media(max-width:760px){.writing-grid{grid-template-columns:1fr;gap:0;}}
 
   /* ---------- capability strip ---------- */
   .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;}
@@ -193,9 +213,10 @@ image: /assets/social-card.png
   .contact .links a:hover .lico{color:var(--accent);}
   .foot{margin-top:64px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--muted);}
 
-  /* reveal */
-  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
-  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{transition:none!important;}
+  }
 </style>
 </head>
 <body>
@@ -203,7 +224,7 @@ image: /assets/social-card.png
 <header class="bar" id="bar">
   <div class="wrap">
     <a class="name-mark" href="#top">PK<i>.</i></a>
-    <nav class="top">
+    <nav class="top" aria-label="Main navigation">
       <a href="#build">What I build</a>
       <a href="#work">Work</a>
       <a href="#projects">Projects</a>
@@ -218,8 +239,8 @@ image: /assets/social-card.png
 <section class="hero" style="border-top:0;">
   <div class="wrap">
     <div class="role eyebrow">Machine Learning Engineer &amp; Data Scientist</div>
-    <h1>Hi, I'm PK.</h1>
-    <p class="intro">I build AI agents for businesses at Meta, and the evaluation frameworks that prove they actually work. Data Scientist by training, ML Engineer by habit.</p>
+    <h1>Building AI agents that remember and hold up under evaluation.</h1>
+    <p class="intro">I'm Praveen Kumar Sridhar. I build AI agents for businesses at Meta and the evaluation frameworks that test whether they work. Here I write about agent memory, retrieval quality, and what makes agents reliable over time.</p>
     <div class="stack-strip">
       <span>Python</span><span>Go</span><span>React</span><span>PyTorch</span><span>GCP / Vertex AI</span><span>AWS</span><span>Kubernetes</span><span>LLMs</span>
     </div>
@@ -235,6 +256,31 @@ image: /assets/social-card.png
     </div>
   </div>
 </section>
+
+<!-- WRITING -->
+{% assign recent_notes = site.notes | sort: "date" | reverse %}
+{% if recent_notes.size > 0 %}
+<section id="writing" aria-labelledby="writing-heading">
+  <div class="wrap">
+    <div class="sec-label">
+      <div class="eyebrow">Writing</div>
+      <h2 id="writing-heading">Notes on memory, agents, and evals.</h2>
+      <p class="sub">Experiments, architecture comparisons, and things I learned by inspecting how agents actually work.</p>
+      {% if site.obsession %}<p class="writing-focus">Current focus: {{ site.obsession | escape }}</p>{% endif %}
+    </div>
+    <div class="writing-grid">
+      {% for note in recent_notes limit: 3 %}
+      <a class="writing-card" href="{{ note.url | relative_url }}">
+        <h3>{{ note.title | escape }}</h3>
+        {% if note.description %}<p>{{ note.description | escape }}</p>{% endif %}
+        <time datetime="{{ note.date | date_to_xmlschema }}">{{ note.date | date: "%b %-d, %Y" }}</time>
+      </a>
+      {% endfor %}
+    </div>
+    <a class="writing-all" href="{{ '/notes/' | relative_url }}">All Lab Notes <span aria-hidden="true">&nbsp;→</span></a>
+  </div>
+</section>
+{% endif %}
 
 <!-- WHAT I BUILD -->
 <section id="build">
@@ -486,10 +532,6 @@ image: /assets/social-card.png
   const bar = document.getElementById('bar');
   addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 12), {passive:true});
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
