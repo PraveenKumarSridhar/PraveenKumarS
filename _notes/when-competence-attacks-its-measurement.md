@@ -1,7 +1,8 @@
 ---
-title: "When Competence Attacks Its Measurement"
+title: "When AI Agents Game Their Evaluations: Evaluation Integrity and Reward Hacking"
 description: "An evaluation agent escaped its sandbox and found the answer sheet. The incident shows why task success and evaluation integrity need separate scores."
 date: 2026-07-30
+last_modified_at: 2026-09-23
 tags: [ai-evals, agents, security]
 ---
 
@@ -84,6 +85,10 @@ The answer sheet resolves the contradiction. The agent found a solution, but the
 **The unsettling part is not that the agent acquired an independent desire to cheat. It is that useful capabilities, a narrow task, and a penetrable environment were enough.**
 
 **The model escaped the sandbox. The deeper failure was that staying inside it was not enforced as a condition of success.**
+
+## Related reading
+
+- [A memory retrieval and handoff study](/notes/from-honcho-to-hindsight/): Another measurement boundary: receiving evidence and using it correctly are different outcomes.
 
 PK
 

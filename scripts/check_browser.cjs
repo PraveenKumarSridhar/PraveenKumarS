@@ -64,6 +64,14 @@ const server = http.createServer((req, res) => {
         check(!layout.overflow, `${width}px ${route}: horizontal page overflow (${layout.overflowNodes.join('; ')})`);
         check(!layout.clipped.length, `${width}px ${route}: clipped content ${layout.clipped.join(', ')}`);
         check(!layout.brokenImages.length, `${width}px ${route}: broken images ${layout.brokenImages}`);
+        if (route.startsWith('/notes/') && route !== '/notes/' && !baseline) {
+          const crumbs = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
+          check(await crumbs.isVisible(), `${width}px ${route}: breadcrumb hidden`);
+          check(await crumbs.locator('[aria-current="page"]').innerText() === await page.locator('h1').innerText(), `${width}px ${route}: breadcrumb title mismatch`);
+          await crumbs.getByRole('link', { name: 'Lab Notes', exact: true }).click();
+          check(new URL(page.url()).pathname === '/notes/', `${width}px ${route}: breadcrumb destination`);
+          await page.goto(origin + route);
+        }
         if (route === '/' && !baseline) {
           const cards = page.locator('#writing .writing-card');
           check(await cards.count() === 3, `${width}px homepage: expected three real note links`);

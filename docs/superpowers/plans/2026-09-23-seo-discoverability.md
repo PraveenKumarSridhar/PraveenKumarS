@@ -51,13 +51,13 @@ For execution: use superpowers:executing-plans, sequentially in this task. The u
 
 **Interfaces:** `bash scripts/build_site.sh OUTPUT_DIR` creates production output; `python3 scripts/check_site.py OUTPUT_DIR` checks it; `node scripts/check_browser.cjs OUTPUT_DIR ARTIFACT_DIR` serves output on a temporary local port and checks Chromium. Browser runner requires the pinned development dependency `playwright`, not a production script.
 
-- [ ] Record current main SHA, five note URLs, assets, title/canonical/schema baseline, existing authoring checks, and unresolved external data access.
-- [ ] Build unmodified main using the cached official Pages build image with a digest pinned in `scripts/build_site.sh`. Validate images first. Run with source mounted read-only and output outside source or ignored/excluded.
-- [ ] Implement generated-output checks using `html.parser`, `urllib.parse`, `json`, and `xml.etree.ElementTree`. Require the seven baseline routes and discover new HTML pages automatically. Check links against built files, fragments against target IDs, head metadata independently of body SVG titles, note BlogPosting fields, social assets, sitemap/feed coverage, and private-file exclusion.
-- [ ] Prove failure sensitivity by mutating temporary copies of the build. Expected: nonzero for missing route, broken link, bad canonical, invalid JSON-LD, and leaked plan; unmodified baseline passes structural checks.
-- [ ] Write browser tests before homepage fixes. Expected baseline failures: mobile nav hidden and homepage content opacity zero without JS. Capture baseline screenshots before editing.
-- [ ] Add CI that installs the pinned development dependencies, builds with the same Pages image, runs both validators, and uploads screenshots on completion/failure. It must not deploy.
-- [ ] Document exact commands, tool versions, scope, and known baseline issues. Commit the gate with the foundation fixes so the draft PR's checks are green.
+- [x] Record current main SHA, five note URLs, assets, title/canonical/schema baseline, existing authoring checks, and unresolved external data access.
+- [x] Build unmodified main using the cached official Pages build image with a digest pinned in `scripts/build_site.sh`. Validate images first. Run with source mounted read-only and output outside source or ignored/excluded.
+- [x] Implement generated-output checks using `html.parser`, `urllib.parse`, `json`, and `xml.etree.ElementTree`. Require the seven baseline routes and discover new HTML pages automatically. Check links against built files, fragments against target IDs, head metadata independently of body SVG titles, note BlogPosting fields, social assets, sitemap/feed coverage, and private-file exclusion.
+- [x] Prove failure sensitivity by mutating temporary copies of the build. Expected: nonzero for missing route, broken link, bad canonical, invalid JSON-LD, and leaked plan; unmodified baseline passes structural checks.
+- [x] Write browser tests before homepage fixes. Expected baseline failures: mobile nav hidden and homepage content opacity zero without JS. Capture baseline screenshots before editing.
+- [x] Add CI that installs the pinned development dependencies, builds with the same Pages image, runs both validators, and uploads screenshots on completion/failure. It must not deploy.
+- [x] Document exact commands, tool versions, scope, and known baseline issues. Commit the gate with the foundation fixes so the draft PR's checks are green.
 
 Run: `bash scripts/build_site.sh /tmp/praveen-seo-check && python3 scripts/check_site.py /tmp/praveen-seo-check && node scripts/check_browser.cjs /tmp/praveen-seo-check /tmp/praveen-seo-browser`
 
@@ -69,10 +69,10 @@ Expected after Tasks 2/3: all gates pass. Baseline defects remain clearly distin
 
 **Interfaces:** Uses `site.notes` front matter already rendered in `/notes/`. Produces real HTML article links before the experience sections. Does not create a second source of article titles/descriptions.
 
-- [ ] Set site tagline to `AI Agents, Agent Memory & Evaluation`; homepage description to `Praveen Kumar Sridhar works on AI agents, agent memory, and evaluation. Technical notes and experiments on building reliable agent systems.`
-- [ ] Replace the greeting-only H1 with `Building AI agents that remember and hold up under evaluation.` Keep the existing role label and introduce the full name in the intro: `I'm Praveen Kumar Sridhar. I build AI agents for businesses at Meta and the evaluation frameworks that test whether they work. Here I write about agent memory, retrieval quality, and what makes agents reliable over time.` Verify this stays within existing public claims.
-- [ ] Add a writing section immediately after the hero, before professional capabilities. Heading: `Notes on memory, agents, and evals.` Intro: `Experiments, architecture comparisons, and things I learned by inspecting how agents actually work.` Include a concise current-focus line using `site.obsession` and link to `/notes/`.
-- [ ] Render three most recent notes with existing titles, descriptions, and publication dates. Use actual collection objects, escape displayed fields, and handle zero, one, and long-title cases without empty boxes or overflow.
+- [x] Set site tagline to `AI Agents, Agent Memory & Evaluation`; homepage description to `Praveen Kumar Sridhar works on AI agents, agent memory, and evaluation. Technical notes and experiments on building reliable agent systems.`
+- [x] Replace the greeting-only H1 with `Building AI agents that remember and hold up under evaluation.` Keep the existing role label and introduce the full name in the intro: `I'm Praveen Kumar Sridhar. I build AI agents for businesses at Meta and the evaluation frameworks that test whether they work. Here I write about agent memory, retrieval quality, and what makes agents reliable over time.` Verify this stays within existing public claims.
+- [x] Add a writing section immediately after the hero, before professional capabilities. Heading: `Notes on memory, agents, and evals.` Intro: `Experiments, architecture comparisons, and things I learned by inspecting how agents actually work.` Include a concise current-focus line using `site.obsession` and link to `/notes/`.
+- [x] Render three most recent notes with existing titles, descriptions, and publication dates. Use actual collection objects, escape displayed fields, and handle zero, one, and long-title cases without empty boxes or overflow.
 
 ```liquid
 {% assign recent_notes = site.notes | sort: "date" | reverse %}
@@ -87,9 +87,9 @@ Expected after Tasks 2/3: all gates pass. Baseline defects remain clearly distin
 {% endif %}
 ```
 
-- [ ] Reuse existing colors, typography, borders, and responsive spacing. Preserve the three hero actions and all existing section IDs, employment facts, and contact links.
-- [ ] Validate all new links; compare the untouched article output and its social metadata to baseline. Check homepage title/hero consistency and visible writing at all four widths.
-- [ ] Run editorial rubric and document the score and rationale. Commit as `feat: foreground agent work and technical writing`.
+- [x] Reuse existing colors, typography, borders, and responsive spacing. Preserve the three hero actions and all existing section IDs, employment facts, and contact links.
+- [x] Validate all new links; compare the untouched article output and its social metadata to baseline. Check homepage title/hero consistency and visible writing at all four widths.
+- [x] Run editorial rubric and document the score and rationale. Commit as `feat: foreground agent work and technical writing`.
 
 Expected: crawler-visible links to three real notes, full name and topic in HTML, unchanged note URLs and article content, no clipping at 320px.
 
@@ -99,11 +99,11 @@ Expected: crawler-visible links to three real notes, full name and topic in HTML
 
 **Interfaces:** Keep `nav.top` links and `header.bar` behavior across all templates; no new navigation library or click-dependent menu.
 
-- [ ] Reproduce each baseline failure in the browser runner before changing CSS.
-- [ ] Replace the mobile `display:none` rule with a wrapped, visible header navigation. Use natural header height on mobile and adequate link padding. Keep desktop layout intact.
-- [ ] Make `.reveal` content visible by default. Use progressive enhancement only if the animation can fail open; the simplest safe choice is to remove the visibility dependency and observer animation. Respect reduced motion for smooth scrolling/transitions.
-- [ ] Verify real clicks to Writing, Work, Contact, and a featured note; keyboard-focus visibility; no-JS access; no IntersectionObserver access; article TOC and table scrolling still work with JS.
-- [ ] Capture before/after desktop/mobile screenshots and inspect visually. Run the entire build/output/browser gate. Commit as `fix: keep navigation and homepage content accessible`.
+- [x] Reproduce each baseline failure in the browser runner before changing CSS.
+- [x] Replace the mobile `display:none` rule with a wrapped, visible header navigation. Use natural header height on mobile and adequate link padding. Keep desktop layout intact.
+- [x] Make `.reveal` content visible by default. Use progressive enhancement only if the animation can fail open; the simplest safe choice is to remove the visibility dependency and observer animation. Respect reduced motion for smooth scrolling/transitions.
+- [x] Verify real clicks to Writing, Work, Contact, and a featured note; keyboard-focus visibility; no-JS access; no IntersectionObserver access; article TOC and table scrolling still work with JS.
+- [x] Capture before/after desktop/mobile screenshots and inspect visually. Run the entire build/output/browser gate. Commit as `fix: keep navigation and homepage content accessible`.
 
 Expected: hidden-content tests turn green; no internal link or metadata regressions; no unexpected shifts at desktop width. This is the first reviewable commit milestone, including Tasks 1-3 and this plan. Continue the next tasks in the same draft PR.
 
@@ -113,11 +113,11 @@ Expected: hidden-content tests turn green; no internal link or metadata regressi
 
 **Interfaces:** preserve all five current permalinks. Add visible related-reading links using existing URLs. Do not link to a future guide before it exists.
 
-- [ ] Map POV note to provenance/perspective; Honcho-vs-Mem0 to architecture/frameworks; migration note to operational memory/retrieval; Muse note to memory/context assembly; competence note to evaluation integrity.
-- [ ] Add 2-4 genuinely relevant links where supported, with an explicit reason per link. For the evaluation-integrity note, fewer links are acceptable if the relationship would otherwise be forced. Avoid automatic all-to-all linking.
-- [ ] Expand the competence note's title to `When AI Agents Game Their Evaluations: Evaluation Integrity and Reward Hacking`; retain its original title as a subtitle if it improves the article. Expand the POV title to `Agent Memory Needs a Point of View: Provenance and Perspective in Multi-Agent Systems`. Preserve filenames and dates; set `last_modified_at` only for actual substantive edits.
-- [ ] Add concise summaries only where absent; preserve original findings and private-source caveats. Add a visible Home > Lab Notes > current article breadcrumb, with a topic level only once that topic URL exists.
-- [ ] Evaluate the reading path, link graph, metadata, feed, long titles, mobile layout, TOC and anchors; record rubric results. Commit the discovery milestone after its checks pass; continue Task 5.
+- [x] Map POV note to provenance/perspective; Honcho-vs-Mem0 to architecture/frameworks; migration note to operational memory/retrieval; Muse note to memory/context assembly; competence note to evaluation integrity.
+- [x] Add 2-4 genuinely relevant links where supported, with an explicit reason per link. For the evaluation-integrity note, fewer links are acceptable if the relationship would otherwise be forced. Avoid automatic all-to-all linking.
+- [x] Expand the competence note's title to `When AI Agents Game Their Evaluations: Evaluation Integrity and Reward Hacking`; retain its original title as a subtitle if it improves the article. Expand the POV title to `Agent Memory Needs a Point of View: Provenance and Perspective in Multi-Agent Systems`. Preserve filenames and dates; set `last_modified_at` only for actual substantive edits.
+- [x] Add concise summaries only where absent; preserve original findings and private-source caveats. Add a visible Home > Lab Notes > current article breadcrumb, with a topic level only once that topic URL exists.
+- [x] Evaluate the reading path, link graph, metadata, feed, long titles, mobile layout, TOC and anchors; record rubric results. Commit the discovery milestone after its checks pass; continue Task 5.
 
 Expected: each note has a clear topic and useful onward reading; all historical links resolve; no altered factual claims.
 

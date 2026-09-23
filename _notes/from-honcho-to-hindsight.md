@@ -2,6 +2,7 @@
 title: "I got tired of babysitting my AI's memory"
 description: "A move from Honcho to Hindsight led me to inspect what my agents had saved. A GPT-OSS handoff study showed how repeated status notes can displace the decisions needed to continue a project."
 date: 2026-09-13
+last_modified_at: 2026-09-23
 tags: [memory, agents]
 ---
 
@@ -176,6 +177,11 @@ My check is small: save a made-up fact, ask for it in a fresh session, and inspe
 I moved because I was tired of babysitting memory. I still have a system to maintain, but I have better questions to ask of it: was the fact captured, did it reach the right session, and what else competed for its place in the context?
 
 I don't need six reminders that we're working on a project. I need the next session to remember what we decided.
+
+## Related reading
+
+- [My earlier Honcho and Mem0 comparison](/notes/honcho-vs-mem0-two-memory-layers-two-architectures/): The July architecture context behind the system I later migrated.
+- [Provenance and perspective in agent memory](/notes/agent-memory-needs-a-point-of-view/): Why preserving a record’s source and access scope matters beyond retrieval relevance.
 
 PK
 

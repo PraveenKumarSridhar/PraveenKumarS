@@ -63,6 +63,11 @@
   }
   @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*,*::before,*::after{transition:none!important;}}
 
+  .breadcrumbs{max-width:920px;margin:0 auto;padding:24px 32px 0;font-size:13px;color:var(--ink-soft);}
+  .breadcrumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:6px 10px;}
+  .breadcrumbs li{min-width:0;overflow-wrap:anywhere;}
+  .breadcrumbs li+li::before{content:"/";margin-right:10px;color:var(--muted);}
+  .breadcrumbs a{text-decoration:underline;text-underline-offset:3px;}
   .note-grid{
     max-width:920px;margin:0 auto;padding:64px 32px 88px;
     display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;
@@ -187,6 +192,8 @@
   </div>
 </header>
 
+{% include breadcrumbs.html %}
+
 {% assign words = content | strip_html | number_of_words %}
 {% assign mins = words | divided_by: 200 | at_least: 1 %}
 <div class="note-grid">
@@ -204,7 +211,7 @@
     </details>
   </div>
   <article>
-    <h1 class="note-title">{{ page.title }}</h1>
+    <h1 class="note-title">{{ page.title | escape }}</h1>
     <div class="article-body" id="article-body">
 {{ content }}
     </div>

@@ -1,7 +1,8 @@
 ---
-title: "Agent Memory Needs a Point of View"
+title: "Agent Memory Needs a Point of View: Provenance and Perspective in Multi-Agent Systems"
 description: "Agent memory breaks when it stores one person's belief as a global fact. Multi-agent systems need observer, audience, source, and access scope."
 date: 2026-07-29
+last_modified_at: 2026-09-23
 tags: [agent-memory, multi-agent-systems, epistemic-logic]
 ---
 
@@ -165,9 +166,14 @@ This is the bridge to a later implementation or evaluation artifact, not evidenc
 
 Bob's question did not require a less relevant record. It required the system to interpret the relevant record correctly, preserve Alice's point of view, verify the evidence, and enforce the disclosure boundary.
 
-My earlier Honcho versus Mem0 article introduced `(observer, observed)` as an architectural difference. This article explains the semantic failure the tuple is trying to prevent.
+My earlier [Honcho versus Mem0 article](/notes/honcho-vs-mem0-two-memory-layers-two-architectures/) introduced `(observer, observed)` as an architectural difference. This article explains the semantic failure the tuple is trying to prevent.
 
 > A memory object is incomplete until the system can answer who holds the claim, what supports it, when it applied, and who may use it.
+
+## Related reading
+
+- [From Honcho to Hindsight](/notes/from-honcho-to-hindsight/): An operational case where stored history, retrieval and delivered context needed separate checks.
+- [Inside Muse’s memory](/notes/muse-memory-investigation/): A source-bounded investigation of how evidence becomes standing guidance.
 
 PK
 
