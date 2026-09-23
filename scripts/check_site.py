@@ -87,7 +87,9 @@ def route_for(path):
     return value[:-10] if value.endswith("index.html") else value
 
 
-def check_site(root):
+def check_site(root, source_root=None):
+    root = root.resolve()
+    source_root = source_root or Path(__file__).resolve().parent.parent
     errors, pages, titles, descriptions = [], {}, [], []
 
     def check(condition, message):
@@ -113,6 +115,14 @@ def check_site(root):
             errors.append(f"{route}: invalid HTML/JSON-LD: {error}")
     for route in sorted(BASELINE_ROUTES - pages.keys()):
         errors.append(f"missing baseline route: {route}")
+
+    source_routes = {"/notes/" + path.stem + "/" for pattern in ("*.md", "*.markdown") for path in (source_root / "_notes").glob(pattern)}
+    for route in sorted(source_routes):
+        check(route in pages, f"source article absent from build: {route}")
+    if "/notes/" in pages:
+        index_links = {urljoin(ORIGIN + "/notes/", ref) for ref in pages["/notes/"].refs}
+        for route in sorted(source_routes):
+            check(ORIGIN + route in index_links, f"article absent from Notes index: {route}")
 
     for route, page in pages.items():
         canonical = ORIGIN + route
@@ -194,8 +204,12 @@ def check_site(root):
         # jekyll-feed 0.17 defaults to ten newest notes; _config.yml leaves this limit unchanged.
         note_routes = [route for route in pages if route.startswith("/notes/") and route != "/notes/"]
         note_routes.sort(key=lambda route: pages[route].meta.get("article:published_time", [""])[0], reverse=True)
-        expected_notes = {ORIGIN + route for route in note_routes[:10]}
-        check(feed_urls == expected_notes, f"feed does not match newest notes: missing {sorted(expected_notes - feed_urls)}, extra {sorted(feed_urls - expected_notes)}")
+        # At the tenth-entry boundary, equally dated notes have no chronological priority.
+        cutoff = pages[note_routes[min(9, len(note_routes) - 1)]].meta.get("article:published_time", [""])[0] if note_routes else ""
+        required_notes = {ORIGIN + route for route in note_routes if pages[route].meta.get("article:published_time", [""])[0] > cutoff}
+        eligible_notes = {ORIGIN + route for route in note_routes if pages[route].meta.get("article:published_time", [""])[0] >= cutoff}
+        check(len(feed_urls) == min(10, len(note_routes)) and required_notes <= feed_urls <= eligible_notes,
+              "feed does not match newest notes (including date ties at the ten-entry boundary)")
         for url in feed_urls:
             check(url in html_urls, f"feed points to absent page: {url}")
         robots = (root / "robots.txt").read_text()
@@ -210,10 +224,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("site", type=Path)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--source", type=Path, default=Path(__file__).resolve().parent.parent)
     args = parser.parse_args()
     if not args.site.is_dir():
         parser.error("site output directory does not exist")
-    errors, pages = check_site(args.site.resolve())
+    errors, pages = check_site(args.site.resolve(), args.source.resolve())
     if args.report:
         args.report.write_text(json.dumps({"pages": pages, "errors": errors}, indent=2) + "\n")
     for error in errors:

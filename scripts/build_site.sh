@@ -15,4 +15,4 @@ docker run --rm --platform linux/amd64 \
   -e JEKYLL_ENV=production \
   -v "$source_dir:/src:ro" -v "$output_dir:/out" \
   --entrypoint sh "$image" -c \
-  'cd /src && ruby scripts/validate_note_images.rb && jekyll build --source /src --destination /out'
+  'cd /src && ruby scripts/test_note_contract.rb && ruby scripts/validate_notes.rb && ruby scripts/validate_note_images.rb && jekyll build --source /src --destination /out'

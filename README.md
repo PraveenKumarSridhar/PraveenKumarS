@@ -1,5 +1,9 @@
 # PraveenkumarS
 
+## Article publishing
+
+Follow [the article publishing workflow](docs/seo/article-publishing.md). Each PR checks source metadata, the generated article, discovery links and browser behavior. Editorial review remains a human decision.
+
 ## Build and verify
 
 Use a generated Jekyll preview. Opening `index.html` directly exposes its YAML front matter and leaves Liquid unrendered.
