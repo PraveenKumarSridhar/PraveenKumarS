@@ -11,6 +11,7 @@ if [[ "$source_dir" == "$output_dir" ]]; then
 fi
 image='ghcr.io/actions/jekyll-build-pages@sha256:a4ebed99056cd2a2c867cfce074d0cc92070855516b131ff099db3b3f961dfa9'
 docker run --rm --platform linux/amd64 \
+  --user "$(id -u):$(id -g)" \
   -e JEKYLL_ENV=production \
   -v "$source_dir:/src:ro" -v "$output_dir:/out" \
   --entrypoint sh "$image" -c \

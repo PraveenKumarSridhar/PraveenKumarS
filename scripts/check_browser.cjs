@@ -51,13 +51,17 @@ const server = http.createServer((req, res) => {
         }
         const layout = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
+          overflowNodes: [...document.querySelectorAll('body *')].filter(el => {
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.right > innerWidth + 1;
+          }).slice(0, 12).map(el => `${el.tagName}.${el.className}: ${el.getBoundingClientRect().right.toFixed(1)}px`),
           clipped: [...document.querySelectorAll('h1, h2, h3, nav.top a, .writing-card, .hero .actions a')].filter(el => {
             const rect = el.getBoundingClientRect();
             return rect.width > 0 && (rect.left < -1 || rect.right > innerWidth + 1);
           }).map(el => el.textContent.trim()),
           brokenImages: [...document.images].filter(img => !img.complete || !img.naturalWidth).map(img => img.src),
         }));
-        check(!layout.overflow, `${width}px ${route}: horizontal page overflow`);
+        check(!layout.overflow, `${width}px ${route}: horizontal page overflow (${layout.overflowNodes.join('; ')})`);
         check(!layout.clipped.length, `${width}px ${route}: clipped content ${layout.clipped.join(', ')}`);
         check(!layout.brokenImages.length, `${width}px ${route}: broken images ${layout.brokenImages}`);
         if (route === '/' && !baseline) {
