@@ -12,7 +12,6 @@ npx playwright install chromium
 bash scripts/build_site.sh _site
 python3 scripts/check_site.py _site
 python3 scripts/test_site_checks.py _site
-python3 scripts/test_writing.py
 node scripts/check_browser.cjs _site .artifacts/browser
 python3 -m http.server 8766 --bind 127.0.0.1 --directory _site
 ```

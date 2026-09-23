@@ -27,7 +27,6 @@ jobs:
       - run: python3 scripts/check_site.py "$RUNNER_TEMP/site"
       - run: python3 scripts/test_site_checks.py "$RUNNER_TEMP/site"
       - run: python3 -m unittest discover -s examples/memory-evaluation -p 'test_*.py'
-      - run: python3 scripts/test_writing.py
       - run: node scripts/check_browser.cjs "$RUNNER_TEMP/site" .artifacts/browser
       - uses: actions/upload-artifact@v4
         if: always()
@@ -35,7 +34,6 @@ jobs:
           name: browser-checks
           path: |
             .artifacts/browser
-            .artifacts/writing-fixtures
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 14

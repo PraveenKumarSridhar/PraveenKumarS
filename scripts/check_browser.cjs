@@ -60,7 +60,7 @@ const server = http.createServer((req, res) => {
             const r = el.getBoundingClientRect();
             return r.width > 0 && r.right > innerWidth + 1;
           }).slice(0, 12).map(el => `${el.tagName}.${el.className}: ${el.getBoundingClientRect().right.toFixed(1)}px`),
-          clipped: [...document.querySelectorAll('h1, h2, h3, nav.top a, .writing-card, .hero .actions a')].filter(el => {
+          clipped: [...document.querySelectorAll('h1, h2, h3, nav.top a, .hero .actions a')].filter(el => {
             const rect = el.getBoundingClientRect();
             return rect.width > 0 && (rect.left < -1 || rect.right > innerWidth + 1);
           }).map(el => el.textContent.trim()),
@@ -79,15 +79,11 @@ const server = http.createServer((req, res) => {
           await page.goto(origin + route);
         }
         if (route === '/' && !baseline) {
-          const cards = page.locator('#writing .writing-card');
-          check(await cards.count() === 3, `${width}px homepage: expected three real note links`);
-          if (await cards.count()) {
-            const href = await cards.first().getAttribute('href');
-            await cards.first().click();
-            check(new URL(page.url()).pathname === href, `${width}px: writing card did not navigate`);
-            check(await page.locator('.article-body').isVisible(), `${width}px: note body missing after navigation`);
-            await page.goto(origin + route);
-          }
+          const writing = page.locator('.hero .actions').getByRole('link', {name:'Read my writing'});
+          check(await writing.isVisible(), `${width}px homepage: writing button hidden`);
+          await writing.click();
+          check(new URL(page.url()).pathname === '/notes/', `${width}px: writing button destination`);
+          await page.goto(origin + route);
         }
         // Keep full-page evidence for every route, at both desktop and narrow mobile widths.
         if (width === 390 || width === 1440) {
@@ -155,7 +151,6 @@ const server = http.createServer((req, res) => {
       await page.goto(origin + '/');
       await page.evaluate(() => document.fonts.ready);
       await page.screenshot({ path: path.join(artifacts, `${width}-home-top.png`) });
-      if (!baseline) await page.locator('#writing').screenshot({ path: path.join(artifacts, `${width}-writing.png`) });
       check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${width}px: loaded-font homepage overflow`);
       await context.close();
     }

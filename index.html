@@ -77,7 +77,7 @@ image: /assets/social-card.png
   .hero .role{margin-bottom:30px;}
   h1{
     font-family:var(--serif);font-weight:400;
-    font-size:clamp(40px,6vw,72px);line-height:1.05;letter-spacing:-0.02em;
+    font-size:clamp(46px,8vw,88px);line-height:1.02;letter-spacing:-0.02em;
     margin-bottom:30px;
   }
   .hero .intro{
@@ -108,7 +108,6 @@ image: /assets/social-card.png
   .meta-line .d{width:5px;height:5px;border-radius:50%;background:var(--accent);}
   .meta-line .ico{width:16px;height:16px;color:var(--accent);flex:none;}
   .intro-2{margin-top:18px;}
-  @media(max-width:680px){.hero{padding:48px 0;}}
 
   /* ---------- section scaffold ---------- */
   section{padding:64px 0;border-top:1px solid var(--line);}
@@ -118,17 +117,6 @@ image: /assets/social-card.png
     letter-spacing:-0.01em;margin-top:14px;line-height:1.1;
   }
   .sec-label .sub{font-size:15px;color:var(--ink-soft);margin-top:10px;max-width:54ch;}
-
-  /* ---------- writing ---------- */
-  .writing-focus{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:18px;}
-  .writing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;}
-  .writing-card{display:flex;flex-direction:column;gap:14px;padding:22px 0;border-top:1px solid var(--line);overflow-wrap:anywhere;}
-  .writing-card h3{font-family:var(--serif);font-size:26px;font-weight:400;line-height:1.18;}
-  .writing-card p{font-size:14px;line-height:1.6;color:var(--ink-soft);}
-  .writing-card time{margin-top:auto;font-family:var(--mono);font-size:11px;color:var(--ink-soft);}
-  .writing-card:hover h3{color:var(--accent);}
-  .writing-all{display:inline-flex;margin-top:24px;font-size:14px;color:var(--accent);border-bottom:1px solid var(--accent);}
-  @media(max-width:760px){.writing-grid{grid-template-columns:1fr;gap:0;}}
 
   /* ---------- capability strip ---------- */
   .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;}
@@ -241,8 +229,8 @@ image: /assets/social-card.png
 <section class="hero" style="border-top:0;">
   <div class="wrap">
     <div class="role eyebrow">Machine Learning Engineer &amp; Data Scientist</div>
-    <h1>Building AI agents that remember and hold up under evaluation.</h1>
-    <p class="intro">I'm Praveen Kumar Sridhar. I build AI agents for businesses at Meta and the evaluation frameworks that test whether they work. Here I write about agent memory, retrieval quality, and what makes agents reliable over time.</p>
+    <h1>Hi, I'm PK.</h1>
+    <p class="intro">I build AI agents for businesses at Meta, and the evaluation frameworks that prove they actually work. Data Scientist by training, ML Engineer by habit.</p>
     <div class="stack-strip">
       <span>Python</span><span>Go</span><span>React</span><span>PyTorch</span><span>GCP / Vertex AI</span><span>AWS</span><span>Kubernetes</span><span>LLMs</span>
     </div>
@@ -258,32 +246,6 @@ image: /assets/social-card.png
     </div>
   </div>
 </section>
-
-<!-- WRITING -->
-{% assign recent_notes = site.notes | sort: "date" | reverse %}
-{% if recent_notes.size > 0 %}
-<section id="writing" aria-labelledby="writing-heading">
-  <div class="wrap">
-    <div class="sec-label">
-      <div class="eyebrow">Writing</div>
-      <h2 id="writing-heading">Notes on memory, agents, and evals.</h2>
-      <p class="sub">Experiments, architecture comparisons, and things I learned by inspecting how agents actually work.</p>
-      {% if site.obsession %}<p class="writing-focus">Current focus: {{ site.obsession | escape }}</p>{% endif %}
-      <p class="sub"><a href="{{ '/agent-memory/' | relative_url }}" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Agent memory: the practical guide &rarr;</a></p>
-    </div>
-    <div class="writing-grid">
-      {% for note in recent_notes limit: 3 %}
-      <a class="writing-card" href="{{ note.url | relative_url }}">
-        <h3>{{ note.title | escape }}</h3>
-        {% if note.description %}<p>{{ note.description | escape }}</p>{% endif %}
-        <time datetime="{{ note.date | date_to_xmlschema }}">{{ note.date | date: "%b %-d, %Y" }}</time>
-      </a>
-      {% endfor %}
-    </div>
-    <a class="writing-all" href="{{ '/notes/' | relative_url }}">All Lab Notes <span aria-hidden="true">&nbsp;→</span></a>
-  </div>
-</section>
-{% endif %}
 
 <!-- WHAT I BUILD -->
 <section id="build">

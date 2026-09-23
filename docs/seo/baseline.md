@@ -52,3 +52,7 @@ The latest local run passes 450 browser assertions, 17 output-validator sensitiv
 Linux CI exposed an existing 320px overflow with fallback fonts in project cards and the contact email. Minimum grid track constraints and wrapping fixed it; the overflow assertion stayed in place. Final CI status is recorded on the PR rather than frozen here before the final commit.
 
 Performance conditions, per-run samples and the measured lazy-loading change are in `performance.md`. The current main remained e2af5a2 at the release audit. PR #17's image files were not modified. See `editorial-calendar.md` for the evidence-gated later program; deployment checks and post-publication measurement await merge and elapsed observation windows.
+
+## Homepage correction after user review
+
+Restored the original hero wording, font sizing and spacing. Removed the added writing-card section and guide promotion from the homepage. Kept the Read my writing button and original section order. Browser checks now verify the button, replacing card-specific assertions; obsolete collection-card fixtures were removed. Earlier screenshots, performance figures and editorial scores above describe the earlier revision. New editorial content remains under user review, without publication approval.

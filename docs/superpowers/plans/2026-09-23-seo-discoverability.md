@@ -250,3 +250,7 @@ Before marking the overall goal complete, inspect each task's committed files, a
 | 10 later publishing | Ranked queue, quality gates and profile/distribution drafts prepared | Real-reader follow-up evidence and two monthly windows before conditional guides |
 
 Whole-branch review checked production diffs, original route retention, exact preservation of homepage professional/contact body, approved Notes copy, metadata and feed consistency, excluded private/development files, deterministic example outputs, browser behavior and measured payload. Review is sequential author review because parallel work was explicitly excluded. CI runs the same build and tests on Linux. The PR remains unmerged; technical readiness is not proof of indexing or ranking gains.
+
+## User correction: homepage scope
+
+The user rejected the SEO hero rewrite and added homepage writing section. Restore the original hero copy, type scale and spacing; keep the existing Read my writing button and original section order. Technical metadata and verified mobile/failed-script bug fixes remain. The writing-card implementation and its dedicated collection tests are superseded. New editorial content is under user review; make no further editorial additions without explicit agreement.
