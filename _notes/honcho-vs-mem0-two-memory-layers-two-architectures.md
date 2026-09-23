@@ -2,7 +2,6 @@
 title: "Honcho vs Mem0: Two Memory Layers, Two Architectures"
 description: Mem0 stores facts about a user. Honcho stores conclusions about a relationship. Picking a memory layer means picking which question you want answered.
 date: 2026-07-18
-last_modified_at: 2026-09-23
 tags: [memory, agents]
 ---
 
@@ -152,11 +151,6 @@ I have not run Mem0 in production on this stack, but I will. A Mem0 setup blog i
 ## Which fits which use case
 
 Pick Mem0 if your agent's value is in retrieved facts. Pick Honcho if your agent's value is in inferences the user would not have made explicit. That is the whole decision.
-
-## Related reading
-
-- [Agent memory needs a point of view](/notes/agent-memory-needs-a-point-of-view/): The semantic problem behind observer and observed identities.
-- [From Honcho to Hindsight](/notes/from-honcho-to-hindsight/): The September follow-up to this July architecture comparison, including what changed in my own setup.
 
 PK
 

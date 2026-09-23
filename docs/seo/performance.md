@@ -38,7 +38,9 @@ Open image PR #17 covers `assets/social-card.png`, `apple-touch-icon.png` and `f
 ## Reproduce
 
 ```sh
-node scripts/sample_performance.cjs /tmp/praveen-seo-discovery /tmp/performance.json / /notes/ /notes/muse-memory-investigation/ /agent-memory/ /notes/evaluating-agent-memory/
+node scripts/sample_performance.cjs /tmp/praveen-seo-discovery /tmp/performance.json / /notes/ /notes/muse-memory-investigation/
 ```
 
 Use the same browser, machine and build conditions for comparisons. Run the normal browser checks separately, since these samples do not exercise scrolling or keyboard behavior.
+
+The guide and evaluation article were subsequently removed at user request. Their earlier samples above are historical, not current routes.

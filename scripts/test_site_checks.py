@@ -98,10 +98,10 @@ class RegressionGateTests(unittest.TestCase):
         (self.root / "docs/plan.md").write_text("Private plan")
         self.fails_with("private/development file published")
 
-    def test_missing_new_note_in_feed_is_rejected(self):
+    def test_missing_existing_note_in_feed_is_rejected(self):
         file = self.root / "feed.xml"
         source = file.read_text()
-        source = re.sub(r'<entry[\s>].*?</entry>', lambda m: '' if '/notes/evaluating-agent-memory/' in m.group() else m.group(), source, flags=re.S)
+        source = re.sub(r'<entry[\s>].*?</entry>', lambda m: '' if '/notes/muse-memory-investigation/' in m.group() else m.group(), source, flags=re.S)
         file.write_text(source)
         self.fails_with("feed does not match newest notes")
 

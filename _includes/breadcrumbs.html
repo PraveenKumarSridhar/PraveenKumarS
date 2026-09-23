@@ -1,7 +1,7 @@
 <nav class="breadcrumbs" aria-label="Breadcrumb">
   <ol>
     <li><a href="{{ '/' | relative_url }}">Home</a></li>
-    {% unless page.guide %}<li><a href="{{ '/notes/' | relative_url }}">Lab Notes</a></li>{% endunless %}
+    <li><a href="{{ '/notes/' | relative_url }}">Lab Notes</a></li>
     <li aria-current="page">{{ page.title | smartify | strip_html | escape }}</li>
   </ol>
 </nav>
@@ -11,8 +11,8 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": {{ '/' | absolute_url | jsonify }}},
-    {% unless page.guide %}{"@type": "ListItem", "position": 2, "name": "Lab Notes", "item": {{ '/notes/' | absolute_url | jsonify }}},{% endunless %}
-    {"@type": "ListItem", "position": {% if page.guide %}2{% else %}3{% endif %}, "name": {{ page.title | smartify | strip_html | jsonify | replace: '<', '\u003c' }}, "item": {{ page.url | absolute_url | jsonify }}}
+    {"@type": "ListItem", "position": 2, "name": "Lab Notes", "item": {{ '/notes/' | absolute_url | jsonify }}},
+    {"@type": "ListItem", "position": 3, "name": {{ page.title | smartify | strip_html | jsonify | replace: '<', '\u003c' }}, "item": {{ page.url | absolute_url | jsonify }}}
   ]
 }
 </script>

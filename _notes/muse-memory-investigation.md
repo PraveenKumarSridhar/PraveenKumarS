@@ -5,7 +5,6 @@ date: 2026-09-21
 image:
   path: /assets/muse-memory-social-v1.png
   alt: "Inside Meta Muse’s memory: records become guidance. Source records, current understanding, and behavioral guidance."
-last_modified_at: 2026-09-23
 tags:
 - memory
 - agents
@@ -129,11 +128,6 @@ To trust that guide, I'd need to know what happens when I correct it. The trail 
 Following the correction also means keeping its source in view. The bank files showed how the same evidence can appear in several forms. When it reaches Hermes again, I'd want to distinguish something I said, outside evidence and an assistant's inference. Otherwise, an interpretation can gain apparent weight simply because the assistant has repeated it. Hindsight's source-backed observations are a useful starting point; I'd carry that distinction through into the context the assistant actually receives.
 
 If I correct the assistant today, I want tomorrow's answer to reflect it. And when a remembered lesson shapes its behavior, I want to know where it came from and whether it still belongs.
-
-## Related reading
-
-- [Agent memory: a practical guide](/agent-memory/): Follow the lifecycle from capture and corrections to retrieval and answer use.
-- [Provenance and perspective in agent memory](/notes/agent-memory-needs-a-point-of-view/): A worked example of why an assistant’s inference must remain distinguishable from what someone actually said.
 
 PK
 

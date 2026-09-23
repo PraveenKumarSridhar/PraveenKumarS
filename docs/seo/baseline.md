@@ -56,3 +56,7 @@ Performance conditions, per-run samples and the measured lazy-loading change are
 ## Homepage correction after user review
 
 Restored the original hero wording, font sizing and spacing. Removed the added writing-card section and guide promotion from the homepage. Kept the Read my writing button and original section order. Browser checks now verify the button, replacing card-specific assertions; obsolete collection-card fixtures were removed. Earlier screenshots, performance figures and editorial scores above describe the earlier revision. New editorial content remains under user review, without publication approval.
+
+## Editorial removal after user review
+
+The guide, evaluation article, experiment and distribution drafts have been removed. All five original article titles and prose are restored from main; only native image-loading attributes differ in Muse. Related-reading additions and artificial update dates were removed. The site returns to its original seven HTML routes. Earlier nine-page counts, experiment results and content-review claims above are historical and superseded. The plan now covers technical SEO and verified website fixes only.

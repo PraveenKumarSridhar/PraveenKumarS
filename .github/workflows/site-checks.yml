@@ -26,7 +26,6 @@ jobs:
       - run: bash scripts/build_site.sh "$RUNNER_TEMP/site"
       - run: python3 scripts/check_site.py "$RUNNER_TEMP/site"
       - run: python3 scripts/test_site_checks.py "$RUNNER_TEMP/site"
-      - run: python3 -m unittest discover -s examples/memory-evaluation -p 'test_*.py'
       - run: node scripts/check_browser.cjs "$RUNNER_TEMP/site" .artifacts/browser
       - uses: actions/upload-artifact@v4
         if: always()

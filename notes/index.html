@@ -141,7 +141,6 @@ image: /assets/social-card.png
       {% if site.obsession %}
       <div class="obsession"><span class="k">Current obsession</span><span class="v">{{ site.obsession }}</span></div>
       {% endif %}
-      <p class="sub"><a href="{{ '/agent-memory/' | relative_url }}" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Agent memory: the practical guide &rarr;</a></p>
     </div>
 
     {% assign notes = site.notes | sort: "date" | reverse %}
