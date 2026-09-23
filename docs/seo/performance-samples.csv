@@ -1,0 +1,55 @@
+phase,profile,route,run,lcp,cls,encodedBytes,domNodes
+baseline,mobile,/,1,404,0,30069,363
+baseline,mobile,/,2,264,0,30069,363
+baseline,mobile,/,3,268,0,30069,363
+baseline,mobile,/notes/,1,272,0,10140,84
+baseline,mobile,/notes/,2,284,0,10140,84
+baseline,mobile,/notes/,3,264,0,10140,84
+baseline,mobile,/notes/muse-memory-investigation/,1,292,0.021077390296476338,424566,206
+baseline,mobile,/notes/muse-memory-investigation/,2,280,0.021077390296476338,424566,206
+baseline,mobile,/notes/muse-memory-investigation/,3,288,0.021077390296476338,424566,206
+baseline,desktop,/,1,76,0,30069,363
+baseline,desktop,/,2,76,0,30069,363
+baseline,desktop,/,3,72,0,30069,363
+baseline,desktop,/notes/,1,80,0,10140,84
+baseline,desktop,/notes/,2,76,0,10140,84
+baseline,desktop,/notes/,3,80,0,10140,84
+baseline,desktop,/notes/muse-memory-investigation/,1,92,0,424566,206
+baseline,desktop,/notes/muse-memory-investigation/,2,88,0,424566,206
+baseline,desktop,/notes/muse-memory-investigation/,3,88,0,424566,206
+SEO before lazy loading,mobile,/,1,304,0,34199,388
+SEO before lazy loading,mobile,/,2,308,0,34199,388
+SEO before lazy loading,mobile,/,3,304,0,34199,388
+SEO before lazy loading,mobile,/notes/,1,264,0,11303,91
+SEO before lazy loading,mobile,/notes/,2,264,0,11303,91
+SEO before lazy loading,mobile,/notes/,3,268,0,11303,91
+SEO before lazy loading,mobile,/notes/muse-memory-investigation/,1,292,0.01548943100857331,426510,224
+SEO before lazy loading,mobile,/notes/muse-memory-investigation/,2,296,0.01548943100857331,426510,224
+SEO before lazy loading,mobile,/notes/muse-memory-investigation/,3,288,0.01548943100857331,426510,224
+SEO before lazy loading,mobile,/agent-memory/,1,296,0.016824367157979036,27403,280
+SEO before lazy loading,mobile,/agent-memory/,2,296,0.016824367157979036,27403,280
+SEO before lazy loading,mobile,/agent-memory/,3,292,0.016824367157979036,27403,280
+SEO before lazy loading,mobile,/notes/evaluating-agent-memory/,1,296,0.015590147173416866,29919,276
+SEO before lazy loading,mobile,/notes/evaluating-agent-memory/,2,296,0.015590147173416866,29919,276
+SEO before lazy loading,mobile,/notes/evaluating-agent-memory/,3,296,0.015590147173416866,29919,276
+SEO before lazy loading,desktop,/,1,108,0,34199,388
+SEO before lazy loading,desktop,/,2,84,0,34199,388
+SEO before lazy loading,desktop,/,3,84,0,34199,388
+SEO before lazy loading,desktop,/notes/,1,88,0,11303,91
+SEO before lazy loading,desktop,/notes/,2,88,0,11303,91
+SEO before lazy loading,desktop,/notes/,3,88,0,11303,91
+SEO before lazy loading,desktop,/notes/muse-memory-investigation/,1,84,0.00045942495840567134,426510,224
+SEO before lazy loading,desktop,/notes/muse-memory-investigation/,2,84,0.00045942495840567134,426510,224
+SEO before lazy loading,desktop,/notes/muse-memory-investigation/,3,84,0.00045942495840567134,426510,224
+SEO before lazy loading,desktop,/agent-memory/,1,84,0,27403,280
+SEO before lazy loading,desktop,/agent-memory/,2,84,0,27403,280
+SEO before lazy loading,desktop,/agent-memory/,3,84,0,27403,280
+SEO before lazy loading,desktop,/notes/evaluating-agent-memory/,1,88,0,29919,276
+SEO before lazy loading,desktop,/notes/evaluating-agent-memory/,2,84,0,29919,276
+SEO before lazy loading,desktop,/notes/evaluating-agent-memory/,3,84,0,29919,276
+Muse with lazy loading,mobile,/notes/muse-memory-investigation/,1,292,0.01548943100857331,34658,224
+Muse with lazy loading,mobile,/notes/muse-memory-investigation/,2,284,0.01548943100857331,34658,224
+Muse with lazy loading,mobile,/notes/muse-memory-investigation/,3,288,0.01548943100857331,34658,224
+Muse with lazy loading,desktop,/notes/muse-memory-investigation/,1,84,0.00045942495840567134,34658,224
+Muse with lazy loading,desktop,/notes/muse-memory-investigation/,2,88,0.00045942495840567134,34658,224
+Muse with lazy loading,desktop,/notes/muse-memory-investigation/,3,84,0.00045942495840567134,34658,224

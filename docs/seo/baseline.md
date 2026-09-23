@@ -42,3 +42,13 @@ Self-review, 0-2 each: question answered 2; original evidence/examples 1; claim 
 ## Remaining scope
 
 The foundation milestone is not the whole SEO program. Continue the ordered content-linking, schema, guide, and reproducible evaluation tasks in the implementation plan. Rankings, indexing of all notes, field Core Web Vitals, future Search Console windows, DNS changes, and public distribution are separate evidence or authorization dependencies. Nothing has been merged or deployed by this branch.
+
+## Final local implementation audit
+
+The branch now renders nine HTML pages: all seven original routes, `/agent-memory/`, and `/notes/evaluating-agent-memory/`. It adds contextual links, explicit modification dates, consistent author identity, breadcrumbs, a substantial guide and a reproducible synthetic evaluation article. Existing employment/contact facts and the approved Notes heading/obsession remain intact. Old article findings are preserved; title/link/date additions are intentional.
+
+The latest local run passes 450 browser assertions, 17 output-validator sensitivity tests and 13 evaluation tests. The evaluation outputs reproduce exactly. The guide and flagship were visually checked at mobile width; the full route matrix captures desktop/mobile screenshots. Table scroll containers are rendered without JavaScript. The browser runner explicitly scrolls to lazy-loaded diagrams and checks decoding.
+
+Linux CI exposed an existing 320px overflow with fallback fonts in project cards and the contact email. Minimum grid track constraints and wrapping fixed it; the overflow assertion stayed in place. Final CI status is recorded on the PR rather than frozen here before the final commit.
+
+Performance conditions, per-run samples and the measured lazy-loading change are in `performance.md`. The current main remained e2af5a2 at the release audit. PR #17's image files were not modified. See `editorial-calendar.md` for the evidence-gated later program; deployment checks and post-publication measurement await merge and elapsed observation windows.

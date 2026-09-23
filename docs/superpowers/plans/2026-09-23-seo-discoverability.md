@@ -130,8 +130,10 @@ Expected: each note has a clear topic and useful onward reading; all historical 
 - [x] Inspect actual emitted graph before extending it. Add Person using verified full name, homepage, visible professional role, Northeastern University, existing sameAs profiles, and supported knowsAbout topics. Do not use the generic social card as a portrait.
 - [x] Ensure note author resolves to the same identity; validate publication/modification dates, image override, mainEntityOfPage, and headline against visible content. Do not reset dates at every build.
 - [x] Add BreadcrumbList via `jsonify`-escaped values, matching the visible breadcrumb. Avoid duplicate Article or contradictory Person records.
-- [ ] Extend validator with malformed/duplicate/conflicting-identity and date fixtures; check all notes. Use Google's Rich Results Test on deployable/public output after merge when available; local JSON parsing alone does not prove eligibility.
-- [ ] Run full gates, commit the schema milestone, and continue Task 6; verify live after the SEO PR merges.
+- [x] Extend validator with malformed/duplicate/conflicting-identity and date fixtures; check all notes.
+- [ ] After merge, use Google's Rich Results Test on public output; local JSON parsing alone does not prove eligibility.
+- [x] Run full gates and commit the schema milestone.
+- [ ] Verify live schema after the SEO PR merges.
 
 Expected: valid, consistent graph with evidence-backed fields; unchanged layout except intended breadcrumb/date presentation. No rich-result or ranking guarantee.
 
@@ -173,7 +175,8 @@ Expected: readers can reproduce the numbers and see why retrieval accuracy alone
 - [x] Explain retrieval precision/recall, temporal correctness, stale/contradictory/false memories, provenance, personalization, pollution, forgetting, usefulness, task impact, multi-turn histories, offline/online evaluation, dataset construction, and benchmark design.
 - [x] Include metric definitions and denominators, the reproducible synthetic example, a diagram, observed failures, primary sources, limitations, and a practical experiment checklist. Separate retrieval exposure from actual answer influence.
 - [x] Independently recompute every published number from the checked-in results; validate code links and alt text. Run editorial rubric and technical gates.
-- [x] Connect the article from homepage, guide, and relevant old notes. Prepare X and LinkedIn distribution drafts under excluded `docs/seo/distribution/`; do not post. Commit the flagship milestone, complete the whole-PR review, then verify the live canonical after user merge.
+- [x] Connect the article from homepage, guide, and relevant old notes. Prepare X and LinkedIn distribution drafts under excluded `docs/seo/distribution/`; do not post. Commit the flagship milestone.
+- [ ] Complete the whole-PR review and verify the live canonical after user merge.
 
 Expected: reproducible evidence, clear limitations, connected reading paths, no unsupported claim of framework superiority.
 
@@ -183,10 +186,10 @@ Expected: reproducible evidence, clear limitations, connected reading paths, no 
 
 **Interfaces:** Search Console property `sc-domain:praveenks.com` or verified URL-prefix equivalent; production sitemap `https://praveenks.com/sitemap.xml`.
 
-- [ ] Confirm Search Console access, record indexing status per important URL, and verify sitemap submission. Use user-provided authenticated access, never infer indexing from HTTP 200.
-- [ ] Verify HTTP -> HTTPS and apex/www behavior. If www is desired, present the exact CNAME/Pages setting for user review, then test redirect chains and TLS after the authorized change. DNS absence is not proof of an apex ranking penalty.
-- [ ] Measure mobile/desktop lab performance and inspect image sizes. Optimize assets only where measured weight or rendering issues warrant it; retain existing image PR #17 overlap awareness. Compare dimensions, visual quality, LCP/CLS and transfer sizes before/after.
-- [ ] Record field Core Web Vitals if available; a small site may have no CrUX sample. Do not substitute a single Lighthouse score for field performance.
+- [x] Confirm Search Console access, record indexing status per important URL, and verify sitemap submission. Use user-provided authenticated access, never infer indexing from HTTP 200.
+- [x] Verify HTTP -> HTTPS and apex/www behavior. If www is desired, present the exact CNAME/Pages setting for user review, then test redirect chains and TLS after the authorized change. DNS absence is not proof of an apex ranking penalty.
+- [x] Measure mobile/desktop lab performance and inspect image sizes. Optimize assets only where measured weight or rendering issues warrant it; retain existing image PR #17 overlap awareness. Compare dimensions, visual quality, LCP/CLS and transfer sizes before/after.
+- [x] Record field Core Web Vitals if available; a small site may have no CrUX sample. Do not substitute a single Lighthouse score for field performance.
 - [ ] Run matched 28-day evaluations after deployment, then repeat monthly. Report actual direction/magnitude and uncertainty. Fix pages with evidenced query mismatch or poor CTR; avoid arbitrary keyword variants.
 
 Expected: measured account state and documented technical changes. Missing access and elapsed observation windows remain explicit dependencies, not completed checkboxes.
@@ -198,8 +201,8 @@ Expected: measured account state and documented technical changes. Missing acces
 **Interfaces:** reuse completed guides, schema, note layout, dataset methodology, and search measurement definitions.
 
 - [ ] Use the evaluation-integrity note plus flagship and follow-up experiment as the evidence base for `/agent-evaluation/`. Cover task success, trajectories, tools, knowledge/memory, reliability, online/offline/human evaluation, attribution, integrity, and tooling. Require the same rubric and engineering gates.
-- [ ] Rank the source analysis's article queue by a concrete unanswered question, available original evidence, and observed search demand when available. Publish supporting pieces only when they add evidence; 8-12 articles is a planning target, not a quality shortcut.
-- [ ] Prepare consistent full-name/topic bios and source-repository links for the user's review. Prepare launch/takeaway/chart/follow-up drafts per substantial article; public posts and outreach require explicit authorization and a live canonical.
+- [x] Rank the source analysis's article queue by a concrete unanswered question, available original evidence, and observed search demand when available. Publish supporting pieces only when they add evidence; 8-12 articles is a planning target, not a quality shortcut.
+- [x] Prepare consistent full-name/topic bios and source-repository links for the user's review. Prepare launch/takeaway/chart/follow-up drafts per substantial article; public posts and outreach require explicit authorization and a live canonical.
 - [ ] Track relevant referring domains, citations, observable AI-search mentions, and technical inquiries without fabricating attribution. Review after two monthly Search Console exports and choose the next topic based on evidence.
 - [ ] Build `/agent-knowledge/` only after unique supporting material exists. Otherwise record why it remains gated and retain the scope.
 
@@ -232,3 +235,18 @@ Before marking the overall goal complete, inspect each task's committed files, a
 - [Google SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide): useful content, readable organization, descriptive links, and the time needed to evaluate changes.
 - [Google Article structured data](https://developers.google.com/search/docs/appearance/structured-data/article): supported article metadata and visible-content consistency.
 - [GitHub Pages dependency versions](https://pages.github.com/versions/): compatibility baseline for the local build.
+
+## Delivery state, September 23, 2026
+
+| Task | Current state | Remaining dependency |
+| --- | --- | --- |
+| 1-3 baseline, homepage and mobile | Implemented and verified | User merge, then deployed smoke check |
+| 4 note discovery | Implemented and verified | User editorial review |
+| 5 identity/schema | Implemented and locally validated | Public Rich Results Test and live-output verification after merge |
+| 6 memory guide | Implemented and verified | User editorial review and merge |
+| 7 reproducible example | Implemented; 13 tests and exact result reproduction | Independent-person review remains stronger than author self-review |
+| 8 evaluation article | Implemented; numeric audit and browser checks pass; distribution drafts prepared | User editorial review, merge, live canonical, posting authorization |
+| 9 technical/measurement | Search Console and sitemap verified; lab comparison and measured lazy loading complete | Deployment timestamp, complete post-deployment windows; no field CWV sample yet |
+| 10 later publishing | Ranked queue, quality gates and profile/distribution drafts prepared | Real-reader follow-up evidence and two monthly windows before conditional guides |
+
+Whole-branch review checked production diffs, original route retention, exact preservation of homepage professional/contact body, approved Notes copy, metadata and feed consistency, excluded private/development files, deterministic example outputs, browser behavior and measured payload. Review is sequential author review because parallel work was explicitly excluded. CI runs the same build and tests on Linux. The PR remains unmerged; technical readiness is not proof of indexing or ranking gains.

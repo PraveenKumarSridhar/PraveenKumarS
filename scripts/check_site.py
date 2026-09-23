@@ -199,9 +199,11 @@ def check_site(root):
         feed = ET.parse(root / "feed.xml")
         entries = feed.findall("{*}entry")
         feed_urls = {el.attrib.get("href") for entry in entries for el in entry.findall("{*}link") if el.attrib.get("rel", "alternate") == "alternate"}
-        # jekyll-feed intentionally caps entries; the five historical notes must remain in this small site's feed.
-        expected_notes = {ORIGIN + route for route in BASELINE_ROUTES if route.startswith("/notes/") and route != "/notes/"}
-        check(expected_notes.issubset(feed_urls), f"baseline notes absent from feed: {sorted(expected_notes - feed_urls)}")
+        # jekyll-feed 0.17 defaults to ten newest notes; _config.yml leaves this limit unchanged.
+        note_routes = [route for route in pages if route.startswith("/notes/") and route != "/notes/"]
+        note_routes.sort(key=lambda route: pages[route].meta.get("article:published_time", [""])[0], reverse=True)
+        expected_notes = {ORIGIN + route for route in note_routes[:10]}
+        check(feed_urls == expected_notes, f"feed does not match newest notes: missing {sorted(expected_notes - feed_urls)}, extra {sorted(feed_urls - expected_notes)}")
         for url in feed_urls:
             check(url in html_urls, f"feed points to absent page: {url}")
         robots = (root / "robots.txt").read_text()

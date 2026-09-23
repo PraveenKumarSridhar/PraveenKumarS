@@ -49,6 +49,11 @@ const server = http.createServer((req, res) => {
         for (const name of ['Writing', 'Work', 'Contact']) {
           check(await page.locator('nav.top').getByRole('link', { name, exact: true }).isVisible(), `${width}px ${route}: ${name} navigation hidden`);
         }
+        for (const img of await page.locator('img[loading="lazy"]').all()) {
+          await img.scrollIntoViewIfNeeded();
+          await img.evaluate(el => el.decode());
+        }
+        await page.evaluate(() => scrollTo(0, 0));
         const layout = await page.evaluate(() => ({
           overflow: document.documentElement.scrollWidth > innerWidth + 1,
           overflowNodes: [...document.querySelectorAll('body *')].filter(el => {
