@@ -128,3 +128,5 @@ For each case, label relevant evidence at the query time, allowed audiences, exp
 LongMemEval tests several abilities, including temporal reasoning, knowledge updates and abstention. LoCoMo examines memory over long conversational histories. Their task definitions are useful starting points; neither replaces application-specific tests for your permissions and context pipeline. [LongMemEval paper](https://arxiv.org/abs/2410.10813), [LoCoMo paper](https://arxiv.org/abs/2402.17753).
 
 Finally, compare matched runs with and without memory. Change one pipeline stage at a time, keep the rest fixed, and inspect failures before aggregating them. The question is whether memory improved the task under a defined cost and correctness contract. More stored facts are an inventory measure.
+
+For runnable cases, metric definitions and observed failures, see [How to evaluate AI agent memory](/notes/evaluating-agent-memory/).

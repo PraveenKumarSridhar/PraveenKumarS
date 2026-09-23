@@ -111,7 +111,7 @@ def check_site(root):
             pages[route] = Page(source)
         except (ValueError, UnicodeError) as error:
             errors.append(f"{route}: invalid HTML/JSON-LD: {error}")
-    for route in sorted((BASELINE_ROUTES | {"/agent-memory/"}) - pages.keys()):
+    for route in sorted((BASELINE_ROUTES | {"/agent-memory/", "/notes/evaluating-agent-memory/"}) - pages.keys()):
         errors.append(f"missing baseline route: {route}")
 
     for route, page in pages.items():

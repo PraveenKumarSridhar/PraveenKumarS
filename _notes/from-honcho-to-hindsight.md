@@ -180,6 +180,7 @@ I don't need six reminders that we're working on a project. I need the next sess
 
 ## Related reading
 
+- [How to evaluate AI agent memory](/notes/evaluating-agent-memory/): A reproducible fixture separates retrieval, source validity and answer correctness.
 - [Agent memory: a practical guide](/agent-memory/): Follow the lifecycle from capture and corrections to retrieval and answer use.
 - [My earlier Honcho and Mem0 comparison](/notes/honcho-vs-mem0-two-memory-layers-two-architectures/): The July architecture context behind the system I later migrated.
 - [Provenance and perspective in agent memory](/notes/agent-memory-needs-a-point-of-view/): Why preserving a record’s source and access scope matters beyond retrieval relevance.

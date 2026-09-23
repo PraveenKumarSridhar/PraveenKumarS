@@ -169,11 +169,11 @@ Expected: readers can reproduce the numbers and see why retrieval accuracy alone
 
 **Interfaces:** stable `/notes/evaluating-agent-memory/`; consumes Task 7's committed cases/code/results. No new results invented during prose drafting.
 
-- [ ] Write `How to Evaluate AI Agent Memory: Metrics, Failure Modes & Benchmarks`, covering all 17 topics in source analysis section 4.
-- [ ] Explain retrieval precision/recall, temporal correctness, stale/contradictory/false memories, provenance, personalization, pollution, forgetting, usefulness, task impact, multi-turn histories, offline/online evaluation, dataset construction, and benchmark design.
-- [ ] Include metric definitions and denominators, the reproducible synthetic example, a diagram, observed failures, primary sources, limitations, and a practical experiment checklist. Separate retrieval exposure from actual answer influence.
-- [ ] Independently recompute every published number from the checked-in results; validate code links and alt text. Run editorial rubric and technical gates.
-- [ ] Connect the article from homepage, guide, and relevant old notes. Prepare X and LinkedIn distribution drafts under excluded `docs/seo/distribution/`; do not post. Commit the flagship milestone, complete the whole-PR review, then verify the live canonical after user merge.
+- [x] Write `How to Evaluate AI Agent Memory: Metrics, Failure Modes & Benchmarks`, covering all 17 topics in source analysis section 4.
+- [x] Explain retrieval precision/recall, temporal correctness, stale/contradictory/false memories, provenance, personalization, pollution, forgetting, usefulness, task impact, multi-turn histories, offline/online evaluation, dataset construction, and benchmark design.
+- [x] Include metric definitions and denominators, the reproducible synthetic example, a diagram, observed failures, primary sources, limitations, and a practical experiment checklist. Separate retrieval exposure from actual answer influence.
+- [x] Independently recompute every published number from the checked-in results; validate code links and alt text. Run editorial rubric and technical gates.
+- [x] Connect the article from homepage, guide, and relevant old notes. Prepare X and LinkedIn distribution drafts under excluded `docs/seo/distribution/`; do not post. Commit the flagship milestone, complete the whole-PR review, then verify the live canonical after user merge.
 
 Expected: reproducible evidence, clear limitations, connected reading paths, no unsupported claim of framework superiority.
 

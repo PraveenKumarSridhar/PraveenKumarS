@@ -88,6 +88,7 @@ The answer sheet resolves the contradiction. The agent found a solution, but the
 
 ## Related reading
 
+- [How to evaluate AI agent memory](/notes/evaluating-agent-memory/): A reproducible fixture separates retrieval, source validity and answer correctness.
 - [A memory retrieval and handoff study](/notes/from-honcho-to-hindsight/): Another measurement boundary: receiving evidence and using it correctly are different outcomes.
 
 PK
