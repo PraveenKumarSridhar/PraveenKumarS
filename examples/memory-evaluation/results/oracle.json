@@ -1,0 +1,403 @@
+{
+  "cases": [
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 0,
+        "answerable_cases": 1,
+        "cases": 1,
+        "claims": 1,
+        "correct": 1,
+        "correct_abstentions": 0,
+        "correct_answers": 1,
+        "provenance_correct": 1,
+        "relevant": 1,
+        "relevant_retrieved": 1,
+        "retrieved": 1,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 1
+      },
+      "errors": [],
+      "id": "stable-preference"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 0,
+        "answerable_cases": 1,
+        "cases": 1,
+        "claims": 1,
+        "correct": 1,
+        "correct_abstentions": 0,
+        "correct_answers": 1,
+        "provenance_correct": 1,
+        "relevant": 1,
+        "relevant_retrieved": 1,
+        "retrieved": 1,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 1
+      },
+      "errors": [],
+      "id": "corrected-preference"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 1,
+        "answerable_cases": 0,
+        "cases": 1,
+        "claims": 0,
+        "correct": 1,
+        "correct_abstentions": 1,
+        "correct_answers": 0,
+        "provenance_correct": 0,
+        "relevant": 0,
+        "relevant_retrieved": 0,
+        "retrieved": 0,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 0
+      },
+      "errors": [],
+      "id": "expired-fact"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 1,
+        "answerable_cases": 0,
+        "cases": 1,
+        "claims": 0,
+        "correct": 1,
+        "correct_abstentions": 1,
+        "correct_answers": 0,
+        "provenance_correct": 0,
+        "relevant": 2,
+        "relevant_retrieved": 2,
+        "retrieved": 2,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 0
+      },
+      "errors": [],
+      "id": "contradiction"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 0,
+        "answerable_cases": 1,
+        "cases": 1,
+        "claims": 1,
+        "correct": 1,
+        "correct_abstentions": 0,
+        "correct_answers": 1,
+        "provenance_correct": 1,
+        "relevant": 1,
+        "relevant_retrieved": 1,
+        "retrieved": 1,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 1
+      },
+      "errors": [],
+      "id": "provenance"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 1,
+        "answerable_cases": 0,
+        "cases": 1,
+        "claims": 0,
+        "correct": 1,
+        "correct_abstentions": 1,
+        "correct_answers": 0,
+        "provenance_correct": 0,
+        "relevant": 0,
+        "relevant_retrieved": 0,
+        "retrieved": 0,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 0
+      },
+      "errors": [],
+      "id": "private-scope"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 0,
+        "answerable_cases": 1,
+        "cases": 1,
+        "claims": 1,
+        "correct": 1,
+        "correct_abstentions": 0,
+        "correct_answers": 1,
+        "provenance_correct": 1,
+        "relevant": 1,
+        "relevant_retrieved": 1,
+        "retrieved": 1,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 1
+      },
+      "errors": [],
+      "id": "irrelevant-repetition"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 0,
+        "answerable_cases": 1,
+        "cases": 1,
+        "claims": 1,
+        "correct": 1,
+        "correct_abstentions": 0,
+        "correct_answers": 1,
+        "provenance_correct": 1,
+        "relevant": 1,
+        "relevant_retrieved": 1,
+        "retrieved": 1,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 1
+      },
+      "errors": [],
+      "id": "false-memory-injection"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 1,
+        "answerable_cases": 0,
+        "cases": 1,
+        "claims": 0,
+        "correct": 1,
+        "correct_abstentions": 1,
+        "correct_answers": 0,
+        "provenance_correct": 0,
+        "relevant": 0,
+        "relevant_retrieved": 0,
+        "retrieved": 0,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 0
+      },
+      "errors": [],
+      "id": "explicit-forgetting"
+    },
+    {
+      "correct": true,
+      "counts": {
+        "abstention_cases": 1,
+        "answerable_cases": 0,
+        "cases": 1,
+        "claims": 0,
+        "correct": 1,
+        "correct_abstentions": 1,
+        "correct_answers": 0,
+        "provenance_correct": 0,
+        "relevant": 0,
+        "relevant_retrieved": 0,
+        "retrieved": 0,
+        "scope_exposed": 0,
+        "scope_used": 0,
+        "stale_used": 0,
+        "unsupported": 0,
+        "used": 0
+      },
+      "errors": [],
+      "id": "abstention"
+    }
+  ],
+  "dataset_sha256": "8fe7520ac6f42d8ab5d81ceda3e9efc4bd589c94546717eadea90e5bacb621f3",
+  "method": "oracle",
+  "metrics": {
+    "answerable_correctness": {
+      "denominator": 5,
+      "numerator": 5,
+      "value": 1.0
+    },
+    "correct_abstention": {
+      "denominator": 5,
+      "numerator": 5,
+      "value": 1.0
+    },
+    "provenance_accuracy": {
+      "denominator": 5,
+      "numerator": 5,
+      "value": 1.0
+    },
+    "retrieval_precision": {
+      "denominator": 7,
+      "numerator": 7,
+      "value": 1.0
+    },
+    "retrieval_recall": {
+      "denominator": 7,
+      "numerator": 7,
+      "value": 1.0
+    },
+    "scope_exposure": {
+      "denominator": 7,
+      "numerator": 0,
+      "value": 0.0
+    },
+    "scope_use": {
+      "denominator": 5,
+      "numerator": 0,
+      "value": 0.0
+    },
+    "stale_use": {
+      "denominator": 5,
+      "numerator": 0,
+      "value": 0.0
+    },
+    "task_correctness": {
+      "denominator": 10,
+      "numerator": 10,
+      "value": 1.0
+    },
+    "unsupported_claims": {
+      "denominator": 5,
+      "numerator": 0,
+      "value": 0.0
+    }
+  },
+  "predictions": [
+    {
+      "answer": {
+        "drink": "tea"
+      },
+      "citations": {
+        "drink": "m1"
+      },
+      "id": "stable-preference",
+      "retrieved": [
+        "m1"
+      ],
+      "used": [
+        "m1"
+      ]
+    },
+    {
+      "answer": {
+        "language": "Rust"
+      },
+      "citations": {
+        "language": "m2"
+      },
+      "id": "corrected-preference",
+      "retrieved": [
+        "m2"
+      ],
+      "used": [
+        "m2"
+      ]
+    },
+    {
+      "answer": {},
+      "citations": {},
+      "id": "expired-fact",
+      "retrieved": [],
+      "used": []
+    },
+    {
+      "answer": {},
+      "citations": {},
+      "id": "contradiction",
+      "retrieved": [
+        "m1",
+        "m2"
+      ],
+      "used": []
+    },
+    {
+      "answer": {
+        "editor": "Vim"
+      },
+      "citations": {
+        "editor": "m1"
+      },
+      "id": "provenance",
+      "retrieved": [
+        "m1"
+      ],
+      "used": [
+        "m1"
+      ]
+    },
+    {
+      "answer": {},
+      "citations": {},
+      "id": "private-scope",
+      "retrieved": [],
+      "used": []
+    },
+    {
+      "answer": {
+        "database": "SQLite"
+      },
+      "citations": {
+        "database": "m1"
+      },
+      "id": "irrelevant-repetition",
+      "retrieved": [
+        "m1"
+      ],
+      "used": [
+        "m1"
+      ]
+    },
+    {
+      "answer": {
+        "role": "viewer"
+      },
+      "citations": {
+        "role": "m1"
+      },
+      "id": "false-memory-injection",
+      "retrieved": [
+        "m1"
+      ],
+      "used": [
+        "m1"
+      ]
+    },
+    {
+      "answer": {},
+      "citations": {},
+      "id": "explicit-forgetting",
+      "retrieved": [],
+      "used": []
+    },
+    {
+      "answer": {},
+      "citations": {},
+      "id": "abstention",
+      "retrieved": [],
+      "used": []
+    }
+  ]
+}

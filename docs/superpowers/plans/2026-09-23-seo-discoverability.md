@@ -155,11 +155,11 @@ Expected: a reader can design a memory lifecycle and identify where it can fail;
 
 **Interfaces:** `python3 examples/memory-evaluation/evaluate.py --cases examples/memory-evaluation/cases.jsonl --predictions PATH` emits JSON metrics plus per-case errors. Dataset labels are independently hand-derived and versioned. No provider credentials or API calls required.
 
-- [ ] Define fixtures for stable preference, corrected preference, date-sensitive fact, contradiction, provenance, privacy scope, irrelevant repetition, injected false memory, explicit forgetting, and relevant-memory abstention. Include multi-turn histories, queries, permitted evidence IDs, expected answer facts, and timestamps.
-- [ ] Implement set-based precision/recall and separately report stale use, unsupported claims, scope violations, provenance correctness, and task correctness with explicit denominators. Empty expected/predicted sets and missing outputs need defined behavior and tests. Abstention is scored separately from successful answer.
-- [ ] Add failing unit cases for wrong denominators, stale evidence, invalid IDs, missing results, and timestamp ordering before implementing. No LLM judge used as ground truth.
-- [ ] Run simple transparent baselines (latest-k, query-token overlap, corrected-state oracle) against the same cases. Label this a synthetic teaching example, not a framework benchmark or real-agent performance claim.
-- [ ] Store exact command, dataset hash, outputs, limitations, and failure cases. Require deterministic reruns to match. Commit the experiment milestone with code review and unit plus site regression checks.
+- [x] Define fixtures for stable preference, corrected preference, date-sensitive fact, contradiction, provenance, privacy scope, irrelevant repetition, injected false memory, explicit forgetting, and relevant-memory abstention. Include multi-turn histories, queries, permitted evidence IDs, expected answer facts, and timestamps.
+- [x] Implement set-based precision/recall and separately report stale use, unsupported claims, scope violations, provenance correctness, and task correctness with explicit denominators. Empty expected/predicted sets and missing outputs need defined behavior and tests. Abstention is scored separately from successful answer.
+- [x] Add failing unit cases for wrong denominators, stale evidence, invalid IDs, missing results, and timestamp ordering before implementing. No LLM judge used as ground truth.
+- [x] Run simple transparent baselines (latest-k, query-token overlap, corrected-state oracle) against the same cases. Label this a synthetic teaching example, not a framework benchmark or real-agent performance claim.
+- [x] Store exact command, dataset hash, outputs, limitations, and failure cases. Require deterministic reruns to match. Commit the experiment milestone with code review and unit plus site regression checks.
 
 Expected: readers can reproduce the numbers and see why retrieval accuracy alone cannot establish useful memory. The oracle is an upper-bound fixture, not a production system.
 
