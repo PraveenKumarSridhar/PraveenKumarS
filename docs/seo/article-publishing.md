@@ -40,7 +40,7 @@ Images in the body need alt attributes and existing local files. Decorative imag
 
 The source contract rejects `permalink`, `canonical_url`, `published`, `draft`, and `sitemap` overrides. These can silently alter the route or discoverability, and Jekyll collections do not share every post-draft behavior. Keep unfinished writing outside `_notes`; handle genuine route/indexing exceptions as an explicit reviewed change to the contract.
 
-Tests discover new note files and generated pages automatically. A temporary fixture article exercises the entire build and proves that losing its output or index link is detected. Fixtures never enter the actual site's source or deployment.
+Tests discover new note files and generated pages automatically. A temporary fixture article exercises the entire build and proves that losing its output or index link is detected. Coverage is compared against the actual source inventory, never a fixed article count. Feed fixtures use dates newer than the current feed, verify that older entries rotate out, and rerun the corruption tests on the expanded site. Fixtures never enter the actual site's source or deployment.
 
 ## Run locally
 

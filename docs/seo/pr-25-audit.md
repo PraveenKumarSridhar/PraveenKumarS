@@ -26,3 +26,7 @@ The image test also raced WebKit lazy loading: `decode()` could reject while a s
 ## Limits
 
 This verifies the PR build. It has not been merged or deployed. Playwright WebKit is engine coverage, not a physical iPhone/Safari test. External websites and email delivery are not tested, and passing checks cannot establish search ranking or editorial quality. Live deployment smoke checks remain necessary after merge.
+
+## Publishing-growth correction after adversarial review
+
+The original integration test hardcoded nineteen pages, and the feed corruption test depended on Muse remaining in the newest-ten feed. Both were test bugs that could block valid future publishing despite a healthy site. The integration test now compares actual source and built article routes. The feed test removes a real current entry. Rollover fixtures choose newer dates dynamically and run the corruption suite on the expanded site. Verified both the existing baseline (seventeen fixture notes) and an additional valid baseline article (eighteen fixture notes); builds, discovery checks and all twenty corruption tests passed in both scenarios. Independent re-review found no remaining blocker in these fixes.

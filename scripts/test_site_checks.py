@@ -7,6 +7,7 @@ import re
 import sys
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from check_site import check_site
 
 BUILD = Path(sys.argv.pop(1)).resolve()
@@ -114,9 +115,12 @@ class RegressionGateTests(unittest.TestCase):
 
     def test_missing_existing_note_in_feed_is_rejected(self):
         file = self.root / "feed.xml"
-        source = file.read_text()
-        source = re.sub(r'<entry[\s>].*?</entry>', lambda m: '' if '/notes/muse-memory-investigation/' in m.group() else m.group(), source, flags=re.S)
-        file.write_text(source)
+        tree = ET.parse(file)
+        feed = tree.getroot()
+        entries = feed.findall("{*}entry")
+        self.assertTrue(entries, "The built feed must contain an entry to remove")
+        feed.remove(entries[0])
+        tree.write(file, encoding="unicode", xml_declaration=True)
         self.fails_with("feed does not match newest notes")
 
     def test_body_svg_title_does_not_corrupt_head_title(self):
