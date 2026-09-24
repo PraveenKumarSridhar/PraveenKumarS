@@ -10,7 +10,7 @@ markdown: kramdown
 
 author:
   name: Praveen Kumar Sridhar
-  url: "https://praveenks.com"
+  url: "https://praveenks.com/#person"
   twitter: prav1411
 
 twitter:
@@ -52,3 +52,9 @@ defaults:
 exclude:
   - README.md
   - scripts
+  - docs
+  - tests
+  - examples
+  - node_modules
+  - package.json
+  - package-lock.json

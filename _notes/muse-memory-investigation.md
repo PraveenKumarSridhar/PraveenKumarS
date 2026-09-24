@@ -82,7 +82,7 @@ The file comparison describes storage. Muse's report describes two routes from t
 </style>
 
 <figure class="muse-diagram">
-<img src="{{ '/assets/muse-context-excalidraw.png' | relative_url }}" width="1032" height="2742" alt="Reported memory organization, followed by two parallel routes into answer context: standing files at conversation start and search or file reads on demand. Bank input lineage remains unresolved." />
+<img loading="lazy" decoding="async" src="{{ '/assets/muse-context-excalidraw.png' | relative_url }}" width="1032" height="2742" alt="Reported memory organization, followed by two parallel routes into answer context: standing files at conversation start and search or file reads on demand. Bank input lineage remains unresolved." />
 </figure>
 
 *Memory organization and context paths described in Muse's exports. The panels separate organization from context access. Dashed arrows show reported relationships, not a verified execution sequence. The two access routes can consult overlapping files; storage does not establish search coverage.*
@@ -104,7 +104,7 @@ The current synthesis, `dreams/alignment/derived/ALIGNMENT_SYNTHESIS.md`, has a 
 I found that distinction more useful than treating dreaming as a single operation. The historical review preserves what was considered. The current synthesis expresses guidance intended for later conversations. Keeping those jobs separate explains why related material can live in both files without being used in the same way.
 
 <figure class="muse-diagram">
-<img src="{{ '/assets/muse-dreaming-excalidraw.png' | relative_url }}" width="1032" height="3144" alt="Reported review produces a historical dated dream and current behavioral synthesis. Current synthesis enters answer context. A separate runtime permission gate governs actions requiring approval." />
+<img loading="lazy" decoding="async" src="{{ '/assets/muse-dreaming-excalidraw.png' | relative_url }}" width="1032" height="3144" alt="Reported review produces a historical dated dream and current behavioral synthesis. Current synthesis enters answer context. A separate runtime permission gate governs actions requiring approval." />
 </figure>
 
 *From remembered evidence to standing guidance, as described in the Investigation Report. This is a functional map of reported relationships. The dated dream is historical; current synthesis has a separate injection path. Runtime permission is separate from memory review.*

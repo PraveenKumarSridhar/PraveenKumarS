@@ -1,0 +1,18 @@
+---
+layout: null
+permalink: /llms.txt
+sitemap: false
+---
+# {{ site.title | strip_html | normalize_whitespace }}
+
+> {{ site.description | strip_html | normalize_whitespace }}
+
+## Site
+
+- [Home]({{ '/' | absolute_url }})
+- [Lab Notes]({{ '/notes/' | absolute_url }})
+
+## Articles
+{% assign articles = site.notes | sort: 'date' | reverse %}{% for note in articles %}
+- [{{ note.title | smartify | strip_html | normalize_whitespace | escape | replace: '[', '&#91;' | replace: ']', '&#93;' }}]({{ note.url | absolute_url }}): {{ note.description | strip_html | normalize_whitespace | escape }}
+{% endfor %}

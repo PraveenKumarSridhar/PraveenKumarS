@@ -1,5 +1,31 @@
 # PraveenkumarS
 
+## Article publishing
+
+Follow [the article publishing workflow](docs/seo/article-publishing.md). Each PR checks source metadata, the generated article, discovery links and browser behavior. Editorial review remains a human decision.
+
+## Build and verify
+
+Use a generated Jekyll preview. Opening `index.html` directly exposes its YAML front matter and leaves Liquid unrendered.
+
+Prerequisites: Docker, Node.js 22+, and Python 3.9+. The build uses a pinned official GitHub Pages container, including Jekyll 3.10 and the existing SEO/feed/sitemap plugins. Development dependencies do not ship with the site.
+
+```sh
+npm ci --ignore-scripts
+npx playwright install chromium
+bash scripts/build_site.sh _site
+python3 scripts/check_site.py _site
+python3 scripts/test_site_checks.py _site
+node scripts/check_browser.cjs _site .artifacts/browser
+python3 -m http.server 8766 --bind 127.0.0.1 --directory _site
+```
+
+Open `http://127.0.0.1:8766/`. The build output directory must be dedicated to this preview; Jekyll manages its contents. CI runs the same checks for pull requests without deploying them. Browser screenshots and a JSON result report are available in the `browser-checks` Actions artifact.
+
+The checks cover generated metadata, all internal HTML links/assets/fragments, sitemap/feed coverage, preserved URLs, private-file exclusions, and browser reading/navigation at 320, 390, 768, and 1440px. Browser tests exercise missing fonts, disabled JavaScript, and missing IntersectionObserver, plus normal typography screenshots. They do not establish Google indexing, search ranking, external link availability, or field Core Web Vitals.
+
+See [the SEO implementation plan](docs/superpowers/plans/2026-09-23-seo-discoverability.md) and [baseline evidence](docs/seo/baseline.md) for staged scope and remaining gates.
+
 
 This repository contains the code for my portfolio website, [https://praveenks.com](https://praveenks.com) The original html, css, and php were acquired from a free themezy theme found [here](https://www.themezy.com/demos/151-ceevee-free-responsive-website-template). It was a lot of fun tweaking the HTML to make the template my own. I learned a lot about HTML and CSS in the process of making this site.
 

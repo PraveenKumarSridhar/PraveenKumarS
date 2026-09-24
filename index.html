@@ -1,6 +1,6 @@
 ---
 layout: null
-description: Data scientist building agent memory, evaluation, and applied machine learning systems.
+description: Praveen Kumar Sridhar works on AI agents, agent memory, and evaluation. Technical notes and experiments on building reliable agent systems.
 image: /assets/social-card.png
 ---
 <!DOCTYPE html>
@@ -10,6 +10,7 @@ image: /assets/social-card.png
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#f7f4ee" />
 {% seo %}
+{% include person-schema.html %}
 <link rel="alternate" type="application/atom+xml" title="Praveen Kumar Sridhar · Lab Notes" href="{{ '/feed.xml' | absolute_url }}" />
 <link rel="icon" href="/favicon.ico?v=20260729" sizes="16x16 32x32 48x48" />
 <link rel="icon" href="/favicon.svg?v=20260729" type="image/svg+xml" />
@@ -61,7 +62,15 @@ image: /assets/social-card.png
   nav.top{display:flex;gap:28px;}
   nav.top a{font-size:14px;color:var(--ink-soft);transition:color .2s;}
   nav.top a:hover{color:var(--accent);}
-  @media(max-width:680px){nav.top{display:none;}}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:5px;}
+  section[id]{scroll-margin-top:84px;}
+  @media(max-width:680px){
+    header.bar{position:relative;}
+    header.bar .wrap{height:auto;min-height:64px;flex-wrap:wrap;gap:8px;padding-top:14px;padding-bottom:14px;}
+    nav.top{width:100%;flex-wrap:wrap;gap:0 18px;}
+    nav.top a{padding:8px 0;}
+    section[id]{scroll-margin-top:20px;}
+  }
 
   /* ---------- hero ---------- */
   .hero{padding:96px 0 72px;}
@@ -145,21 +154,21 @@ image: /assets/social-card.png
   @media(max-width:680px){.job{grid-template-columns:1fr;gap:12px;}}
 
   /* ---------- projects ---------- */
-  .projects{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;}
-  .proj{background:var(--bg);padding:26px;display:flex;flex-direction:column;gap:10px;min-height:188px;transition:background .25s;}
+  .projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;}
+  .proj{background:var(--bg);padding:26px;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:188px;transition:background .25s;}
   .proj:hover{background:#fdfbf6;}
   .proj-link .badge{color:var(--accent);}
   .proj-link:hover h3{color:var(--accent);}
   .proj-link h3{transition:color .2s;}
-  .proj .pt{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+  .proj .pt{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px;}
   .proj h3{font-size:18px;font-weight:600;letter-spacing:-0.01em;}
   .proj .badge{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;}
   .proj p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
   .proj .stack{margin-top:auto;display:flex;flex-wrap:wrap;gap:7px;font-family:var(--mono);}
-  .proj .stack span{font-size:11.5px;color:var(--ink-soft);}
+  .proj .stack span{font-size:11.5px;color:var(--ink-soft);overflow-wrap:anywhere;min-width:0;}
   .proj .stack span::after{content:"·";margin-left:7px;color:var(--muted);}
   .proj .stack span:last-child::after{content:"";}
-  @media(max-width:620px){.projects{grid-template-columns:1fr;}}
+  @media(max-width:620px){.projects{grid-template-columns:minmax(0,1fr);}}
 
   /* ---------- skills ---------- */
   .skill-row{display:grid;grid-template-columns:170px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--line-2);}
@@ -187,15 +196,17 @@ image: /assets/social-card.png
   .contact h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,52px);letter-spacing:-0.02em;line-height:1.05;}
   .contact h2 em{font-style:italic;color:var(--accent);}
   .contact .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px;}
-  .contact .links a{font-size:14px;padding:11px 18px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);transition:all .2s;display:inline-flex;align-items:center;gap:10px;}
+  .contact .links a{font-size:14px;padding:11px 18px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);transition:all .2s;display:inline-flex;align-items:center;gap:10px;max-width:100%;}
+  .contact .links a span{min-width:0;overflow-wrap:anywhere;}
   .contact .links a .lico{width:17px;height:17px;flex:none;color:var(--muted);transition:color .2s;}
   .contact .links a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
   .contact .links a:hover .lico{color:var(--accent);}
   .foot{margin-top:64px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--muted);}
 
-  /* reveal */
-  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
-  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{transition:none!important;}
+  }
 </style>
 </head>
 <body>
@@ -203,7 +214,7 @@ image: /assets/social-card.png
 <header class="bar" id="bar">
   <div class="wrap">
     <a class="name-mark" href="#top">PK<i>.</i></a>
-    <nav class="top">
+    <nav class="top" aria-label="Main navigation">
       <a href="#build">What I build</a>
       <a href="#work">Work</a>
       <a href="#projects">Projects</a>
@@ -486,10 +497,6 @@ image: /assets/social-card.png
   const bar = document.getElementById('bar');
   addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 12), {passive:true});
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 </body>
 </html>

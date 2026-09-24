@@ -1,0 +1,10 @@
+{
+  "name": "praveenks-site-checks",
+  "private": true,
+  "scripts": {
+    "check:browser": "node scripts/check_browser.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
