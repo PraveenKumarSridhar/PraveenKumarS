@@ -60,3 +60,7 @@ The build runs the Ruby contract tests, validates note metadata/images, then bui
 Argument, voice, factual support, originality, permission to publish and whether the piece is worth reading. A green check does not approve editorial content, verify every external source, or guarantee indexing/ranking.
 
 Repository merge enforcement is a separate GitHub setting. The workflow exposes the `site` status check. Require that check in the main-branch rules to prevent merging failures; it is not enforced merely by adding this file.
+
+## AI-readable index
+
+`/llms.txt` is generated at build time from the existing site description and every published note’s title, description and canonical URL, newest first. It links to the existing HTML articles. No manual duplicate list is needed. CI checks coverage, titles and nonempty descriptions, including the temporary new-article and seventeen-note fixtures. This optional index does not change crawler permissions or guarantee AI citations.

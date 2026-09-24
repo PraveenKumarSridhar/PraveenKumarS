@@ -5,6 +5,8 @@ from collections import Counter
 from datetime import datetime
 from html.parser import HTMLParser
 import json
+import re
+from html import unescape
 from pathlib import Path
 import sys
 from urllib.parse import unquote, urljoin, urlsplit
@@ -217,6 +219,21 @@ def check_site(root, source_root=None):
         check(not any(line.split("#", 1)[0].strip().lower() == "disallow: /" for line in robots.splitlines()), "robots.txt blocks the whole site")
     except (OSError, ET.ParseError, TypeError) as error:
         errors.append(f"sitemap/feed/robots: {error}")
+    try:
+        llms = (root / "llms.txt").read_text()
+        check(llms.startswith("# ") and "\n> " in llms, "llms.txt lacks heading or summary")
+        check("{{" not in llms and "{%" not in llms, "llms.txt contains unrendered Liquid")
+        entries = re.findall(r"^- \[([^\n]+)\]\((https://[^\s)]+)\)(?:: (.*))?$", llms, re.M)
+        urls = [url for _, url, _ in entries]
+        expected = {ORIGIN + route for route in pages}
+        check(set(urls) == expected and len(urls) == len(expected), "llms.txt links do not match published pages")
+        for title, url, description in entries:
+            route = url.removeprefix(ORIGIN)
+            if route in pages and route.startswith("/notes/") and route != "/notes/":
+                check(unescape(title) == pages[route].h1, f"llms.txt title mismatch: {route}")
+                check(bool(description.strip()), f"llms.txt missing description: {route}")
+    except OSError as error:
+        errors.append(f"llms.txt: {error}")
     return errors, {route: {"title": page.title, "description": page.meta.get("description"), "canonical": page.canonicals} for route, page in pages.items()}
 
 

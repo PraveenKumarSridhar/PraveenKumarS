@@ -34,6 +34,20 @@ class RegressionGateTests(unittest.TestCase):
     def test_valid_site_passes_including_image_object_override(self):
         self.assertEqual(check_site(self.root)[0], [])
 
+    def test_llms_missing_file(self):
+        (self.root / "llms.txt").unlink()
+        self.fails_with("llms.txt:")
+
+    def test_llms_missing_article(self):
+        file = self.root / "llms.txt"
+        file.write_text("\n".join(line for line in file.read_text().splitlines() if '/notes/muse-memory-investigation/' not in line))
+        self.fails_with("llms.txt links do not match")
+
+    def test_llms_stale_title(self):
+        file = self.root / "llms.txt"
+        file.write_text(re.sub(r"^- \[.*?\](\(https://praveenks.com/notes/muse-memory-investigation/\))", r"- [Stale title]\1", file.read_text(), flags=re.M))
+        self.fails_with("llms.txt title mismatch")
+
     def mutate_schema(self, route, kind, change):
         file = self.root / route / "index.html"
         def edit(match):
