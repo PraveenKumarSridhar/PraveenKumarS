@@ -1,0 +1,31 @@
+- date: '2026-09-24'
+  project: Hindsight
+  title: Make reasoning token usage visible
+  description: Store reasoning tokens separately from visible output and expose the count in request history, stats, and the Control Plane.
+  outcome: Submitted
+  pr: '#4745'
+  url: https://github.com/vectorize-io/hindsight/pull/4745
+
+- date: '2026-09-10'
+  project: Langfuse
+  title: Carry structured output schemas into Playground
+  description: Import AI SDK schemas from generation metadata so the trace-to-Playground flow retains the output constraint.
+  outcome: Submitted
+  pr: '#17310'
+  url: https://github.com/langfuse/langfuse/pull/17310
+
+- date: '2026-08-04'
+  project: Honcho
+  title: Put a timeout on Gemini requests
+  description: Add a default HTTP timeout at every Gemini client construction point, with regression tests, so a stalled request cannot hold the deriver indefinitely.
+  outcome: Merged
+  pr: '#903'
+  url: https://github.com/plastic-labs/honcho/pull/903
+
+- date: '2026-07-21'
+  project: Hermes
+  title: Attribute scheduled agent usage by job
+  description: Label OpenRouter requests from cron jobs so repeated runs can be identified in usage analytics.
+  outcome: Submitted
+  pr: '#68290'
+  url: https://github.com/NousResearch/hermes-agent/pull/68290

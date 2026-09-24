@@ -20,6 +20,7 @@ npx playwright install chromium
 bash scripts/build_site.sh _site
 python3 scripts/check_site.py _site
 python3 scripts/test_site_checks.py _site
+python3 scripts/test_open_source_timeline.py _site
 python3 scripts/test_preview_site.py
 node scripts/check_browser.cjs _site .artifacts/browser
 ```
@@ -27,6 +28,10 @@ node scripts/check_browser.cjs _site .artifacts/browser
 The build output directory must be dedicated to the build; Jekyll manages its contents. CI runs the same checks for pull requests without deploying them. Browser screenshots and a JSON result report are available in the `browser-checks` Actions artifact.
 
 The checks cover generated metadata, all internal HTML links/assets/fragments, sitemap/feed coverage, preserved URLs, private-file exclusions, and browser reading/navigation at 320, 390, 768, and 1440px. Browser tests exercise missing fonts, disabled JavaScript, and missing IntersectionObserver, plus normal typography screenshots. They do not establish Google indexing, search ranking, external link availability, or field Core Web Vitals.
+
+## Open source timeline
+
+Add a dated entry to `_data/contributions.yml` for each contribution worth showing. The homepage sorts entries newest first. Use the PR submission date for a submitted change and the merge date for a merged change; update the outcome and date if a submitted PR merges. Keep the description tied to the exact PR and link it so visitors can check its review history.
 
 See [the SEO implementation plan](docs/superpowers/plans/2026-09-23-seo-discoverability.md) and [baseline evidence](docs/seo/baseline.md) for staged scope and remaining gates.
 
