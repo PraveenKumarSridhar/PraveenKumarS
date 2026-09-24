@@ -89,6 +89,38 @@ const server = http.createServer((req, res) => {
           await writing.click();
           check(new URL(page.url()).pathname === '/notes/', `${width}px: writing button destination`);
           await page.goto(origin + route);
+          const timeline = page.locator('.patch-timeline');
+          check(await timeline.count() === 1, `${width}px homepage: open source timeline missing`);
+          const timelineWindow = page.locator('.patch-window');
+          check(await timelineWindow.count() === 1, `${width}px homepage: timeline scroll region missing`);
+          if (await timelineWindow.count()) {
+            const region = await timelineWindow.evaluate(el => ({
+              height: el.clientHeight,
+              contentHeight: el.scrollHeight,
+              overflow: getComputedStyle(el).overflowY,
+              label: el.getAttribute('aria-label'),
+            }));
+            check(region.height <= 480 && region.contentHeight > region.height && region.overflow === 'auto', `${width}px homepage: contribution timeline does not stay compact and scrollable`);
+            check(Boolean(region.label), `${width}px homepage: scroll region has no accessible label`);
+          }
+          const palette = await page.evaluate(() => ({
+            page: getComputedStyle(document.body).backgroundColor,
+            section: getComputedStyle(document.querySelector('#open-source')).backgroundColor,
+          }));
+          check(palette.section === palette.page, `${width}px homepage: open source section breaks the page palette`);
+          if (width === 1440 && await timeline.count() && await timelineWindow.count()) {
+            const before = await timeline.evaluate(el => parseFloat(el.style.getPropertyValue('--progress')) || 0);
+            await timelineWindow.focus();
+            await page.keyboard.press('PageDown');
+            await page.waitForFunction(value => {
+              const el = document.querySelector('.patch-timeline');
+              return (parseFloat(el.style.getPropertyValue('--progress')) || 0) > value;
+            }, before, { timeout: 2000 }).catch(() => {});
+            const after = await timeline.evaluate(el => parseFloat(el.style.getPropertyValue('--progress')) || 0);
+            check(await timelineWindow.evaluate(el => el.scrollTop > 0), 'homepage: timeline does not scroll by keyboard');
+            check(after > before, 'homepage: timeline progress does not advance on internal scroll');
+            await page.evaluate(() => scrollTo(0, 0));
+          }
         }
         if (route.startsWith('/notes/') && route !== '/notes/' && !baseline) {
           const toc = page.locator('#toc-block');

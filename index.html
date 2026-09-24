@@ -170,6 +170,44 @@ image: /assets/social-card.png
   .proj .stack span:last-child::after{content:"";}
   @media(max-width:620px){.projects{grid-template-columns:minmax(0,1fr);}}
 
+  /* ---------- open source ---------- */
+  #open-source{background:var(--bg);color:var(--text);padding:78px 0 84px;}
+  #open-source .sec-label{margin-bottom:52px;}
+  #open-source .sec-label h2{font-size:clamp(38px,5vw,56px);}
+  #open-source .sec-label h2 em{color:var(--accent);font-weight:400;}
+  #open-source .sec-label .sub{max-width:60ch;}
+  .patch-window-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px;color:var(--muted);font:500 11px var(--mono);letter-spacing:0.08em;text-transform:uppercase;}
+  .patch-window-head span:last-child{color:var(--accent);}
+  .patch-window{max-height:clamp(340px,52vh,480px);overflow-y:auto;scrollbar-color:var(--accent) var(--bg-2);scrollbar-width:thin;padding-right:14px;}
+  .patch-window:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .patch-timeline{--rail-x:150px;--progress:0px;position:relative;list-style:none;}
+  .patch-timeline::before,.patch-timeline::after{content:"";position:absolute;top:18px;left:var(--rail-x);width:2px;max-height:calc(100% - 18px);border-radius:2px;pointer-events:none;}
+  .patch-timeline::before{height:calc(100% - 18px);background:var(--line);}
+  .patch-timeline::after{height:var(--progress);background:var(--accent);}
+  .patch-timeline li{position:relative;padding-bottom:28px;}
+  .patch-timeline li:last-child{padding-bottom:0;}
+  .patch-timeline li::before{content:"";position:absolute;z-index:1;top:17px;left:calc(var(--rail-x) - 6px);width:14px;height:14px;border:3px solid var(--accent);border-radius:50%;background:var(--bg);}
+  .patch{display:grid;grid-template-columns:130px minmax(0,1fr);gap:42px;}
+  .patch time{padding-top:16px;font:500 11px var(--mono);letter-spacing:0.04em;color:var(--accent);white-space:nowrap;}
+  .patch-card{min-width:0;padding:24px 28px 25px;border:1px solid var(--line);border-radius:14px;background:var(--bg-2);transition:border-color .2s,transform .2s;}
+  .patch-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .patch-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;font:500 11px var(--mono);letter-spacing:0.08em;text-transform:uppercase;}
+  .patch-project{color:var(--accent);}
+  .patch-outcome{color:var(--muted);}
+  .patch h3{margin-top:14px;font:400 clamp(23px,2.8vw,29px)/1.2 var(--serif);letter-spacing:-0.01em;}
+  .patch p{margin-top:10px;max-width:64ch;font-size:14px;line-height:1.65;color:var(--ink-soft);}
+  .patch a{display:inline-block;margin-top:17px;color:var(--accent);font-size:13px;text-decoration:underline;text-underline-offset:4px;}
+  .patch a:hover{color:var(--text);}
+  @media(max-width:680px){
+    #open-source{padding:62px 0 68px;}
+    .patch-window{padding-right:8px;}
+    .patch-timeline{--rail-x:7px;}
+    .patch{grid-template-columns:minmax(0,1fr);gap:10px;padding-left:32px;}
+    .patch time{padding-top:0;}
+    .patch-timeline li::before{top:4px;}
+    .patch-card{padding:20px 21px 22px;}
+  }
+
   /* ---------- skills ---------- */
   .skill-row{display:grid;grid-template-columns:170px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--line-2);}
   .skill-row:first-child{border-top:0;}
@@ -422,6 +460,36 @@ image: /assets/social-card.png
   </div>
 </section>
 
+<!-- OPEN SOURCE -->
+<section id="open-source">
+  <div class="wrap">
+    <div class="sec-label">
+      <div class="eyebrow">Open source</div>
+      <h2>The patch <em>trail.</em></h2>
+      <p class="sub">A running record of specific changes to tools I work with. Each entry links to the pull request and its review history.</p>
+    </div>
+    {% assign contributions = site.data.contributions | sort: 'date' | reverse %}
+    <div class="patch-window-head" aria-hidden="true"><span>Latest first</span><span>Scroll the trail ↓</span></div>
+    <div class="patch-window" role="region" aria-label="Open source contributions, scroll for more" tabindex="0">
+      <ol class="patch-timeline" aria-label="Open source contributions">
+        {% for contribution in contributions %}
+        <li>
+          <article class="patch">
+            <time datetime="{{ contribution.date }}">{{ contribution.date | date: '%b %d, %Y' }}</time>
+            <div class="patch-card">
+              <div class="patch-meta"><span class="patch-project">{{ contribution.project | escape }}</span><span class="patch-outcome">{{ contribution.outcome | escape }}</span></div>
+              <h3>{{ contribution.title | escape }}</h3>
+              <p>{{ contribution.description | escape }}</p>
+              <a href="{{ contribution.url | escape }}" target="_blank" rel="noopener">Read PR {{ contribution.pr | escape }} <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</section>
+
 <!-- SKILLS -->
 <section id="skills">
   <div class="wrap">
@@ -496,6 +564,18 @@ image: /assets/social-card.png
 <script>
   const bar = document.getElementById('bar');
   addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 12), {passive:true});
+
+  const timeline = document.querySelector('.patch-timeline');
+  if (timeline) {
+    const timelineWindow = timeline.closest('.patch-window');
+    const updateTimeline = () => {
+      const progress = Math.min(timeline.offsetHeight - 18, timelineWindow.scrollTop + timelineWindow.clientHeight * 0.55);
+      timeline.style.setProperty('--progress', `${progress}px`);
+    };
+    timelineWindow.addEventListener('scroll', updateTimeline, {passive:true});
+    addEventListener('resize', updateTimeline);
+    updateTimeline();
+  }
 
 </script>
 </body>
