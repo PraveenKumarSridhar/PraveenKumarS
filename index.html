@@ -170,6 +170,16 @@ image: /assets/social-card.png
   .proj .stack span:last-child::after{content:"";}
   @media(max-width:620px){.projects{grid-template-columns:minmax(0,1fr);}}
 
+  /* ---------- open source ---------- */
+  .contribution{display:grid;grid-template-columns:170px 1fr;gap:28px;padding:25px 0;border-top:1px solid var(--line-2);}
+  .contribution:first-child{border-top:0;padding-top:0;}
+  .contribution .project-name{font-size:14px;font-weight:600;color:var(--text);}
+  .contribution h3{font-size:17px;font-weight:600;line-height:1.35;letter-spacing:-0.01em;}
+  .contribution p{font-size:14px;color:var(--ink-soft);line-height:1.55;margin-top:7px;max-width:65ch;}
+  .contribution .evidence{display:inline-block;margin-top:10px;font-size:13px;color:var(--accent);text-underline-offset:3px;text-decoration:underline;}
+  .contribution .evidence:hover{color:var(--text);}
+  @media(max-width:680px){.contribution{grid-template-columns:1fr;gap:8px;}}
+
   /* ---------- skills ---------- */
   .skill-row{display:grid;grid-template-columns:170px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--line-2);}
   .skill-row:first-child{border-top:0;}
@@ -418,6 +428,51 @@ image: /assets/social-card.png
         <p>Models, notebooks, and experiments across NLP, computer vision, and LLM tooling, plus everything that did not fit above.</p>
         <div class="stack"><span>github.com/PraveenKumarSridhar</span></div>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN SOURCE -->
+<section id="open-source">
+  <div class="wrap">
+    <div class="sec-label reveal">
+      <div class="eyebrow">Open source</div>
+      <h2>Specific fixes, in public.</h2>
+      <p class="sub">I contribute to tools I work with. Each pull request shows the change and its review status.</p>
+    </div>
+    <div class="reveal">
+      <article class="contribution">
+        <div class="project-name">Honcho</div>
+        <div>
+          <h3>Put a timeout on Gemini requests</h3>
+          <p>Added a default HTTP timeout at each Gemini client construction point, with regression tests, so a stalled request cannot hold the deriver indefinitely.</p>
+          <a class="evidence" href="https://github.com/plastic-labs/honcho/pull/903" target="_blank" rel="noopener">Merged PR #903 <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+      <article class="contribution">
+        <div class="project-name">Hindsight</div>
+        <div>
+          <h3>Make reasoning token usage visible</h3>
+          <p>Submitted a change to store reasoning tokens separately from visible output and expose the count in request history, stats, and the Control Plane.</p>
+          <a class="evidence" href="https://github.com/vectorize-io/hindsight/pull/4745" target="_blank" rel="noopener">PR #4745 <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+      <article class="contribution">
+        <div class="project-name">Langfuse</div>
+        <div>
+          <h3>Carry structured output schemas into Playground</h3>
+          <p>Submitted a fix for the trace-to-Playground flow to import AI SDK schemas from generation metadata instead of dropping the output constraint.</p>
+          <a class="evidence" href="https://github.com/langfuse/langfuse/pull/17310" target="_blank" rel="noopener">PR #17310 <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+      <article class="contribution">
+        <div class="project-name">Hermes</div>
+        <div>
+          <h3>Attribute scheduled agent usage by job</h3>
+          <p>Submitted a provider-specific change that labels OpenRouter requests from cron jobs, making repeated runs identifiable in usage analytics.</p>
+          <a class="evidence" href="https://github.com/NousResearch/hermes-agent/pull/68290" target="_blank" rel="noopener">PR #68290 <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
     </div>
   </div>
 </section>
