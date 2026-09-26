@@ -1,8 +1,8 @@
-- date: '2026-09-24'
+- date: '2026-09-25'
   project: Hindsight
   title: Make reasoning token usage visible
   description: Store reasoning tokens separately from visible output and expose the count in request history, stats, and the Control Plane.
-  outcome: Submitted
+  outcome: Merged
   pr: '#4745'
   url: https://github.com/vectorize-io/hindsight/pull/4745
 
